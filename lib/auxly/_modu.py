@@ -17,12 +17,14 @@ def open(target):
         webbrowser.open(target)
     # TODO: (JRR@201605192229) Will need to test on other platforms.
 
-def cwd(path=""):
+def cwd(path=None):
     """Returns the CWD and optionally sets it to the given path."""
     if path:
+        if not op.isabs(path):
+            path = op.abspath(path)
         if op.isfile(path):
             path = op.dirname(path)
-        os.setcwd(path)
+        os.chdir(path)
     return os.getcwd()
 
 def abspath(relpath, root=__file__):
