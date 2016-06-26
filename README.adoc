@@ -1,0 +1,10 @@
+= Auxly
+
+== Introduction
+This project provides a Python 2.7/3.x library with common helper functions. Some of the functionality overlaps with the standard library but the API is slightly modified. The primary goal of this library is to simplify shell-like scripts written in Python.
+
+== Status
+The status of this project is **pre-alpha**. This project is not yet suitable for use other than testing.
+
+== Requirements
+Auxly should run on any Python 2.7/3.x interpreter without additional dependencies.
