@@ -1,3 +1,4 @@
+"""This example deletes all PYC files in the project."""
 import auxly
 import qprompt
 delfunc = lambda is_test: auxly.filesys.delete("..", "\.pyc$", recurse=True, test=is_test)
