@@ -5,7 +5,7 @@ setup(
     version = "0.1.0-alpha",
     author = "Jeff Rimko",
     author_email = "jeffrimko@gmail.com",
-    description = "TODO",
+    description = "Python library for common shell-like script tasks.",
     license = "MIT",
     keywords = "cli library",
     url = "https://github.com/jeffrimko/Auxly",
