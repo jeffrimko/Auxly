@@ -13,4 +13,4 @@ Auxly should run on any Python 2.7/3.x interpreter without additional dependenci
 == Usage
 The following are basic examples of Auxly (all examples can be found https://github.com/jeffrimko/Auxly/tree/master/examples[here]):
 
-  - https://github.com/jeffrimko/Auxly/blob/master/examples/clean_pyc.py[examples/delete_1.py] - Deletes all PYC files in the project.
+  - https://github.com/jeffrimko/Auxly/blob/master/examples/delete_1.py[examples/delete_1.py] - Deletes all PYC files in the project.
