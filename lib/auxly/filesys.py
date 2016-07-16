@@ -1,3 +1,5 @@
+"""Library of functions related to file system contents and manipulation."""
+
 ##==============================================================#
 ## SECTION: Imports                                             #
 ##==============================================================#
@@ -61,7 +63,8 @@ def copy(srcpath, dstpath):
     else:
         dstdir = dstpath
     if dstdir and not op.isdir(dstdir):
-        os.makedirs(dstdir)
+        if not makedirs(dstdir):
+            return False
     if op.isdir(srcpath):
         for r,ds,fs in os.walk(srcpath):
             for f in fs:
@@ -91,6 +94,15 @@ def move(srcpath, dstpath):
     except:
         return False
     return verfunc(verpath)
+
+def makedirs(path):
+    """Makes all directories required for given path; returns true if successful
+    and false otherwise."""
+    try:
+        os.makedirs(path)
+    except:
+        return False
+    return True
 
 ##==============================================================#
 ## SECTION: Main Body                                           #
