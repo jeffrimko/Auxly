@@ -4,6 +4,7 @@
 
 import os
 import subprocess
+import sys
 
 ##==============================================================#
 ## SECTION: Function Definitions                                #
@@ -23,5 +24,7 @@ def cleanup_readme():
 
 if __name__ == '__main__':
     generate_readme()
+    if len(sys.argv) > 1 and sys.argv[1] == "generate_readme":
+        exit()
     subprocess.call("python setup.py install", shell=True)
     cleanup_readme()
