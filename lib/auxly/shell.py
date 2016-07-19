@@ -18,12 +18,14 @@ NULL = open(os.devnull, "w")
 ##==============================================================#
 
 def call(cmd, **kwargs):
-    """Calls the given shell command. Output will be displayed."""
+    """Calls the given shell command. Output will be displayed. Returns the
+    status code."""
     kwargs['shell'] = True
     return subprocess.call(cmd, **kwargs)
 
 def silent(cmd, **kwargs):
-    """Calls the given shell command. Output will be displayed."""
+    """Calls the given shell command. Output will not be displayed. Returns the
+    status code."""
     return call(cmd, shell=True, stdout=NULL, stderr=NULL, **kwargs)
 
 def iterout(cmd, **kwargs):

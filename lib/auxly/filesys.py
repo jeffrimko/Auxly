@@ -43,7 +43,7 @@ def delete(path, regex=None, recurse=False, test=False):
             return [] if op.exists(path) else [path]
     return deleted
 
-def is_empty(path):
+def isempty(path):
     """Returns True if the given file or directory path is empty."""
     if op.isdir(path):
         return [] == os.listdir(path)

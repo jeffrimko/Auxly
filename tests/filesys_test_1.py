@@ -5,7 +5,7 @@
 import os
 from testlib import *
 
-from auxly.filesys import makedirs, delete, is_empty, copy
+from auxly.filesys import makedirs, delete, isempty, copy
 
 ##==============================================================#
 ## SECTION: Class Definitions                                   #
@@ -19,9 +19,10 @@ class TestCase(unittest.TestCase):
         test.assertTrue(makedirs(path))
         test.assertTrue(os.path.exists(path))
         test.assertTrue(os.path.isdir(path))
-        test.assertTrue(is_empty(path))
+        test.assertTrue(isempty(path))
         test.assertTrue(delete(path))
         test.assertFalse(os.path.exists(path))
+        test.assertTrue(delete(path.split("/")[0]))
 
     def test_makedirs_2(test):
         path1 = "../foo"
@@ -30,7 +31,7 @@ class TestCase(unittest.TestCase):
         test.assertTrue(makedirs(path1))
         test.assertTrue(os.path.exists(path1))
         test.assertTrue(os.path.isdir(path1))
-        test.assertTrue(is_empty(path1))
+        test.assertTrue(isempty(path1))
         test.assertTrue(copy(path1, path2))
         test.assertTrue(delete(path1))
         test.assertTrue(delete(path2))
