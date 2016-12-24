@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = "auxly",
-    version = "0.1.0",
+    version = "0.2.0-alpha1",
     author = "Jeff Rimko",
     author_email = "jeffrimko@gmail.com",
     description = "Python library for common shell-like script tasks.",
