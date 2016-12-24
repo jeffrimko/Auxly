@@ -51,31 +51,44 @@ def isempty(path):
         return 0 == os.stat(path).st_size
     return None
 
-def copy(srcpath, dstpath):
+def copy(srcpath, dstpath, overwrite=True):
     """Copies the file or directory at `srcpath` to `dstpath`. Returns True if
     successful, False otherwise."""
+    # Handle bail conditions.
     if not op.exists(srcpath):
         return False
-    if op.isdir(dstpath):
-        dstdir = dstpath
-    elif "" != op.splitext(dstpath)[1]:
-        dstdir = op.dirname(dstpath)
-    else:
-        dstdir = dstpath
-    if dstdir and not op.isdir(dstdir):
-        if not makedirs(dstdir):
+    if not overwrite:
+        if op.isfile(dstpath):
             return False
+        if op.isdir(dstpath):
+            chkpath = op.join(dstpath, op.basename(srcpath))
+            if op.isdir(chkpath) or op.isfile(chkpath):
+                return False
+
+    # Make dirs if needed.
+    ies = op.isdir(srcpath)
+    makedirs(dstpath, ignore_extsep=ies)
+
+    # Handle copying.
     if op.isdir(srcpath):
+        if op.isdir(srcpath) or op.isdir(dstpath):
+            dstdir = dstpath
+        elif "" != op.splitext(dstpath)[1]:
+            dstdir = op.dirname(dstpath)
+        else:
+            dstdir = dstpath
         for r,ds,fs in os.walk(srcpath):
             for f in fs:
-                copy(op.join(r,f), op.join(dstdir, r, f))
+                if not copy(op.join(r,f), op.join(dstdir, r, f), overwrite=overwrite):
+                    return False
     elif op.isfile(srcpath):
         shutil.copy2(srcpath, dstpath)
     return op.exists(dstpath)
 
-def move(srcpath, dstpath):
+def move(srcpath, dstpath, overwrite=True):
     """Moves the file or directory at `srcpath` to `dstpath`. Returns True if
     successful, False otherwise."""
+    # TODO: (JRR@201612230924) Consider adding smarter checks to prevent files ending up with directory names; e.g. if dstpath directory does not exist.
     if not op.exists(srcpath):
         return False
     if op.isfile(srcpath) and op.isdir(dstpath):
@@ -89,15 +102,23 @@ def move(srcpath, dstpath):
         verpath = dstpath
     else:
         return False
+    if os.path.isfile(verpath):
+        if not overwrite:
+            return False
+        else:
+            if not delete(verpath):
+                return False
     try:
         shutil.move(srcpath, dstpath)
     except:
         return False
     return verfunc(verpath)
 
-def makedirs(path):
+def makedirs(path, ignore_extsep=False):
     """Makes all directories required for given path; returns true if successful
     and false otherwise."""
+    if not ignore_extsep and os.path.basename(path).find(os.extsep) > -1:
+        path = os.path.dirname(path)
     try:
         os.makedirs(path)
     except:
@@ -119,4 +140,8 @@ if __name__ == '__main__':
     # print move(r"__temp__\backup2", r"__backup__")
     # print move(r"__backup__\__backup__", "__temp__")
     # print move(r"test.txt", r"__temp__")
-    print move(r"test2.txt", r"test.txt")
+    # print move(r"test2.txt", r"test.txt")
+    # makedirs("hello/world.txt")
+    # print copy("world", "hello.txt", overwrite=False)
+    # print makedirs("foo.bar", ignore_extsep=True)
+    print copy("foo.txt", "foo", overwrite=False)
