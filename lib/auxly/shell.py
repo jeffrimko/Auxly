@@ -28,37 +28,64 @@ def silent(cmd, **kwargs):
     status code."""
     return call(cmd, shell=True, stdout=NULL, stderr=NULL, **kwargs)
 
-def iterout(cmd, **kwargs):
-    """Iterates through the lines of stdout from the given shell command."""
+def has(cmd):
+    """Returns true if the give shell command is available."""
+    helps = ["--help", "-h", "--version"]
+    if "nt" == os.name:
+        helps.append("/?")
+    fakecmd = "fakecmd"
+    cmderr = strerr(fakecmd).replace(fakecmd, cmd)
+    for h in helps:
+        hcmd = "%s %s" % (cmd, h)
+        if 0 == silent(hcmd):
+            return True
+        if len(listout(hcmd)) > 0:
+            return True
+        if strerr(hcmd) != cmderr:
+            return True
+    return False
+
+def iterstd(cmd, std="out", **kwargs):
+    """Iterates through the lines of a stderr/stdout stream for the given shell
+    command."""
     kwargs['shell'] = True
     kwargs['stdout'] = subprocess.PIPE
-    kwargs['stderr'] = NULL
+    kwargs['stderr'] = subprocess.PIPE
     proc = subprocess.Popen(cmd, **kwargs)
     while True:
-        line = proc.stdout.readline()
-        if line != "":
-            yield line.rstrip()
+        line = getattr(proc, "std"+std).readline()
+        if line != b"":
+            yield line.rstrip().decode("UTF-8", "replace")
         else:
             break
+
+##--------------------------------------------------------------#
+## Stdout related functions.                                    #
+##--------------------------------------------------------------#
+
+iterout = functools.partial(iterstd, std="out")
 
 def listout(cmd, **kwargs):
     """Same as iterout() but returns a list."""
     return [line for line in iterout(cmd, **kwargs)]
 
-def has(cmd):
-    """Returns true if the give shell command is available."""
-    if 0 == silent(cmd + " --help"):
-        return True
-    if 0 == silent(cmd + " -h"):
-        return True
-    if 0 == silent(cmd + " --version"):
-        return True
-    if 0 == silent(cmd + " /?"):
-        return True
-    # TODO: (JRR@201605192227) Not sure if this is valid.
-    # if len(listout(cmd)) > 0:
-    #     return True
-    return False
+def strout(cmd, **kwargs):
+    """Same as iterout() but returns a string."""
+    return "\n".join(listout(cmd, **kwargs))
+
+##--------------------------------------------------------------#
+## Stderr related functions.                                    #
+##--------------------------------------------------------------#
+
+itererr = functools.partial(iterstd, std="err")
+
+def listerr(cmd, **kwargs):
+    """Same as itererr() but returns a list."""
+    return [line for line in itererr(cmd, **kwargs)]
+
+def strerr(cmd, **kwargs):
+    """Same as itererr() but returns a string."""
+    return "\n".join(listerr(cmd, **kwargs))
 
 ##==============================================================#
 ## SECTION: Main Body                                           #
