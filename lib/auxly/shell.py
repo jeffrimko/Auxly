@@ -32,7 +32,7 @@ def has(cmd):
     """Returns true if the give shell command is available."""
     helps = ["--help", "-h", "--version"]
     if "nt" == os.name:
-        helps.append("/?")
+        helps.insert(0, "/?")
     fakecmd = "fakecmd"
     cmderr = strerr(fakecmd).replace(fakecmd, cmd)
     for h in helps:
