@@ -5,8 +5,8 @@
 ##==============================================================#
 
 import os
-import re
 import os.path as op
+import re
 import shutil
 
 ##==============================================================#
@@ -100,6 +100,7 @@ def move(srcpath, dstpath, overwrite=True):
     elif op.isfile(srcpath):
         verfunc = op.isfile
         verpath = dstpath
+        makedirs(dstpath)
     else:
         return False
     if os.path.isfile(verpath):
@@ -130,18 +131,4 @@ def makedirs(path, ignore_extsep=False):
 ##==============================================================#
 
 if __name__ == '__main__':
-    # copy("__temp-foo.txt", "foo.txt")
-    # copy("__temp-foo.txt", "foo/bar/baz")
-    # copy("__backup__", "foo/baz")
-    # copy("__backup__", "../")
-    # print copy("__backup__", "__temp__")
-    # delete("__temp__")
-    # print delete("__temp__", "txt", recurse=True, test=True)
-    # print move(r"__temp__\backup2", r"__backup__")
-    # print move(r"__backup__\__backup__", "__temp__")
-    # print move(r"test.txt", r"__temp__")
-    # print move(r"test2.txt", r"test.txt")
-    # makedirs("hello/world.txt")
-    # print copy("world", "hello.txt", overwrite=False)
-    # print makedirs("foo.bar", ignore_extsep=True)
-    print copy("foo.txt", "foo", overwrite=False)
+    pass
