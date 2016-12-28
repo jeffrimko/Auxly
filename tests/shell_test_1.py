@@ -11,8 +11,7 @@ from auxly.shell import has, listout, iterout
 ## SECTION: Class Definitions                                   #
 ##==============================================================#
 
-class TestCase(unittest.TestCase):
-
+class TestCase(BaseTest):
     def test_listout_1(test):
         if has("ls"):
             ls = sorted(listout("ls"))
