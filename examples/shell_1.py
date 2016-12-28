@@ -1,5 +1,5 @@
+"""This examples attempts to detect the OS via available shell commands."""
 from auxly.shell import has
-
 wincmds = ["tracert","fc","ver"]
 maccmds = ["osacompile"]
 nixcmds = ["ls","stat","pwd"]
