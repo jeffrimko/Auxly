@@ -21,6 +21,9 @@ from _Install_Package import generate_readme, cleanup_readme
 ##==============================================================#
 
 if __name__ == '__main__':
+    pause = True
+    if len(sys.argv) > 1 and "nopause" == sys.argv[1]:
+        pause = False
     ver = VERCHK.run()
     if not ver:
         qprompt.alert("Issue with version info!")
@@ -29,3 +32,6 @@ if __name__ == '__main__':
         generate_readme()
         subprocess.call("python setup.py sdist upload", shell=True)
         cleanup_readme()
+    if pause:
+        qprompt.pause()
+    sys.exit(0)
