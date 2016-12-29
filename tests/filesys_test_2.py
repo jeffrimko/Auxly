@@ -42,8 +42,6 @@ class TestCase(BaseTest):
 
     def test_copy_4(test):
         """Copy file to dir fails due to overwrite flag."""
-        # import qprompt
-        # qprompt.pause()
         path0 = FNAME[0]
         path1 = DIR[0]
         fwrite(path0, TEXT[0])
