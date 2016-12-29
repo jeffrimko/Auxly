@@ -1,5 +1,17 @@
 = Auxly Changelog
 
+== auxly-0.2.0 (2016-12-28)
+=== Release highlights
+  - Improved support for Python 3.
+  - Various updates to improve default function behavior.
+
+=== All additions and changes
+  - Updates to improve behavior of `move()`, `copy()`, `makedirs()` in `filesys`.
+  - Added `stderr` functions to `shell`.
+
+=== Bug fixes
+  - Updates to fix freeze bug of `has()` in `shell` when run on Linux.
+
 == auxly-0.1.0 (2016-07-18)
 === Release highlights
   - First release.
