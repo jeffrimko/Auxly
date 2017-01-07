@@ -8,10 +8,28 @@ import os
 import os.path as op
 import re
 import shutil
+from collections import namedtuple
+
+##==============================================================#
+## SECTION: Global Definitions                                  #
+##==============================================================#
+
+#: A path parsed into the directory/file names and extension.
+ParsedPath = namedtuple("ParsedPath", "dir file ext")
 
 ##==============================================================#
 ## SECTION: Function Definitions                                #
 ##==============================================================#
+
+def parsepath(path):
+    """Returns a ParsedPath using the given valid/existing path."""
+    if op.isdir(path):
+        return ParsedPath(path, None, None)
+    elif op.isfile(path):
+        base = op.basename(path)
+        return ParsedPath(op.dirname(path), op.splitext(base)[0], op.splitext(base)[1])
+    else:
+        return ParsedPath(None, None, None)
 
 def delete(path, regex=None, recurse=False, test=False):
     """Deletes the file or directory at `path`. If `path` is a directory and
@@ -89,6 +107,8 @@ def move(srcpath, dstpath, overwrite=True):
     """Moves the file or directory at `srcpath` to `dstpath`. Returns True if
     successful, False otherwise."""
     # TODO: (JRR@201612230924) Consider adding smarter checks to prevent files ending up with directory names; e.g. if dstpath directory does not exist.
+    if srcpath == dstpath:
+        return True
     if not op.exists(srcpath):
         return False
     if op.isfile(srcpath) and op.isdir(dstpath):
@@ -103,7 +123,7 @@ def move(srcpath, dstpath, overwrite=True):
         makedirs(dstpath)
     else:
         return False
-    if os.path.isfile(verpath):
+    if op.isfile(verpath):
         if not overwrite:
             return False
         else:
@@ -118,8 +138,8 @@ def move(srcpath, dstpath, overwrite=True):
 def makedirs(path, ignore_extsep=False):
     """Makes all directories required for given path; returns true if successful
     and false otherwise."""
-    if not ignore_extsep and os.path.basename(path).find(os.extsep) > -1:
-        path = os.path.dirname(path)
+    if not ignore_extsep and op.basename(path).find(os.extsep) > -1:
+        path = op.dirname(path)
     try:
         os.makedirs(path)
     except:
@@ -131,4 +151,4 @@ def makedirs(path, ignore_extsep=False):
 ##==============================================================#
 
 if __name__ == '__main__':
-    pass
+    print move("foo.txt", "foo.txt")
