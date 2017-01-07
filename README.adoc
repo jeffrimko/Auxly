@@ -12,7 +12,6 @@ The status of this project is **pre-alpha**. This project is not yet suitable fo
 == Requirements
 Auxly should run on any Python 2.7/3.x interpreter without additional dependencies.
 
-
 == Usage
 The following are basic examples of Auxly (all examples can be found https://github.com/jeffrimko/Auxly/tree/master/examples[here]):
 
