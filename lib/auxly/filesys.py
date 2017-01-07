@@ -107,10 +107,10 @@ def move(srcpath, dstpath, overwrite=True):
     """Moves the file or directory at `srcpath` to `dstpath`. Returns True if
     successful, False otherwise."""
     # TODO: (JRR@201612230924) Consider adding smarter checks to prevent files ending up with directory names; e.g. if dstpath directory does not exist.
-    if srcpath == dstpath:
-        return True
     if not op.exists(srcpath):
         return False
+    if srcpath == dstpath:
+        return True
     if op.isfile(srcpath) and op.isdir(dstpath):
         verfunc = op.isfile
         verpath = op.join(dstpath, op.basename(srcpath))
