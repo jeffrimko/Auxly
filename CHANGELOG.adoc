@@ -1,5 +1,15 @@
 = Auxly Changelog
 
+== auxly-0.3.0 (2017-01-07)
+=== Release highlights
+  - Bug fix and convenience function update.
+
+=== All additions and changes
+  - Added `filesys.parsepath()`.
+
+=== Bug fixes
+  - Fixed issue with `filesys.move()` which would result in file being deleted if src and dst are the same.
+
 == auxly-0.2.0 (2016-12-28)
 === Release highlights
   - Improved support for Python 3.

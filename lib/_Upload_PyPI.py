@@ -5,6 +5,7 @@
 ##==============================================================#
 
 import os
+import auxly
 import subprocess
 import sys
 
@@ -27,10 +28,13 @@ if __name__ == '__main__':
     ver = VERCHK.run()
     if not ver:
         qprompt.alert("Issue with version info!")
-        exit()
+        sys.exit(1)
+    if 0 != auxly.shell.silent(r"..\tests\_Run_Tests.py nopause"):
+        qprompt.alert("Issue running tests!")
+        sys.exit(1)
     if qprompt.ask_yesno("Upload version `%s`?" % (ver)):
         generate_readme()
-        subprocess.call("python setup.py sdist upload", shell=True)
+        auxly.shell.call("python setup.py sdist upload")
         cleanup_readme()
     if pause:
         qprompt.pause()
