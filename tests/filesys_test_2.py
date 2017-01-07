@@ -44,8 +44,8 @@ class TestCase(BaseTest):
         """Copy file to dir fails due to overwrite flag."""
         path0 = FNAME[0]
         path1 = DIR[0]
-        fwrite(path0, TEXT[0])
         fpath1 = op.join(path1, path0)
+        fwrite(path0, TEXT[0])
         fwrite(fpath1, TEXT[1])
         test.assertFalse(copy(path0, path1, overwrite=False))
         test.assertTrue(TEXT[1] == fread(fpath1))
