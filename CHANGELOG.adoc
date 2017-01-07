@@ -1,5 +1,16 @@
 = Auxly Changelog
 
+== auxly-0.3.1 (2017-01-07)
+=== Release highlights
+  - Changed file system path convenience function/type to class.
+
+=== All additions and changes
+  - Changed `filesys.ParsedPath` to a class.
+  - Removed `filesys.parsepath()`.
+
+=== Bug fixes
+Not applicable.
+
 == auxly-0.3.0 (2017-01-07)
 === Release highlights
   - Bug fix and convenience function update.

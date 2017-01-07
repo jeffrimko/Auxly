@@ -11,25 +11,40 @@ import shutil
 from collections import namedtuple
 
 ##==============================================================#
-## SECTION: Global Definitions                                  #
+## SECTION: Class Definitions                                   #
 ##==============================================================#
 
-#: A path parsed into the directory/file names and extension.
-ParsedPath = namedtuple("ParsedPath", "dir file ext")
+class ParsedPath:
+    """Handles information on parsed filesystem path."""
+    def __init__(self, path):
+        self.path = op.abspath(path)
+        self.parse()
+    def __repr__(self):
+        return self.path
+    def parse(self):
+        self.dir = None
+        self.file = None
+        self.ext = None
+        if op.isdir(self.path):
+            self.dir = self.path
+        elif op.isfile(self.path):
+            base = op.basename(self.path)
+            self.dir = op.dirname(self.path)
+            self.filename = base
+            self.file = op.splitext(base)[0]
+            self.ext = op.splitext(base)[1]
+    def isfile(self):
+        return op.isfile(self.path)
+    def isdir(self):
+        return op.isdir(self.path)
+    def exists(self):
+        return op.exists(self.path)
+    def isempty(self):
+        return isempty(self.path)
 
 ##==============================================================#
 ## SECTION: Function Definitions                                #
 ##==============================================================#
-
-def parsepath(path):
-    """Returns a ParsedPath using the given valid/existing path."""
-    if op.isdir(path):
-        return ParsedPath(path, None, None)
-    elif op.isfile(path):
-        base = op.basename(path)
-        return ParsedPath(op.dirname(path), op.splitext(base)[0], op.splitext(base)[1])
-    else:
-        return ParsedPath(None, None, None)
 
 def delete(path, regex=None, recurse=False, test=False):
     """Deletes the file or directory at `path`. If `path` is a directory and
@@ -151,4 +166,6 @@ def makedirs(path, ignore_extsep=False):
 ##==============================================================#
 
 if __name__ == '__main__':
-    print move("foo.txt", "foo.txt")
+    print ParsedPath("_modu.py").isempty()
+    print ParsedPath("__backup__").path
+    print ParsedPath("__backup__").isempty()
