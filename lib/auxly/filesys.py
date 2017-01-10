@@ -14,6 +14,33 @@ from collections import namedtuple
 ## SECTION: Class Definitions                                   #
 ##==============================================================#
 
+class File:
+    """Handle object IO."""
+    def __init__(self, path):
+        self.path = path
+        self.parsed_path = ParsedPath(self.path)
+    def __repr__(self):
+        return self.path
+    def read(self):
+        makedirs(self.path)
+        try:
+            with open(self.path) as fi:
+                return fi.read()
+        except:
+            return None
+    def write(self, string, mode="w"):
+        makedirs(self.path)
+        try:
+            with open(self.path, mode) as fo:
+                fo.write(string)
+                return True
+        except:
+            return False
+    def exists(self):
+        return op.exists(self.path)
+    def isempty(self):
+        return isempty(self.path)
+
 class ParsedPath:
     """Handles information on parsed filesystem path."""
     def __init__(self, path):
@@ -166,6 +193,4 @@ def makedirs(path, ignore_extsep=False):
 ##==============================================================#
 
 if __name__ == '__main__':
-    print ParsedPath("_modu.py").isempty()
-    print ParsedPath("__backup__").path
-    print ParsedPath("__backup__").isempty()
+    pass
