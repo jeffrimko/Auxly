@@ -124,6 +124,8 @@ def copy(srcpath, dstpath, overwrite=True):
             chkpath = op.join(dstpath, op.basename(srcpath))
             if op.isdir(chkpath) or op.isfile(chkpath):
                 return False
+    srcpath = op.abspath(srcpath)
+    dstpath = op.abspath(dstpath)
 
     # Make dirs if needed.
     ies = op.isdir(srcpath)
@@ -137,9 +139,13 @@ def copy(srcpath, dstpath, overwrite=True):
             dstdir = op.dirname(dstpath)
         else:
             dstdir = dstpath
+        dstbase = op.split(dstdir)[0]
         for r,ds,fs in os.walk(srcpath):
+            dstnew = r.replace(op.commonprefix([dstbase, r]), "").strip(os.sep).rstrip(os.sep)
+            curdir = op.join(dstdir, dstnew)
+            makedirs(curdir)
             for f in fs:
-                if not copy(op.join(r,f), op.join(dstdir, r, f), overwrite=overwrite):
+                if not copy(op.join(r,f), op.join(curdir, f), overwrite=overwrite):
                     return False
     elif op.isfile(srcpath):
         shutil.copy2(srcpath, dstpath)
