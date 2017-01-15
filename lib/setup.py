@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+from auxly.filesys import File
 
 setup(
     name = "auxly",
@@ -10,7 +11,7 @@ setup(
     keywords = "cli script utility library",
     url = "https://github.com/jeffrimko/Auxly",
     packages=["auxly"],
-    long_description=open("README.rst").read(),
+    long_description=File("README.rst").read() or "",
     classifiers=[
         "Development Status :: 4 - Beta",
         "Topic :: Utilities",
