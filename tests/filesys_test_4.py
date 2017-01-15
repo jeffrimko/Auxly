@@ -4,6 +4,7 @@
 
 from testlib import *
 
+import auxly
 from auxly.filesys import move, makedirs
 
 ##==============================================================#
@@ -79,6 +80,21 @@ class TestCase(BaseTest):
         test.assertFalse(op.isfile(path0))
         test.assertTrue(op.isdir(DIR[0]))
         test.assertTrue(op.isfile(fpath1))
+
+    def test_move_5(test):
+        path0 = op.join(DIR[0], DIR[1])
+        path1 = op.join(DIR[2])
+        makedirs(path0)
+        makedirs(path1)
+        test.assertFalse(op.isdir(DIR[1]))
+        auxly.cwd(DIR[0])
+        test.assertTrue(op.isdir(DIR[1]))
+        tpath0 = op.join("..", DIR[2])
+        tpath1 = op.join(DIR[1])
+        test.assertTrue(move(tpath0, tpath1))
+        test.assertFalse(op.isdir(tpath0))
+        tpath = op.join(DIR[1], DIR[2])
+        test.assertTrue(op.isdir(tpath))
 
 ##==============================================================#
 ## SECTION: Main Body                                           #

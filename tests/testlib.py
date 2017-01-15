@@ -17,7 +17,7 @@ from auxly.filesys import delete, makedirs
 ##==============================================================#
 
 FNAME = ["foo.txt", "bar.txt"]
-DIR = ["foo", "bar"]
+DIR = ["foo", "bar", "baz", "qux"]
 TEXT = ["hello", "world"]
 
 ##==============================================================#
