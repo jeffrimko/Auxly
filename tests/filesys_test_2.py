@@ -63,18 +63,31 @@ class TestCase(BaseTest):
 
     def test_copy_6(test):
         """Copy dir to dir using relative-parent path."""
-        path0 = op.join(DIR[0], DIR[1])
-        path1 = op.join(DIR[2])
-        makedirs(path0)
-        makedirs(path1)
+        test.assertTrue(makedirs(op.join(DIR[0], DIR[1])))
+        test.assertTrue(makedirs(op.join(DIR[2])))
         test.assertFalse(op.isdir(DIR[1]))
         auxly.cwd(DIR[0])
         test.assertTrue(op.isdir(DIR[1]))
-        tpath0 = op.join("..", DIR[2])
-        tpath1 = op.join(DIR[1])
-        test.assertTrue(copy(tpath0, tpath1))
-        test.assertTrue(op.isdir(tpath0))
+        path0 = op.join("..", DIR[2])
+        path1 = DIR[1]
         tpath = op.join(DIR[1], DIR[2])
+        test.assertFalse(op.isdir(tpath))
+        test.assertTrue(copy(path0, path1))
+        test.assertTrue(op.isdir(path0))
+        test.assertTrue(op.isdir(tpath))
+
+    def test_copy_6(test):
+        """Copy dir to dir using relative-parent path."""
+        test.assertTrue(makedirs(op.join(DIR[0], DIR[1])))
+        auxly.cwd(DIR[0])
+        test.assertTrue(op.isdir(DIR[1]))
+        path0 = DIR[1]
+        path1 = ".."
+        tpath = op.join("..", DIR[1])
+        test.assertFalse(op.isdir(tpath))
+        test.assertTrue(copy(path0, path1))
+        import qprompt; qprompt.pause()
+        test.assertTrue(op.isdir(path0))
         test.assertTrue(op.isdir(tpath))
 
 ##==============================================================#
