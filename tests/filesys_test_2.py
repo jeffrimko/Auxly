@@ -5,7 +5,7 @@
 from testlib import *
 
 import auxly
-from auxly.filesys import copy, delete
+from auxly.filesys import copy, delete, isempty
 
 ##==============================================================#
 ## SECTION: Class Definitions                                   #
@@ -62,7 +62,7 @@ class TestCase(BaseTest):
         test.assertTrue(op.isdir(tpath))
 
     def test_copy_6(test):
-        """Copy dir to dir using relative-parent path."""
+        """Copy dir to dir using relative src path."""
         test.assertTrue(makedirs(op.join(DIR[0], DIR[1])))
         test.assertTrue(makedirs(op.join(DIR[2])))
         test.assertFalse(op.isdir(DIR[1]))
@@ -76,8 +76,8 @@ class TestCase(BaseTest):
         test.assertTrue(op.isdir(path0))
         test.assertTrue(op.isdir(tpath))
 
-    def test_copy_6(test):
-        """Copy dir to dir using relative-parent path."""
+    def test_copy_7(test):
+        """Copy dir to dir using relative dst path."""
         test.assertTrue(makedirs(op.join(DIR[0], DIR[1])))
         auxly.cwd(DIR[0])
         test.assertTrue(op.isdir(DIR[1]))
@@ -86,9 +86,19 @@ class TestCase(BaseTest):
         tpath = op.join("..", DIR[1])
         test.assertFalse(op.isdir(tpath))
         test.assertTrue(copy(path0, path1))
-        import qprompt; qprompt.pause()
         test.assertTrue(op.isdir(path0))
         test.assertTrue(op.isdir(tpath))
+
+    def test_copy_8(test):
+        """Copy dir to dir that does not exist."""
+        path0 = DIR[0]
+        path1 = DIR[1]
+        test.assertTrue(makedirs(path0))
+        test.assertFalse(op.isdir(path1))
+        test.assertTrue(copy(path0, path1))
+        test.assertTrue(op.isdir(path0))
+        test.assertTrue(op.isdir(path1))
+        test.assertTrue(isempty(path1))
 
 ##==============================================================#
 ## SECTION: Main Body                                           #

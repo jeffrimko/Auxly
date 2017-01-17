@@ -127,28 +127,46 @@ def copy(srcpath, dstpath, overwrite=True):
     srcpath = op.abspath(srcpath)
     dstpath = op.abspath(dstpath)
 
-    # Make dirs if needed.
-    ies = op.isdir(srcpath)
-    makedirs(dstpath, ignore_extsep=ies)
-
     # Handle copying.
     if op.isdir(srcpath):
-        if op.isdir(srcpath) or op.isdir(dstpath):
-            dstdir = dstpath
-        elif "" != op.splitext(dstpath)[1]:
+        dstdir = dstpath
+        if op.isfile(dstpath):
             dstdir = op.dirname(dstpath)
-        else:
-            dstdir = dstpath
-        dstbase = op.split(dstdir)[0]
+        elif op.isdir(dstpath):
+            # Make sure srcdir is copied INTO dstdir.
+            dstdir = op.join(dstpath, op.basename(srcpath))
+        makedirs(dstdir)
         for r,ds,fs in os.walk(srcpath):
-            dstnew = r.replace(op.commonprefix([dstbase, r]), "").strip(os.sep).rstrip(os.sep)
-            curdir = op.join(dstdir, dstnew)
+            basedir = r.replace(srcpath, "").rstrip(os.sep).strip(os.sep)
+            curdir = op.join(dstdir, basedir)
             makedirs(curdir)
             for f in fs:
                 if not copy(op.join(r,f), op.join(curdir, f), overwrite=overwrite):
                     return False
     elif op.isfile(srcpath):
+        makedirs(dstpath)
         shutil.copy2(srcpath, dstpath)
+
+    # # Handle copying.
+    # if op.isdir(srcpath):
+    #     if op.isdir(srcpath) or op.isdir(dstpath):
+    #         dstdir = dstpath
+    #     elif "" != op.splitext(dstpath)[1]:
+    #         dstdir = op.dirname(dstpath)
+    #     else:
+    #         dstdir = dstpath
+    #     dstbase = op.split(dstdir)[0]
+    #     for r,ds,fs in os.walk(srcpath):
+    #         dstnew = r.replace(op.commonprefix([dstbase, r]), "").strip(os.sep).rstrip(os.sep)
+    #         curdir = op.normpath(op.join(dstdir, dstnew))
+    #         print "DBGMRK 1", dstdir, dstnew, curdir
+    #         makedirs(curdir)
+    #         for f in fs:
+    #             if not copy(op.join(r,f), op.join(curdir, f), overwrite=overwrite):
+    #                 return False
+    # elif op.isfile(srcpath):
+    #     shutil.copy2(srcpath, dstpath)
+
     return op.exists(dstpath)
 
 def move(srcpath, dstpath, overwrite=True):
@@ -162,13 +180,16 @@ def move(srcpath, dstpath, overwrite=True):
     if op.isfile(srcpath) and op.isdir(dstpath):
         verfunc = op.isfile
         verpath = op.join(dstpath, op.basename(srcpath))
-    elif op.isdir(srcpath) and op.isdir(dstpath):
-        verfunc = op.isdir
-        verpath = op.join(dstpath, op.basename(srcpath))
     elif op.isfile(srcpath):
         verfunc = op.isfile
         verpath = dstpath
         makedirs(dstpath)
+    elif op.isdir(srcpath) and op.isdir(dstpath):
+        verfunc = op.isdir
+        verpath = op.join(dstpath, op.basename(srcpath))
+    elif op.isdir(srcpath):
+        verfunc = op.isdir
+        verpath = dstpath
     else:
         return False
     if op.isfile(verpath):
@@ -199,4 +220,12 @@ def makedirs(path, ignore_extsep=False):
 ##==============================================================#
 
 if __name__ == '__main__':
-    pass
+    # pass
+    # delete("bar")
+    # copy("foo", "new")
+    print move("foo", "new")
+    move("new", "__backup__")
+    # print move("old", "bar")
+    # copy("foo", "__backup__")
+    # copy("..\dist", "new")
+    # print copy("foo", "..")

@@ -5,7 +5,7 @@
 from testlib import *
 
 import auxly
-from auxly.filesys import move, makedirs
+from auxly.filesys import move, makedirs, isempty
 
 ##==============================================================#
 ## SECTION: Class Definitions                                   #
@@ -82,19 +82,43 @@ class TestCase(BaseTest):
         test.assertTrue(op.isfile(fpath1))
 
     def test_move_5(test):
-        path0 = op.join(DIR[0], DIR[1])
-        path1 = op.join(DIR[2])
-        makedirs(path0)
-        makedirs(path1)
+        """Copy dir to dir using relative src path."""
+        test.assertTrue(makedirs(op.join(DIR[0], DIR[1])))
+        test.assertTrue(makedirs(op.join(DIR[2])))
         test.assertFalse(op.isdir(DIR[1]))
         auxly.cwd(DIR[0])
         test.assertTrue(op.isdir(DIR[1]))
-        tpath0 = op.join("..", DIR[2])
-        tpath1 = op.join(DIR[1])
-        test.assertTrue(move(tpath0, tpath1))
-        test.assertFalse(op.isdir(tpath0))
+        path0 = op.join("..", DIR[2])
+        path1 = DIR[1]
         tpath = op.join(DIR[1], DIR[2])
+        test.assertFalse(op.isdir(tpath))
+        test.assertTrue(move(path0, path1))
+        test.assertFalse(op.isdir(path0))
         test.assertTrue(op.isdir(tpath))
+
+    def test_move_6(test):
+        """Move dir to dir using relative dst path."""
+        test.assertTrue(makedirs(op.join(DIR[0], DIR[1])))
+        auxly.cwd(DIR[0])
+        test.assertTrue(op.isdir(DIR[1]))
+        path0 = DIR[1]
+        path1 = ".."
+        tpath = op.join("..", DIR[1])
+        test.assertFalse(op.isdir(tpath))
+        test.assertTrue(move(path0, path1))
+        test.assertFalse(op.isdir(path0))
+        test.assertTrue(op.isdir(tpath))
+
+    def test_move_7(test):
+        """Move dir to dir that does not exist."""
+        path0 = DIR[0]
+        path1 = DIR[1]
+        test.assertTrue(makedirs(path0))
+        test.assertFalse(op.isdir(path1))
+        test.assertTrue(move(path0, path1))
+        test.assertFalse(op.isdir(path0))
+        test.assertTrue(op.isdir(path1))
+        test.assertTrue(isempty(path1))
 
 ##==============================================================#
 ## SECTION: Main Body                                           #
