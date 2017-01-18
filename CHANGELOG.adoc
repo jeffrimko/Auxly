@@ -1,5 +1,16 @@
 = Auxly Changelog
 
+== auxly-0.3.3 (2017-01-17)
+=== Release highlights
+  - Added convenience class.
+  - Fixed issues with `filesys` functions.
+
+=== All additions and changes
+  - Added `Cwd` class.
+
+=== Bug fixes
+  - Fixed incorrect behavior in `filesys.copy()` and `filesys.move()`.
+
 == auxly-0.3.2 (2017-01-09)
 === Release highlights
   - Added convenience class.
