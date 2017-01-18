@@ -120,6 +120,15 @@ class TestCase(BaseTest):
         test.assertTrue(op.isdir(path1))
         test.assertTrue(isempty(path1))
 
+    def test_move_8(test):
+        """Regression check for release `0.3.4`; bug fix for deleting
+        file if src and dst have the same case-insensitive names on Windows."""
+        path = FNAME[0]
+        fwrite(path, TEXT[0])
+        test.assertTrue(op.isfile(path))
+        test.assertTrue(move(path.lower(), path.upper()))
+        test.assertTrue(op.isfile(path))
+
 ##==============================================================#
 ## SECTION: Main Body                                           #
 ##==============================================================#

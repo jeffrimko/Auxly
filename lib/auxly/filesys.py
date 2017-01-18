@@ -176,7 +176,11 @@ def move(srcpath, dstpath, overwrite=True):
         if not overwrite:
             return False
         else:
-            if not delete(verpath):
+            # On Windows, filename case is ignored so the following check will
+            # prevent unintentionally deleting the srcpath before moving.
+            if "nt" == os.name and srcpath.lower() == dstpath.lower():
+                pass
+            elif not delete(verpath):
                 return False
     try:
         shutil.move(srcpath, dstpath)
