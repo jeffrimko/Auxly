@@ -147,26 +147,6 @@ def copy(srcpath, dstpath, overwrite=True):
         makedirs(dstpath)
         shutil.copy2(srcpath, dstpath)
 
-    # # Handle copying.
-    # if op.isdir(srcpath):
-    #     if op.isdir(srcpath) or op.isdir(dstpath):
-    #         dstdir = dstpath
-    #     elif "" != op.splitext(dstpath)[1]:
-    #         dstdir = op.dirname(dstpath)
-    #     else:
-    #         dstdir = dstpath
-    #     dstbase = op.split(dstdir)[0]
-    #     for r,ds,fs in os.walk(srcpath):
-    #         dstnew = r.replace(op.commonprefix([dstbase, r]), "").strip(os.sep).rstrip(os.sep)
-    #         curdir = op.normpath(op.join(dstdir, dstnew))
-    #         print "DBGMRK 1", dstdir, dstnew, curdir
-    #         makedirs(curdir)
-    #         for f in fs:
-    #             if not copy(op.join(r,f), op.join(curdir, f), overwrite=overwrite):
-    #                 return False
-    # elif op.isfile(srcpath):
-    #     shutil.copy2(srcpath, dstpath)
-
     return op.exists(dstpath)
 
 def move(srcpath, dstpath, overwrite=True):
@@ -220,12 +200,4 @@ def makedirs(path, ignore_extsep=False):
 ##==============================================================#
 
 if __name__ == '__main__':
-    # pass
-    # delete("bar")
-    # copy("foo", "new")
-    print move("foo", "new")
-    move("new", "__backup__")
-    # print move("old", "bar")
-    # copy("foo", "__backup__")
-    # copy("..\dist", "new")
-    # print copy("foo", "..")
+    pass
