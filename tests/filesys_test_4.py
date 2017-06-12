@@ -127,7 +127,7 @@ class TestCase(BaseTest):
         fwrite(path, TEXT[0])
         test.assertTrue(op.isfile(path))
         test.assertTrue(move(path.lower(), path.upper()))
-        test.assertTrue(op.isfile(path))
+        test.assertTrue(op.isfile(path.upper()))
 
 ##==============================================================#
 ## SECTION: Main Body                                           #
