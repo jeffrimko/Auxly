@@ -5,7 +5,7 @@
 from testlib import *
 
 import auxly
-from auxly.filesys import copy, delete, isempty
+from auxly.filesys import copy, cwd, delete, isempty
 
 ##==============================================================#
 ## SECTION: Class Definitions                                   #
@@ -66,7 +66,7 @@ class TestCase(BaseTest):
         test.assertTrue(makedirs(op.join(DIR[0], DIR[1])))
         test.assertTrue(makedirs(op.join(DIR[2])))
         test.assertFalse(op.isdir(DIR[1]))
-        auxly.cwd(DIR[0])
+        cwd(DIR[0])
         test.assertTrue(op.isdir(DIR[1]))
         path0 = op.join("..", DIR[2])
         path1 = DIR[1]
@@ -79,7 +79,7 @@ class TestCase(BaseTest):
     def test_copy_7(test):
         """Copy dir to dir using relative dst path."""
         test.assertTrue(makedirs(op.join(DIR[0], DIR[1])))
-        auxly.cwd(DIR[0])
+        cwd(DIR[0])
         test.assertTrue(op.isdir(DIR[1]))
         path0 = DIR[1]
         path1 = ".."

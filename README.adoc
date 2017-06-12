@@ -13,7 +13,71 @@ The status of this project is **pre-alpha**. This project is not yet suitable fo
 Auxly should run on any Python 2.7/3.x interpreter without additional dependencies.
 
 == Usage
+Auxly provides the following modules:
+
+  - `auxly.filesys` - <<_file_system>>
+  - `auxly.shell` - <<_shell>>
 
 The following are basic examples of Auxly (all examples can be found https://github.com/jeffrimko/Auxly/tree/master/examples[here]):
 
   - https://github.com/jeffrimko/Auxly/blob/master/examples/delete_1.py[examples/delete_1.py] - Deletes all PYC files in the project.
+
+=== File System
+The `auxly.filesys` module provides various convenience functions for working with the file system. Functions that overlap with the standard library are designed to do what you'd reasonably expect (https://en.wikipedia.org/wiki/Principle_of_least_astonishment[POLA]) and, when necessary, fail without throwing exceptions.
+
+Start by importing the file system module into your Python script:
+
+[source,python]
+--------
+import auxly.filesys as fs
+--------
+
+Checking or changing the current working directory (CWD) is easy:
+
+[source,python]
+--------
+print(fs.cwd())  # Get the CWD.
+fs.cwd("foo")  # Set the CWD to `foo`.
+with fs.Cwd(fs.homedir()):  # Temporarily set CWD.
+    pass  # do stuff here...
+--------
+
+Copying or moving files is a snap:
+
+[source,python]
+--------
+fs.copy("foo.txt", fs.homedir())  # Simple file move.
+fs.move("bar", fs.homedir())  # Entire directory copied.
+--------
+
+Note that copy/move functions return a boolean. Miss your exceptions? Try the following:
+
+[source,python]
+--------
+fs.copy("foo.txt", "bar") or auxly.throw()  # Throws/raises exception on failure.
+--------
+
+Check if a file or directory is empty:
+
+[source,python]
+--------
+print(fs.isempty("foo.txt"))  # Works on files...
+print(fs.isempty("bar"))  # ...or directories!
+--------
+
+Need to make some directories:
+
+[source,python]
+--------
+fs.makedirs("bar/baz")
+--------
+
+Delete files or directories:
+
+[source,python]
+--------
+fs.delete("bar")  # Returns true if successful.
+--------
+
+=== Shell
+TODO

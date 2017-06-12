@@ -2,7 +2,6 @@
 ## SECTION: Imports                                             #
 ##==============================================================#
 
-import qprompt
 import verace
 
 ##==============================================================#
@@ -10,19 +9,13 @@ import verace
 ##==============================================================#
 
 VERCHK = verace.VerChecker("Auxly", __file__)
-VERCHK.include(r"lib\setup.py", match="version = ", delim='"')
-VERCHK.include(r"lib\auxly\_modu.py", match="__version__ = ", delim='"')
-VERCHK.include(r"CHANGELOG.adoc", match="auxly-", delim="-", delim2=" ", updatable=False)
+VERCHK.include(r"lib\setup.py", match="version = ", splits=[('"',1)])
+VERCHK.include(r"lib\auxly\_modu.py", match="__version__ = ", splits=[('"',1)])
+VERCHK.include(r"CHANGELOG.adoc", match="auxly-", splits=[("-",1),(" ",0)], updatable=False)
 
 ##==============================================================#
 ## SECTION: Main Body                                           #
 ##==============================================================#
 
 if __name__ == '__main__':
-    VERCHK.run()
-    if qprompt.ask_yesno("Update version?", dft="n"):
-        newver = qprompt.ask_str("New version string")
-        if newver:
-            VERCHK.update(newver)
-            VERCHK.run()
-            qprompt.pause()
+    VERCHK.prompt()

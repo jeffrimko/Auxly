@@ -8,7 +8,8 @@ import sys
 import unittest
 
 # Allows development version of library to be used instead of installed.
-sys.path.insert(0, r"..\lib")
+libdir = op.normpath(op.join(op.abspath(op.dirname(__file__)), r"../lib"))
+sys.path.insert(0, libdir)
 
 from auxly.filesys import delete, makedirs
 

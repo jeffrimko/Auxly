@@ -4,74 +4,67 @@
 ## SECTION: Imports                                             #
 ##==============================================================#
 
+import atexit
 import os
 import os.path as op
 import re
 import shutil
-from collections import namedtuple
 
 ##==============================================================#
 ## SECTION: Class Definitions                                   #
 ##==============================================================#
 
-class File:
-    """Handle object IO."""
-    def __init__(self, path):
-        self.path = path
-        self.parsed_path = ParsedPath(self.path)
+class Cwd(object):
+    """Class to handle changing current working directory. Can
+    be used as a context manager."""
+    def __init__(self, newpath=""):
+        self.path = os.getcwd()
+        self.original = self.path
+        if newpath:
+            if not op.isabs(newpath):
+                newpath = op.abspath(newpath)
+            if op.isfile(newpath):
+                newpath = op.dirname(newpath)
+            if op.isdir(newpath):
+                self.path = newpath
+            os.chdir(self.path)
+    def __enter__(self):
+        return self
+    def __exit__(self, type, value, traceback):
+        os.chdir(self.original)
+    def __getattr__(self, name):
+        return getattr(self.path, name)
     def __repr__(self):
         return self.path
-    def read(self):
-        makedirs(self.path)
-        try:
-            with open(self.path) as fi:
-                return fi.read()
-        except:
-            return None
-    def write(self, string, mode="w"):
-        makedirs(self.path)
-        try:
-            with open(self.path, mode) as fo:
-                fo.write(string)
-                return True
-        except:
-            return False
-    def exists(self):
-        return op.exists(self.path)
-    def isempty(self):
-        return isempty(self.path)
-
-class ParsedPath:
-    """Handles information on parsed filesystem path."""
-    def __init__(self, path):
-        self.path = op.abspath(path)
-        self.parse()
-    def __repr__(self):
-        return self.path
-    def parse(self):
-        self.dir = None
-        self.file = None
-        self.ext = None
-        if op.isdir(self.path):
-            self.dir = self.path
-        elif op.isfile(self.path):
-            base = op.basename(self.path)
-            self.dir = op.dirname(self.path)
-            self.filename = base
-            self.file = op.splitext(base)[0]
-            self.ext = op.splitext(base)[1]
-    def isfile(self):
-        return op.isfile(self.path)
-    def isdir(self):
-        return op.isdir(self.path)
-    def exists(self):
-        return op.exists(self.path)
-    def isempty(self):
-        return isempty(self.path)
 
 ##==============================================================#
 ## SECTION: Function Definitions                                #
 ##==============================================================#
+
+def abspath(relpath, root=__file__):
+    """Returns an absolute path based on the given root and relative path."""
+    if op.isfile(root):
+        root = op.dirname(root)
+    return op.abspath(op.join(root, relpath))
+
+def homedir():
+    """Returns the path to the current user's home directory."""
+    return op.expanduser("~")
+
+def cwd(path=None):
+    """Returns the CWD and optionally sets it to the given path."""
+    return Cwd(path).path
+
+def makedirs(path, ignore_extsep=False):
+    """Makes all directories required for given path; returns true if successful
+    and false otherwise."""
+    if not ignore_extsep and op.basename(path).find(os.extsep) > -1:
+        path = op.dirname(path)
+    try:
+        os.makedirs(path)
+    except:
+        return False
+    return True
 
 def delete(path, regex=None, recurse=False, test=False):
     """Deletes the file or directory at `path`. If `path` is a directory and
@@ -102,6 +95,28 @@ def delete(path, regex=None, recurse=False, test=False):
             else: return [path]
             return [] if op.exists(path) else [path]
     return deleted
+
+def countfiles(path, recurse=False):
+    """Returns the number of files under the given directory path."""
+    if not op.isdir(path):
+        return 0
+    count = 0
+    for r,ds,fs in os.walk(path):
+        count += len(fs)
+        if not recurse:
+            break
+    return count
+
+def countdirs(path, recurse=False):
+    """Returns the number of directories under the given directory path."""
+    if not op.isdir(path):
+        return 0
+    count = 0
+    for r,ds,fs in os.walk(path):
+        count += len(ds)
+        if not recurse:
+            break
+    return count
 
 def isempty(path):
     """Returns True if the given file or directory path is empty."""
@@ -187,17 +202,6 @@ def move(srcpath, dstpath, overwrite=True):
     except:
         return False
     return verfunc(verpath)
-
-def makedirs(path, ignore_extsep=False):
-    """Makes all directories required for given path; returns true if successful
-    and false otherwise."""
-    if not ignore_extsep and op.basename(path).find(os.extsep) > -1:
-        path = op.dirname(path)
-    try:
-        os.makedirs(path)
-    except:
-        return False
-    return True
 
 ##==============================================================#
 ## SECTION: Main Body                                           #

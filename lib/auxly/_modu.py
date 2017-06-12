@@ -12,29 +12,7 @@ import sys
 ##==============================================================#
 
 #: Library version string.
-__version__ = "0.3.4"
-
-##==============================================================#
-## SECTION: Class Definitions                                   #
-##==============================================================#
-
-class Cwd:
-    def __init__(self, newpath=""):
-        self.path = os.getcwd()
-        self.original = self.path
-        if newpath:
-            if not op.isabs(newpath):
-                newpath = op.abspath(newpath)
-            if op.isfile(newpath):
-                newpath = op.dirname(newpath)
-            self.path = newpath
-            os.chdir(newpath)
-    def __enter__(self):
-        return self
-    def __exit__(self, type, value, traceback):
-        os.chdir(self.original)
-    def __getattr__(self, name):
-        return getattr(self.path, name)
+__version__ = "0.3.5-alpha1"
 
 ##==============================================================#
 ## SECTION: Function Definitions                                #
@@ -49,9 +27,10 @@ def open(target):
         opener = "open" if sys.platform == "darwin" else "xdg-open"
         subprocess.call([opener, target])
 
-def cwd(path=None):
-    """Returns the CWD and optionally sets it to the given path."""
-    return Cwd(path).path
+def throw(name="AuxlyException"):
+    """Convenience function for throwing/raising exceptions. Usefully with
+    compound "or" statements and similar situations."""
+    raise Exception(name)
 
 ##==============================================================#
 ## SECTION: Main Body                                           #

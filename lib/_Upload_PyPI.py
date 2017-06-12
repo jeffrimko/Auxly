@@ -4,9 +4,7 @@
 ## SECTION: Imports                                             #
 ##==============================================================#
 
-import os
 import auxly
-import subprocess
 import sys
 
 import qprompt
