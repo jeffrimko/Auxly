@@ -15,13 +15,14 @@ Auxly should run on any Python 2.7/3.x interpreter without additional dependenci
 == Usage
 Auxly provides the following modules:
 
-  - `auxly.filesys` - <<_file_system>>
-  - `auxly.shell` - <<_shell>>
+  - `auxly.filesys` - <<filesys>>
+  - `auxly.shell` - <<shell>>
 
 The following are basic examples of Auxly (all examples can be found https://github.com/jeffrimko/Auxly/tree/master/examples[here]):
 
   - https://github.com/jeffrimko/Auxly/blob/master/examples/delete_1.py[examples/delete_1.py] - Deletes all PYC files in the project.
 
+[[filesys]]
 === File System
 The `auxly.filesys` module provides various convenience functions for working with the file system. Functions that overlap with the standard library are designed to do what you'd reasonably expect (https://en.wikipedia.org/wiki/Principle_of_least_astonishment[POLA]) and, when necessary, fail without throwing exceptions.
 
@@ -79,5 +80,6 @@ Delete files or directories:
 fs.delete("bar")  # Returns true if successful.
 --------
 
+[[shell]]
 === Shell
 TODO
