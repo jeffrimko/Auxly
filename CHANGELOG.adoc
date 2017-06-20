@@ -1,12 +1,11 @@
 = Auxly Changelog
 
-== auxly-0.3.5 (TODO)
+== auxly-0.3.5 (2017-06-19)
 === Release highlights
   - Minor module reorganization.
 
 === All additions and changes
   - Moved `path` functions to `filesys`.
-  - Removed `File` and `ParsedPath`; use `pathlib` (or `pathlib2`) instead.
 
 === Bug fixes
 Not applicable.

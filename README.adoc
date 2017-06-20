@@ -1,6 +1,6 @@
 = Auxly
 
-image:http://img.shields.io/:license-mit-blue.svg["License", link="https://github.com/jeffrimko/Qprompt/blob/master/LICENSE"]
+image:http://img.shields.io/:license-mit-blue.svg["License", link="https://github.com/jeffrimko/Auxly/blob/master/LICENSE"]
 image:https://travis-ci.org/jeffrimko/Auxly.svg?branch=master["Build Status"]
 
 == Introduction
@@ -12,9 +12,17 @@ The status of this project is **pre-alpha**. This project is not yet suitable fo
 == Requirements
 Auxly should run on any Python 2.7/3.x interpreter without additional dependencies.
 
+== Installation
+Auxly can be installed with pip using the following command: `pip install auxly`
+
+Additionally, Auxly can be installed from source by running: `python setup.py install`
+
 == Usage
+Auxly provides various convenience functions for common tasks. Functions that overlap with the standard library are designed to do what you would reasonably expect (https://en.wikipedia.org/wiki/Principle_of_least_astonishment[POLA]) and, when necessary, fail without throwing exceptions.
+
 Auxly provides the following modules:
 
+  - `auxly` - <<toplevel>>
   - `auxly.filesys` - <<filesys>>
   - `auxly.shell` - <<shell>>
 
@@ -22,9 +30,28 @@ The following are basic examples of Auxly (all examples can be found https://git
 
   - https://github.com/jeffrimko/Auxly/blob/master/examples/delete_1.py[examples/delete_1.py] - Deletes all PYC files in the project.
 
+[[toplevel]]
+=== Top Level
+Start by importing Auxly into your Python script:
+
+[source,python]
+--------
+import auxly
+--------
+
+Auxly will attempt to open files and URLs using the default application:
+
+[source,python]
+--------
+auxly.open("myfile.txt")
+auxly.open("https://www.github.com/")
+--------
+
+Also in the top level is the `auxly.throw()` convenience function that allows exceptions to be thrown if desired.
+
 [[filesys]]
 === File System
-The `auxly.filesys` module provides various convenience functions for working with the file system. Functions that overlap with the standard library are designed to do what you'd reasonably expect (https://en.wikipedia.org/wiki/Principle_of_least_astonishment[POLA]) and, when necessary, fail without throwing exceptions.
+The `auxly.filesys` module provides various convenience functions for working with the file system.
 
 Start by importing the file system module into your Python script:
 
@@ -82,4 +109,53 @@ fs.delete("bar")  # Returns true if successful.
 
 [[shell]]
 === Shell
-TODO
+The `auxly.shell` module provides various convenience functions for working with the system shell.
+
+Start by importing the shell module into your Python script:
+
+[source,python]
+--------
+import auxly.shell as sh
+--------
+
+Calling command line utilities is easy:
+
+[source,python]
+--------
+sh.call("ls")
+--------
+
+Not sure if a utility is available on the shell? Try the following:
+
+[source,python]
+--------
+sh.has("ls")
+# True
+--------
+
+Call a utility while hiding the output:
+
+[source,python]
+--------
+sh.silent("ls")
+--------
+
+Need to iterate over the stdout of a command? Just use:
+
+[source,python]
+--------
+for line in sh.iterout("cat myfile.txt"):
+    print(line)
+--------
+
+Or get the stdout as a string:
+
+[source,python]
+--------
+sh.strout("ls")
+--------
+
+== Similar
+The following projects are similar and may be worth checking out:
+
+  - https://github.com/cdgriffith/Reusables[Reusables]

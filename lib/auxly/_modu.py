@@ -12,7 +12,7 @@ import sys
 ##==============================================================#
 
 #: Library version string.
-__version__ = "0.3.5-alpha1"
+__version__ = "0.3.5-alpha2"
 
 ##==============================================================#
 ## SECTION: Function Definitions                                #

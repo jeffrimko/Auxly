@@ -37,6 +37,76 @@ class Cwd(object):
     def __repr__(self):
         return self.path
 
+class Path(str):
+    """Object representing a filesystem path."""
+    def __new__(cls, content):
+        return super(Path, cls).__new__(cls, op.abspath(content))
+    def __init__(self, path):
+        self.parse()
+    def parse(self):
+        self.dir = None
+        self.file = None
+        self.ext = None
+        if op.isdir(self):
+            self.dir = self
+        elif op.isfile(self):
+            base = op.basename(self)
+            self.dir = op.dirname(self)
+            self.filename = base
+            self.file = op.splitext(base)[0]
+            self.ext = op.splitext(base)[1]
+    def dirpath(self):
+        """Returns a Path object for the directory associated with this path."""
+        return Path(self.dir)
+    def join(self, relpath):
+        """Joins the given relative path with this path."""
+        return Path(op.join(self, relpath))
+    def isfile(self):
+        return op.isfile(self)
+    def isdir(self):
+        return op.isdir(self)
+    def exists(self):
+        return op.exists(self)
+    def isempty(self):
+        return isempty(self)
+
+class File(object):
+    """Object representing a filesystem file."""
+    def __init__(self, path, del_at_exit=False):
+        """Creates a file object for the given path.
+
+        **Params:**
+          - path (str) - Path to the file.
+          - del_at_exit (bool) - If true, the file will be deleted when the
+            script exits.
+        """
+        self.path = Path(path)
+        if del_at_exit:
+            atexit.register(self.delete)
+    def __repr__(self):
+        return self.path
+    def read(self):
+        makedirs(self.path)
+        try:
+            with open(self.path) as fi:
+                return fi.read()
+        except:
+            return None
+    def write(self, text, mode="w"):
+        makedirs(self.path)
+        try:
+            with open(self.path, mode) as fo:
+                fo.write(text)
+                return True
+        except:
+            return False
+    def delete(self):
+        return delete(self.path)
+    def exists(self):
+        return op.exists(self.path)
+    def isempty(self):
+        return isempty(self.path)
+
 ##==============================================================#
 ## SECTION: Function Definitions                                #
 ##==============================================================#
