@@ -22,7 +22,7 @@ DIR = ["foo", "bar", "baz", "qux"]
 TEXT = ["hello", "world"]
 
 ##==============================================================#
-## SECTION: Global Definitions                                  #
+## SECTION: Class Definitions                                   #
 ##==============================================================#
 
 class BaseTest(unittest.TestCase):
