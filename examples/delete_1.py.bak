@@ -5,7 +5,7 @@ delfunc = lambda is_test: auxly.filesys.delete("..", "\.pyc$", recurse=True, tes
 delfiles = delfunc(True)
 if len(delfiles):
     print("Files to delete:")
-    print(("\n".join(["    " + i for i in delfiles])))
+    print("\n".join(["    " + i for i in delfiles]))
     if qprompt.ask_yesno("OK to delete?"):
         if delfunc(False) == delfiles:
             qprompt.alert("Files deleted.")
