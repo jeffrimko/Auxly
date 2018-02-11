@@ -6,6 +6,7 @@
 
 import atexit
 import os
+import io
 import os.path as op
 import re
 import shutil
@@ -92,10 +93,14 @@ class File(object):
                 return fi.read()
         except:
             return None
-    def write(self, text, mode="w"):
+    def append(self, text, binary=False, **kwargs):
+        mode = "ab" if binary else "a"
+        self.write(text, mode=mode **kwargs)
+    def write(self, text, binary=False, **kwargs):
         makedirs(self.path)
         try:
-            with open(self.path, mode) as fo:
+            mode = "wb" if binary else "w"
+            with io.open(self.path, mode, **kwargs) as fo:
                 fo.write(text)
                 return True
         except:
