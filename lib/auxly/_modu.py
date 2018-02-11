@@ -2,6 +2,7 @@
 ## SECTION: Imports                                             #
 ##==============================================================#
 
+import ctypes
 import os
 import os.path as op
 import subprocess
@@ -31,6 +32,13 @@ def throw(name="AuxlyException"):
     """Convenience function for throwing/raising exceptions. Usefully with
     compound "or" statements and similar situations."""
     raise Exception(name)
+
+def isadmin():
+    """Returns true if the script is being run in admin mode, false
+    otherwise."""
+    if sys.platform == "win32":
+        return ctypes.windll.shell32.IsUserAnAdmin() != 0
+    return os.getuid() == 0
 
 ##==============================================================#
 ## SECTION: Main Body                                           #
