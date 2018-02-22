@@ -2,9 +2,10 @@
 ## SECTION: Imports                                             #
 ##==============================================================#
 
+import functools
 import os
 import subprocess
-import functools
+import sys
 
 ##==============================================================#
 ## SECTION: Global Definitions                                  #
@@ -48,16 +49,23 @@ def has(cmd):
 def iterstd(cmd, std="out", **kwargs):
     """Iterates through the lines of a stderr/stdout stream for the given shell
     command."""
-    kwargs['shell'] = True
-    kwargs['stdout'] = subprocess.PIPE
-    kwargs['stderr'] = subprocess.PIPE
-    with subprocess.Popen(cmd, **kwargs) as proc:
+    def _readline():
         while True:
             line = getattr(proc, "std"+std).readline()
             if line != b"":
                 yield line.rstrip().decode("UTF-8", "replace")
             else:
                 break
+    kwargs['shell'] = True
+    kwargs['stdout'] = subprocess.PIPE
+    kwargs['stderr'] = subprocess.PIPE
+    if sys.version_info >= (3,0):
+        with subprocess.Popen(cmd, **kwargs) as proc:
+            for line in _readline(): yield line
+    else:
+        proc = subprocess.Popen(cmd, **kwargs)
+        for line in _readline(): yield line
+        proc.kill()
 
 ##--------------------------------------------------------------#
 ## Stdout related functions.                                    #
