@@ -51,13 +51,13 @@ def iterstd(cmd, std="out", **kwargs):
     kwargs['shell'] = True
     kwargs['stdout'] = subprocess.PIPE
     kwargs['stderr'] = subprocess.PIPE
-    proc = subprocess.Popen(cmd, **kwargs)
-    while True:
-        line = getattr(proc, "std"+std).readline()
-        if line != b"":
-            yield line.rstrip().decode("UTF-8", "replace")
-        else:
-            break
+    with subprocess.Popen(cmd, **kwargs) as proc:
+        while True:
+            line = getattr(proc, "std"+std).readline()
+            if line != b"":
+                yield line.rstrip().decode("UTF-8", "replace")
+            else:
+                break
 
 ##--------------------------------------------------------------#
 ## Stdout related functions.                                    #
