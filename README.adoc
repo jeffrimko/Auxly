@@ -47,6 +47,13 @@ auxly.open("myfile.txt")
 auxly.open("https://www.github.com/")
 --------
 
+Auxly can tell you if the script is running as an admin:
+
+[source,python]
+--------
+auxly.isadmin()
+--------
+
 Also in the top level is the `auxly.throw()` convenience function that allows exceptions to be thrown if desired.
 
 [[filesys]]
