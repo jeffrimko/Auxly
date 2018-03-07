@@ -5,8 +5,9 @@
 ##==============================================================#
 
 import atexit
-import os
+import hashlib
 import io
+import os
 import os.path as op
 import re
 import shutil
@@ -111,6 +112,8 @@ class File(object):
         return op.exists(self.path)
     def isempty(self):
         return isempty(self.path)
+    def checksum(self, **kwargs):
+        return checksum(self.path, **kwargs)
 
 ##==============================================================#
 ## SECTION: Function Definitions                                #
@@ -277,6 +280,21 @@ def move(srcpath, dstpath, overwrite=True):
     except:
         return False
     return verfunc(verpath)
+
+def checksum(fpath, hasher=None, asbytes=False):
+    """Returns the checksum of the file at the given path as a hex string
+    (default) or as a bytes literal. Uses MD5 by default. Based on code from
+    https://stackoverflow.com/a/3431835/789078."""
+    def blockiter(fpath, blocksize=0x1000):
+        with open(fpath, "rb") as afile:
+            block = afile.read(blocksize)
+            while len(block) > 0:
+                yield block
+                block = afile.read(blocksize)
+    hasher = hasher or hashlib.md5()
+    for block in blockiter(fpath):
+        hasher.update(block)
+    return (hasher.digest() if asbytes else hasher.hexdigest())
 
 ##==============================================================#
 ## SECTION: Main Body                                           #
