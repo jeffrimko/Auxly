@@ -64,12 +64,16 @@ class Path(str):
         """Joins the given relative path with this path."""
         return Path(op.join(self, relpath))
     def isfile(self):
+        """Returns true if path is file, false otherwise."""
         return op.isfile(self)
     def isdir(self):
+        """Returns true if path is directory, false otherwise."""
         return op.isdir(self)
     def exists(self):
+        """Returns true if path exists, false otherwise."""
         return op.exists(self)
     def isempty(self):
+        """Returns true if path is empty, false otherwise."""
         return isempty(self)
 
 class File(object):
@@ -88,31 +92,42 @@ class File(object):
     def __repr__(self):
         return self.path
     def read(self):
+        """Reads from the file and returns result as a string."""
         makedirs(self.path)
         try:
             with open(self.path) as fi:
                 return fi.read()
         except:
             return None
-    def append(self, text, binary=False, **kwargs):
-        mode = "ab" if binary else "a"
-        self.write(text, mode=mode **kwargs)
-    def write(self, text, binary=False, **kwargs):
+    def _write(self, content, mode):
         makedirs(self.path)
         try:
-            mode = "wb" if binary else "w"
-            with io.open(self.path, mode, **kwargs) as fo:
-                fo.write(text)
+            with io.open(self.path, mode) as fo:
+                fo.write(content)
                 return True
         except:
             return False
+    def append(self, content, binary=False):
+        """Appends the given content to the file. Existing content is
+        preserved. Returns true if successful, false otherwise."""
+        mode = "ab" if binary else "a"
+        return self._write(content, mode)
+    def write(self, content, binary=False):
+        """Writes the given content to the file. Existing content is
+        deleted. Returns true if successful, false otherwise."""
+        mode = "wb" if binary else "w"
+        return self._write(content, mode)
     def delete(self):
+        """Deletes the file. Returns true if successful, false otherwise."""
         return delete(self.path)
     def exists(self):
+        """Returns true if the file exists, false otherwise."""
         return op.exists(self.path)
     def isempty(self):
+        """Returns true if the file is empty, false otherwise."""
         return isempty(self.path)
     def checksum(self, **kwargs):
+        """Returns the checksum of the file."""
         return checksum(self.path, **kwargs)
 
 ##==============================================================#

@@ -4,27 +4,23 @@
 
 from testlib import *
 
-from auxly.filesys import Path
+from auxly.filesys import File
 
 ##==============================================================#
 ## SECTION: Class Definitions                                   #
 ##==============================================================#
 
 class TestCase(BaseTest):
-    def test_path_1(test):
-        """Basic Path usage."""
-        path = FNAME[0]
-        fwrite(path, TEXT[0])
-        base,ext = op.splitext(path)
-        dir_ = op.abspath(".")
-        p = Path(path)
-        test.assertTrue(p.exists())
-        test.assertTrue(p.isfile())
-        test.assertFalse(p.isdir())
-        test.assertEqual(dir_, p.dir)
-        test.assertEqual(path, p.filename)
-        test.assertEqual(base, p.file)
-        test.assertEqual(ext, p.ext)
+    def test_file_1(test):
+        """Basic File usage."""
+        p = FNAME[0]
+        f = File(p)
+        test.assertFalse(f.exists())
+        test.assertTrue(f.write("hello"))
+        test.assertTrue(f.append(" world"))
+        test.assertTrue(f.exists())
+        test.assertEqual("hello world", fread(p))
+        test.assertEqual("5eb63bbbe01eeed093cb22bb8f5acdc3", f.checksum())
 
 ##==============================================================#
 ## SECTION: Main Body                                           #

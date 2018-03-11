@@ -22,9 +22,9 @@ Auxly provides various convenience functions for common tasks. Functions that ov
 
 Auxly provides the following modules:
 
-  - `auxly` - <<toplevel>>
-  - `auxly.filesys` - <<filesys>>
-  - `auxly.shell` - <<shell>>
+  - `auxly` - <<toplevel, Top Level>>
+  - `auxly.filesys` - <<filesys, File System>>
+  - `auxly.shell` - <<shell, Shell>>
 
 The following are basic examples of Auxly (all examples can be found https://github.com/jeffrimko/Auxly/tree/master/examples[here]):
 
@@ -112,6 +112,21 @@ Delete files or directories:
 [source,python]
 --------
 fs.delete("bar")  # Returns true if successful.
+--------
+
+There's also `File` and `Path` objects:
+
+[source,python]
+--------
+f = File("foo.txt")
+f.write("hello")
+f.append(" world")
+print(f.read())  # hello world
+
+p = File.path
+print(p.isfile())  # True
+print(p.isdir())  # False
+print(p.isempty())  # False
 --------
 
 [[shell]]
