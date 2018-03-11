@@ -96,8 +96,8 @@ Check if a file or directory is empty:
 
 [source,python]
 --------
-print(fs.isempty("foo.txt"))  # Works on files...
-print(fs.isempty("bar"))  # ...or directories!
+fs.isempty("foo.txt")  # Works on files...
+fs.isempty("bar")  # ...or directories!
 --------
 
 Need to make some directories:
@@ -121,12 +121,12 @@ There's also `File` and `Path` objects:
 f = File("foo.txt")
 f.write("hello")
 f.append(" world")
-print(f.read())  # hello world
+f.read()  # "hello world"
 
-p = File.path
-print(p.isfile())  # True
-print(p.isdir())  # False
-print(p.isempty())  # False
+p = File.path  # Path object
+p.isfile()  # True
+p.isdir()  # False
+p.isempty()  # False
 --------
 
 [[shell]]
