@@ -4,6 +4,7 @@
 ## SECTION: Imports                                             #
 ##==============================================================#
 
+import __main__
 import atexit
 import hashlib
 import io
@@ -134,8 +135,9 @@ class File(object):
 ## SECTION: Function Definitions                                #
 ##==============================================================#
 
-def abspath(relpath, root=__file__):
+def abspath(relpath, root=None):
     """Returns an absolute path based on the given root and relative path."""
+    root = root or __main__.__file__
     if op.isfile(root):
         root = op.dirname(root)
     return op.abspath(op.join(root, relpath))
