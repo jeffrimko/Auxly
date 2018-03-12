@@ -24,15 +24,15 @@ Auxly provides various convenience functions for common tasks. Functions that ov
 
 Auxly provides the following modules:
 
-  - `auxly` - <<toplevel, Top Level>>
-  - `auxly.filesys` - <<filesys, File System>>
+  - `auxly` - <<top-level, Top Level>>
+  - `auxly.filesys` - <<file-system, File System>>
   - `auxly.shell` - <<shell, Shell>>
 
 The following are basic examples of Auxly (all examples can be found https://github.com/jeffrimko/Auxly/tree/master/examples[here]):
 
   - https://github.com/jeffrimko/Auxly/blob/master/examples/delete_1.py[examples/delete_1.py] - Deletes all PYC files in the project.
 
-[[toplevel]]
+[[top-level]]
 === Top Level
 Start by importing Auxly into your Python script:
 
@@ -58,7 +58,7 @@ auxly.isadmin()
 
 Also in the top level is the `auxly.throw()` convenience function that allows exceptions to be thrown if desired.
 
-[[filesys]]
+[[file-system]]
 === File System
 The `auxly.filesys` module provides various convenience functions for working with the file system.
 
