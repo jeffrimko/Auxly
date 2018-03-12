@@ -1,6 +1,6 @@
 = Auxly Changelog
 
-== auxly-0.3.7 (2018-03-11)
+== auxly-0.4.0 (2018-03-11)
 === Release highlights
   - Minor function addition.
 

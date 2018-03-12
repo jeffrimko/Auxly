@@ -3,7 +3,7 @@ from auxly.filesys import File
 
 setup(
     name = "auxly",
-    version = "0.3.7",
+    version = "0.4.0",
     author = "Jeff Rimko",
     author_email = "jeffrimko@gmail.com",
     description = "Python library for common shell-like script tasks.",
