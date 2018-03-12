@@ -7,7 +7,6 @@
 import __main__
 import atexit
 import hashlib
-import io
 import os
 import os.path as op
 import re
