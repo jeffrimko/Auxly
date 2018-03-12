@@ -177,6 +177,9 @@ Or get the stdout as a string:
 sh.strout("ls")
 --------
 
+== Documentation
+The full documentation for this project can be found http://auxly.readthedocs.io[here on Read the Docs].
+
 == Similar
 The following projects are similar and may be worth checking out:
 
