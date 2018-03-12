@@ -103,7 +103,7 @@ class File(object):
     def _write(self, content, mode):
         makedirs(self.path)
         try:
-            with io.open(self.path, mode) as fo:
+            with open(self.path, mode) as fo:
                 fo.write(content)
                 return True
         except:
