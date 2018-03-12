@@ -8,6 +8,12 @@ Auxly
 
 This is the main documentation for Auxly, a Python library for various helper classes/functions originally intended to make shell-like scripting easier.
 
+For more information:
+
+  - **Readme** - https://github.com/jeffrimko/Auxly/blob/master/README.adoc - Main readme file.
+  - **GitHub** - https://github.com/jeffrimko/Auxly - Main version control repository.
+  - **PyPI** - https://pypi.python.org/pypi/auxly - Package index page.
+
 Top Level
 ---------
 
