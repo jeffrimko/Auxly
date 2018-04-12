@@ -6,6 +6,8 @@ image:https://travis-ci.org/jeffrimko/Auxly.svg?branch=master["Build Status"]
 == Introduction
 This project provides a Python 2.7/3.x library for common tasks especially when writing shell-like scripts. Some of the functionality overlaps with the standard library but the API is slightly modified.
 
+The goal of this project is to leverage the straightforward, clean syntax of Python while avoiding some of the boilerplate code that might be necessary when using the standard library.
+
 == Status
 Currently, this project is in the **development release** stage. While this project is suitable for use, please note that there may be incompatibilities in new releases.
 
@@ -116,7 +118,7 @@ Delete files or directories:
 fs.delete("bar")  # Returns true if successful.
 --------
 
-There's also `File` and `Path` objects:
+There are `File` and `Path` objects too:
 
 [source,python]
 --------
