@@ -13,7 +13,7 @@ import sys
 ##==============================================================#
 
 #: Library version string.
-__version__ = "0.4.0"
+__version__ = "0.4.1"
 
 ##==============================================================#
 ## SECTION: Function Definitions                                #
@@ -39,6 +39,15 @@ def isadmin():
     if sys.platform == "win32":
         return ctypes.windll.shell32.IsUserAnAdmin() != 0
     return os.getuid() == 0
+
+def verbose(enabled):
+    """Returns normal print function if enable, otherwise a dummy print
+    function is returned which will suppress output."""
+    def _vprint(msg, **kwargs):
+        print(msg, **kwargs)
+    def _nprint(msg, **kwargs):
+        pass
+    return _vprint if enabled else _nprint
 
 ##==============================================================#
 ## SECTION: Main Body                                           #
