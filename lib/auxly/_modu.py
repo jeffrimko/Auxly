@@ -8,6 +8,9 @@ import os.path as op
 import subprocess
 import sys
 
+if sys.version_info < (3, 0):
+    from __future__ import print_function
+
 ##==============================================================#
 ## SECTION: Global Definitions                                  #
 ##==============================================================#
