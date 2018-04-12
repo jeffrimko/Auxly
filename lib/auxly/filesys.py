@@ -136,7 +136,7 @@ class File(object):
 
 def abspath(relpath, root=None):
     """Returns an absolute path based on the given root and relative path."""
-    root = root or __main__.__file__
+    root = root or cwd()
     if op.isfile(root):
         root = op.dirname(root)
     return op.abspath(op.join(root, relpath))
