@@ -20,6 +20,7 @@ Top Level
 .. autofunction:: auxly.open
 .. autofunction:: auxly.throw
 .. autofunction:: auxly.isadmin
+.. autofunction:: auxly.verbose
 
 File System
 -----------
