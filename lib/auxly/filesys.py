@@ -93,12 +93,18 @@ class File(object):
         return self.path
     def read(self):
         """Reads from the file and returns result as a string."""
-        makedirs(self.path)
         try:
             with open(self.path) as fi:
                 return fi.read()
         except:
             return None
+    def readlines(self):
+        """Reads from the file and returns result as a list of lines."""
+        try:
+            with open(self.path) as fi:
+                return fi.readlines()
+        except:
+            return []
     def _write(self, content, mode):
         makedirs(self.path)
         try:
