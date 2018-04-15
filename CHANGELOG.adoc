@@ -1,5 +1,15 @@
 = Auxly Changelog
 
+== auxly-0.4.3 (2018-04-14)
+=== Release highlights
+  - Minor method addition.
+
+=== All additions and changes
+  - Added `filesys.File.readlines()`.
+
+=== Bug fixes
+Not applicable.
+
 == auxly-0.4.2 (2018-04-11)
 === Release highlights
   - Minor function tweak.
