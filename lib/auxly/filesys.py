@@ -4,7 +4,6 @@
 ## SECTION: Imports                                             #
 ##==============================================================#
 
-import __main__
 import atexit
 import hashlib
 import os
@@ -132,6 +131,9 @@ class File(object):
     def isempty(self):
         """Returns true if the file is empty, false otherwise."""
         return isempty(self.path)
+    def size(self):
+        """Returns the size of the file in bytes."""
+        return op.getsize(self.path)
     def checksum(self, **kwargs):
         """Returns the checksum of the file."""
         return checksum(self.path, **kwargs)
