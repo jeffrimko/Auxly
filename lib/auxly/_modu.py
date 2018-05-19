@@ -50,6 +50,37 @@ def verbose(enabled):
         pass
     return _vprint if enabled else _nprint
 
+def trycatch(*args, **kwargs):
+    """Wraps a function in a try/catch block. Can be used as a function
+    decorator or as a function that accepts another function.
+
+    **Params**:
+      - func (func) - Function to call. Only available when used as a function.
+      - oncatch (str) [kwargs] - Function to call if an exception is caught.
+      - rethrow (str) [kwargs] - If true, exception will be re-thrown.
+
+    **Examples**:
+      - `trycatch(myfunc)(myarg1, myarg2, kwarg=mykwarg)`
+      - `trycatch(myfunc, oncatch=mycatchfunc)(myarg1, myarg2, kwarg=mykwarg)`
+      - `trycatch(myfunc, rethrow=True)(myarg1, myarg2, kwarg=mykwarg)`
+    """
+    rethrow = kwargs.get('rethrow', False)
+    oncatch = kwargs.get('oncatch', None)
+    def decor(func):
+        def wrapper(*wargs, **wkrgs):
+            try:
+                return func(*wargs, **wkrgs)
+            except:
+                if oncatch != None:
+                    oncatch()
+                if rethrow:
+                    raise
+        return wrapper
+    if len(args) > 0 and callable(args[0]):
+        func = args[0]
+        return decor(func)
+    return decor
+
 ##==============================================================#
 ## SECTION: Main Body                                           #
 ##==============================================================#
