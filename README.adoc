@@ -29,6 +29,7 @@ Auxly provides the following modules:
   - `auxly` - <<top-level, Top Level>>
   - `auxly.filesys` - <<file-system, File System>>
   - `auxly.shell` - <<shell, Shell>>
+  - `auxly.stringy` - <<stringy, Stringy>>
 
 The following are basic examples of Auxly (all examples can be found https://github.com/jeffrimko/Auxly/tree/master/examples[here]):
 
@@ -179,6 +180,33 @@ Or get the stdout as a string:
 [source,python]
 --------
 sh.strout("ls")
+--------
+
+[[stringy]]
+=== Stringy
+The `auxly.stringy` module provides various convenience functions for working with strings.
+
+Start by importing the stringy module into your Python script:
+
+[source,python]
+--------
+import auxly.stringy as stringy
+--------
+
+Substituting within a string is easy:
+
+[source,python]
+--------
+stringy.subidx("bit", 2, "n")
+# bin
+--------
+
+Need a random string? Try this:
+
+[source,python]
+--------
+stringy.randomize()
+# bnmzwx
 --------
 
 == Documentation
