@@ -11,7 +11,7 @@ from auxly.filesys import File
 ## SECTION: Global Definitions                                  #
 ##==============================================================#
 
-UTF8_STR = "ÁÍÓÚÀÈÌÒÙAEIOU"
+UTF8_STR = u"ÁÍÓÚÀÈÌÒÙAEIOU"
 
 ##==============================================================#
 ## SECTION: Class Definitions                                   #
