@@ -71,6 +71,7 @@ def iterstd(cmd, std="out", **kwargs):
 ## Stdout related functions.                                    #
 ##--------------------------------------------------------------#
 
+#: Iterates through lines of stdout.
 iterout = functools.partial(iterstd, std="out")
 
 def listout(cmd, **kwargs):
@@ -85,6 +86,7 @@ def strout(cmd, **kwargs):
 ## Stderr related functions.                                    #
 ##--------------------------------------------------------------#
 
+#: Iterates through lines of stderr.
 itererr = functools.partial(iterstd, std="err")
 
 def listerr(cmd, **kwargs):
