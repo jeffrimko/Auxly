@@ -115,12 +115,4 @@ def callstop(*args, **kwargs):
 ##==============================================================#
 
 if __name__ == '__main__':
-
-    @callstop(limit=3)
-    def foo(a):
-        print(f"foo({a})")
-
-    call = callstop(foo, limit=2)
-    for _ in range(10):
-        call("hi")
-        foo("hi")
+    pass
