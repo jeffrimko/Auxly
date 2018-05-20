@@ -60,9 +60,11 @@ def trycatch(*args, **kwargs):
       - rethrow (str) [kwargs] - If true, exception will be re-thrown.
 
     **Examples**:
-      - `trycatch(myfunc)(myarg1, myarg2, kwarg=mykwarg)`
-      - `trycatch(myfunc, oncatch=mycatchfunc)(myarg1, myarg2, kwarg=mykwarg)`
-      - `trycatch(myfunc, rethrow=True)(myarg1, myarg2, kwarg=mykwarg)`
+    ::
+
+        trycatch(myfunc)(myarg1, myarg2, kwarg=mykwarg)
+        trycatch(myfunc, oncatch=mycatchfunc)(myarg1, myarg2, kwarg=mykwarg)
+        trycatch(myfunc, rethrow=True)(myarg1, myarg2, kwarg=mykwarg)
     """
     rethrow = kwargs.get('rethrow', False)
     oncatch = kwargs.get('oncatch', None)
@@ -90,8 +92,9 @@ def callstop(*args, **kwargs):
       - func (func) - Function to call. Only available when used as a function.
 
     **Examples**:
-    .. code:: python
-        call = callstop(myfunc, 3)
+    ::
+
+        call = callstop(myfunc, limit=3)
         call(myarg1, myarg2)
     """
     limit = kwargs.get('limit', 1)

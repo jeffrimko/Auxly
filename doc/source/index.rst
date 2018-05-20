@@ -21,6 +21,8 @@ Top Level
 .. autofunction:: auxly.throw
 .. autofunction:: auxly.isadmin
 .. autofunction:: auxly.verbose
+.. autofunction:: auxly.trycatch
+.. autofunction:: auxly.callstop
 
 File System
 -----------
