@@ -35,6 +35,8 @@ The following are basic examples of Auxly (all examples can be found https://git
 
   - https://github.com/jeffrimko/Auxly/blob/master/examples/delete_1.py[examples/delete_1.py] - Deletes all PYC files in the project.
 
+Refer to the unit tests https://github.com/jeffrimko/Auxly/tree/master/tests[here] for additional examples.
+
 [[top-level]]
 === Top Level
 Start by importing Auxly into your Python script:
