@@ -50,12 +50,10 @@ class TestCase(BaseTest):
 
 def goodfunc(a):
     global VAL
-    print(f"good {a}")
     VAL += a
 
 def badfunc(a):
     global VAL
-    print(f"bad {a}")
     x += 1
     VAL += a
 
