@@ -5,11 +5,19 @@
 ##==============================================================#
 
 import atexit
+import codecs
 import hashlib
 import os
 import os.path as op
 import re
 import shutil
+
+##==============================================================#
+## SECTION: Global Definitions                                  #
+##==============================================================#
+
+#: Default file encoding.
+ENCODING = "utf8"
 
 ##==============================================================#
 ## SECTION: Class Definitions                                   #
@@ -90,38 +98,43 @@ class File(object):
             atexit.register(self.delete)
     def __repr__(self):
         return self.path
-    def read(self):
+    def read(self, encoding=None):
         """Reads from the file and returns result as a string."""
+        encoding = encoding or ENCODING
         try:
-            with open(self.path) as fi:
+            with codecs.open(self.path, encoding=encoding) as fi:
                 return fi.read()
         except:
             return None
-    def readlines(self):
+    def readlines(self, encoding=None):
         """Reads from the file and returns result as a list of lines."""
         try:
-            with open(self.path) as fi:
+            encoding = encoding or ENCODING
+            with codecs.open(self.path, encoding=None) as fi:
                 return fi.readlines()
         except:
             return []
-    def _write(self, content, mode):
+    def _write(self, content, mode, encoding=None):
         makedirs(self.path)
         try:
-            with open(self.path, mode) as fo:
+            encoding = encoding or ENCODING
+            with codecs.open(self.path, mode, encoding=encoding) as fo:
                 fo.write(content)
                 return True
         except:
             return False
-    def append(self, content, binary=False):
+    def append(self, content, binary=False, encoding=None):
         """Appends the given content to the file. Existing content is
         preserved. Returns true if successful, false otherwise."""
         mode = "ab" if binary else "a"
-        return self._write(content, mode)
-    def write(self, content, binary=False):
+        encoding = encoding or ENCODING
+        return self._write(content, mode, encoding=encoding)
+    def write(self, content, binary=False, encoding=None):
         """Writes the given content to the file. Existing content is
         deleted. Returns true if successful, false otherwise."""
         mode = "wb" if binary else "w"
-        return self._write(content, mode)
+        encoding = encoding or ENCODING
+        return self._write(content, mode, encoding=encoding)
     def delete(self):
         """Deletes the file. Returns true if successful, false otherwise."""
         return delete(self.path)
@@ -325,4 +338,8 @@ def checksum(fpath, hasher=None, asbytes=False):
 ##==============================================================#
 
 if __name__ == '__main__':
-    pass
+    f1 = File("__temp-ascii.txt")
+    print(f1.read())
+
+    f2 = File("__temp-utf8.txt")
+    print(f2.read())
