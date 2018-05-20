@@ -67,9 +67,9 @@ def trycatch(*args, **kwargs):
     rethrow = kwargs.get('rethrow', False)
     oncatch = kwargs.get('oncatch', None)
     def decor(func):
-        def wrapper(*wargs, **wkrgs):
+        def wrapper(*fargs, **fkrgs):
             try:
-                return func(*wargs, **wkrgs)
+                return func(*fargs, **fkrgs)
             except:
                 if oncatch != None:
                     oncatch()
@@ -81,9 +81,43 @@ def trycatch(*args, **kwargs):
         return decor(func)
     return decor
 
+def callstop(*args, **kwargs):
+    """Limits the number of times a function can be called. Can be used as a
+    function decorator or as a function that accepts another function. If used
+    as a function, it returns a new function that will be call limited.
+
+    **Params**:
+      - func (func) - Function to call. Only available when used as a function.
+
+    **Examples**:
+    .. code:: python
+        call = callstop(myfunc, 3)
+        call(myarg1, myarg2)
+    """
+    limit = kwargs.get('limit', 1)
+    def decor(func):
+        def wrapper(*args, **kwargs):
+            if wrapper.calls < limit:
+                wrapper.calls += 1
+                return func(*args, **kwargs)
+        wrapper.calls = 0
+        return wrapper
+    if len(args) > 0 and callable(args[0]):
+        func = args[0]
+        return decor(func)
+    return decor
+
 ##==============================================================#
 ## SECTION: Main Body                                           #
 ##==============================================================#
 
 if __name__ == '__main__':
-    pass
+
+    @callstop(limit=3)
+    def foo(a):
+        print(f"foo({a})")
+
+    call = callstop(foo, limit=2)
+    for _ in range(10):
+        call("hi")
+        foo("hi")
