@@ -84,7 +84,8 @@ class Path(str):
         return isempty(self)
 
 class File(object):
-    """Object representing a filesystem file."""
+    """Object representing a filesystem file. The ENCODING variable defines the
+    default encoding."""
     def __init__(self, path, del_at_exit=False):
         """Creates a file object for the given path.
 

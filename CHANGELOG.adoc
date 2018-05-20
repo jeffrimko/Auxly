@@ -1,5 +1,19 @@
 = Auxly Changelog
 
+== auxly-0.5.0 (2018-05-20)
+=== Release highlights
+  - Added helper functions/methods.
+
+=== All additions and changes
+  - Added `encoding` option to `filesys.File` methods.
+  - Added `stringy` module.
+  - Added `callstop()`.
+  - Added `trycatch()`.
+  - Added `filesys.File.size()`.
+
+=== Bug fixes
+Not applicable.
+
 == auxly-0.4.3 (2018-04-14)
 === Release highlights
   - Minor method addition.

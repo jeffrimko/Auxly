@@ -61,3 +61,9 @@ Shell
 .. autofunction:: auxly.shell.strout
 .. autofunction:: auxly.shell.listerr
 .. autofunction:: auxly.shell.strerr
+
+Stringy
+-------
+
+.. autofunction:: auxly.stringy.subidx
+.. autofunction:: auxly.stringy.randomize
