@@ -17,7 +17,7 @@ import shutil
 ##==============================================================#
 
 #: Default file encoding.
-ENCODING = "utf8"
+ENCODING = "utf-8"
 
 ##==============================================================#
 ## SECTION: Class Definitions                                   #
