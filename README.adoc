@@ -199,7 +199,7 @@ Substituting within a string is easy:
 
 [source,python]
 --------
-stringy.subidx("bit", 2, "n")
+stringy.subat("bit", 2, "n")
 # bin
 --------
 

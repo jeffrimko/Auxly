@@ -9,7 +9,7 @@ from string import ascii_lowercase
 ## SECTION: Function Definitions                                #
 ##==============================================================#
 
-def subidx(orig, index, replace):
+def subat(orig, index, replace):
     """Substitutes the replacement string/character at the given index in the
     given string, returns the modified string."""
     return "".join([(orig[x] if x != index else replace) for x in range(len(orig))])

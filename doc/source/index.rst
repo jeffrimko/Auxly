@@ -65,5 +65,5 @@ Shell
 Stringy
 -------
 
-.. autofunction:: auxly.stringy.subidx
+.. autofunction:: auxly.stringy.subat
 .. autofunction:: auxly.stringy.randomize
