@@ -17,7 +17,8 @@ def smooth(l):
     was of depth 1."""
     if type(l) in [list, tuple]:
         for i in l:
-            yield from smooth(i)
+            for j in smooth(i):
+                yield j
     else:
         yield l
 
