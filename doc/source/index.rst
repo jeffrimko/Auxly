@@ -67,3 +67,9 @@ Stringy
 
 .. autofunction:: auxly.stringy.subat
 .. autofunction:: auxly.stringy.randomize
+
+Listy
+-----
+
+.. autofunction:: auxly.listy.chunk
+.. autofunction:: auxly.listy.smooth

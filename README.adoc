@@ -211,6 +211,32 @@ stringy.randomize()
 # bnmzwx
 --------
 
+== Listy
+The `auxly.listy` module provides various convenience functions for working with lists.
+
+Start by importing the listy module into your Python script:
+
+[source,python]
+--------
+import auxly.listy as listy
+--------
+
+Need to split a list into chunks? Not a problem:
+
+[source,python]
+--------
+list(chunk([1,2,3,4,5,6,7,8], 3))
+# [[1, 2, 3], [4, 5, 6], [7, 8]]
+--------
+
+Need to smooth a chunky list? Worry not:
+
+[source,python]
+--------
+list(smooth([1,[2,[3,[4]]]]))
+# [1, 2, 3, 4]
+--------
+
 == Documentation
 The full documentation for this project can be found http://auxly.readthedocs.io[here on Read the Docs].
 

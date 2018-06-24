@@ -1,5 +1,15 @@
 = Auxly Changelog
 
+== auxly-0.5.2 (2018-06-23)
+=== Release highlights
+  - Added new module.
+
+=== All additions and changes
+  - Added `listy` module along with `listy.chunk()` and `listy.smooth()`.
+
+=== Bug fixes
+Not applicable.
+
 == auxly-0.5.1 (2018-05-26)
 === Release highlights
   - Renamed function.
