@@ -30,6 +30,7 @@ Auxly provides the following modules:
   - `auxly.filesys` - <<file-system, File System>>
   - `auxly.shell` - <<shell, Shell>>
   - `auxly.stringy` - <<stringy, Stringy>>
+  - `auxly.listy` - <<listy, Listy>>
 
 The following are basic examples of Auxly (all examples can be found https://github.com/jeffrimko/Auxly/tree/master/examples[here]):
 
@@ -211,6 +212,7 @@ stringy.randomize()
 # bnmzwx
 --------
 
+[[listy]]
 == Listy
 The `auxly.listy` module provides various convenience functions for working with lists.
 
