@@ -1,5 +1,19 @@
 = Auxly Changelog
 
+== auxly-0.5.3 (2018-09-19)
+=== Release highlights
+  - Added helper functions/methods.
+
+=== All additions and changes
+  - Added `filesys.rootdir()`.
+  - Added `filesys.Path.created()`.
+  - Added `filesys.Path.modified()`.
+  - Added `filesys.File.created()`.
+  - Added `filesys.File.modified()`.
+
+=== Bug fixes
+Not applicable.
+
 == auxly-0.5.2 (2018-06-23)
 === Release highlights
   - Added new module.

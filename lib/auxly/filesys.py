@@ -11,6 +11,7 @@ import os
 import os.path as op
 import re
 import shutil
+from datetime import datetime
 
 ##==============================================================#
 ## SECTION: Global Definitions                                  #
@@ -82,6 +83,12 @@ class Path(str):
     def isempty(self):
         """Returns true if path is empty, false otherwise."""
         return isempty(self)
+    def created(self):
+        """Returns the path created date/time."""
+        return datetime.fromtimestamp(op.getctime(self))
+    def modified(self):
+        """Returns the path modified date/time."""
+        return datetime.fromtimestamp(op.getmtime(self))
 
 class File(object):
     """Object representing a filesystem file. The ENCODING variable defines the
@@ -141,10 +148,16 @@ class File(object):
         return delete(self.path)
     def exists(self):
         """Returns true if the file exists, false otherwise."""
-        return op.exists(self.path)
+        return self.path.exists()
     def isempty(self):
         """Returns true if the file is empty, false otherwise."""
-        return isempty(self.path)
+        return self.path.isempty()
+    def created(self):
+        """Returns the file created date/time."""
+        return self.path.created()
+    def modified(self):
+        """Returns the file modified date/time."""
+        return self.path.modified()
     def size(self):
         """Returns the size of the file in bytes."""
         return op.getsize(self.path)
@@ -334,13 +347,13 @@ def checksum(fpath, hasher=None, asbytes=False):
         hasher.update(block)
     return (hasher.digest() if asbytes else hasher.hexdigest())
 
+def rootdir():
+    """Returns the system root directory."""
+    return os.path.abspath(os.sep)
+
 ##==============================================================#
 ## SECTION: Main Body                                           #
 ##==============================================================#
 
 if __name__ == '__main__':
-    f1 = File("__temp-ascii.txt")
-    print(f1.read())
-
-    f2 = File("__temp-utf8.txt")
-    print(f2.read())
+    pass
