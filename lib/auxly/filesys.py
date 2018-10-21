@@ -47,11 +47,43 @@ class Cwd(object):
     def __repr__(self):
         return self.path
 
-class Path(str):
+class _FileSysObject(object):
+    def __init__(self, path):
+        self._fspath = path
+    def isfile(self):
+        """Returns true if object is file, false otherwise."""
+        return op.isfile(self._fspath)
+    def isdir(self):
+        """Returns true if object is directory, false otherwise."""
+        return op.isdir(self._fspath)
+    def dirpath(self):
+        """Returns a Path object for the directory associated with this object."""
+        if self.isfile():
+            return Path(op.dirname(self._fspath))
+        else:
+            return Path(self)
+    def exists(self):
+        """Returns true if object exists, false otherwise."""
+        return op.exists(self._fspath)
+    def isempty(self):
+        """Returns true if object is empty, false otherwise."""
+        return isempty(self._fspath)
+    def created(self):
+        """Returns the object created date/time."""
+        return datetime.fromtimestamp(op.getctime(self._fspath))
+    def modified(self):
+        """Returns the object modified date/time."""
+        return datetime.fromtimestamp(op.getmtime(self._fspath))
+    def size(self):
+        """Returns the size of the object in bytes."""
+        return getsize(self._fspath, recurse=True)
+
+class Path(_FileSysObject, str):
     """Object representing a filesystem path."""
     def __new__(cls, content):
         return super(Path, cls).__new__(cls, op.abspath(content))
     def __init__(self, path):
+        super(Path, self).__init__(self)
         self.parse()
     def parse(self):
         self.dir = None
@@ -65,32 +97,11 @@ class Path(str):
             self.filename = base
             self.file = op.splitext(base)[0]
             self.ext = op.splitext(base)[1]
-    def dirpath(self):
-        """Returns a Path object for the directory associated with this path."""
-        return Path(self.dir)
     def join(self, relpath):
         """Joins the given relative path with this path."""
         return Path(op.join(self, relpath))
-    def isfile(self):
-        """Returns true if path is file, false otherwise."""
-        return op.isfile(self)
-    def isdir(self):
-        """Returns true if path is directory, false otherwise."""
-        return op.isdir(self)
-    def exists(self):
-        """Returns true if path exists, false otherwise."""
-        return op.exists(self)
-    def isempty(self):
-        """Returns true if path is empty, false otherwise."""
-        return isempty(self)
-    def created(self):
-        """Returns the path created date/time."""
-        return datetime.fromtimestamp(op.getctime(self))
-    def modified(self):
-        """Returns the path modified date/time."""
-        return datetime.fromtimestamp(op.getmtime(self))
 
-class File(object):
+class File(_FileSysObject):
     """Object representing a filesystem file. The ENCODING variable defines the
     default encoding."""
     def __init__(self, path, del_at_exit=False):
@@ -102,6 +113,9 @@ class File(object):
             script exits.
         """
         self.path = Path(path)
+        if self.path.exists() and self.path.isdir():
+            raise Exception("AuxlyExceptionFileCannotBeDir")
+        super(File, self).__init__(self.path)
         if del_at_exit:
             atexit.register(self.delete)
     def __repr__(self):
@@ -146,21 +160,6 @@ class File(object):
     def delete(self):
         """Deletes the file. Returns true if successful, false otherwise."""
         return delete(self.path)
-    def exists(self):
-        """Returns true if the file exists, false otherwise."""
-        return self.path.exists()
-    def isempty(self):
-        """Returns true if the file is empty, false otherwise."""
-        return self.path.isempty()
-    def created(self):
-        """Returns the file created date/time."""
-        return self.path.created()
-    def modified(self):
-        """Returns the file modified date/time."""
-        return self.path.modified()
-    def size(self):
-        """Returns the size of the file in bytes."""
-        return op.getsize(self.path)
     def checksum(self, **kwargs):
         """Returns the checksum of the file."""
         return checksum(self.path, **kwargs)
@@ -225,6 +224,20 @@ def delete(path, regex=None, recurse=False, test=False):
             return [] if op.exists(path) else [path]
     return deleted
 
+def walkfiles(startdir, regex=None, recurse=True):
+    """Yields the absolute paths of files found within the given start
+    directory. Can optionally filter paths using a regex pattern."""
+    for r,_,fs in os.walk(startdir):
+        if not recurse and startdir != r:
+            return
+        for f in fs:
+            path = op.abspath(op.join(r,f))
+            if regex and type(regex) == str:
+                if not re.compile(regex).match(path):
+                    continue
+            if op.isfile(path):
+                yield path
+
 def countfiles(path, recurse=False):
     """Returns the number of files under the given directory path."""
     if not op.isdir(path):
@@ -254,6 +267,18 @@ def isempty(path):
     elif op.isfile(path):
         return 0 == os.stat(path).st_size
     return None
+
+def getsize(path, recurse=False):
+    """Returns the size of the file or directory in bytes."""
+    if not op.isdir(path):
+        return op.getsize(path)
+    size = 0
+    for r,_,fs in os.walk(path):
+        for f in fs:
+            size += getsize(op.join(r,f))
+        if not recurse:
+            break
+    return size
 
 def copy(srcpath, dstpath, overwrite=True):
     """Copies the file or directory at `srcpath` to `dstpath`. Returns True if
