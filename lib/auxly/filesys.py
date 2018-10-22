@@ -168,6 +168,13 @@ class File(_FileSysObject):
 ## SECTION: Function Definitions                                #
 ##==============================================================#
 
+def _is_match(regex, text):
+    """Returns true if the given text matches the given regex pattern."""
+    try:
+        return re.compile(regex).search(text) != None
+    except:
+        return False
+
 def abspath(relpath, root=None):
     """Returns an absolute path based on the given root and relative path."""
     root = root or cwd()
@@ -208,13 +215,9 @@ def delete(path, regex=None, recurse=False, test=False):
         return [] if op.exists(path) else [path]
     elif op.isdir(path):
         if regex:
-            try:
-                ptrn = re.compile(regex)
-            except:
-                return []
             for r,ds,fs in os.walk(path):
                 for i in fs:
-                    if ptrn.search(i):
+                    if _is_match(regex, i):
                         deleted += delete(op.join(r,i), test=test)
                 if not recurse:
                     break
@@ -232,8 +235,7 @@ def walkfiles(startdir, regex=None, recurse=True):
             return
         for f in fs:
             path = op.abspath(op.join(r,f))
-            if regex and type(regex) == str:
-                if not re.compile(regex).match(path):
+            if regex and not _is_match(regex, path):
                     continue
             if op.isfile(path):
                 yield path
