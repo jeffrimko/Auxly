@@ -13,3 +13,4 @@ if len(delfiles):
             qprompt.warn("Some files not deleted!")
 else:
     qprompt.alert("No files to delete.")
+qprompt.pause()

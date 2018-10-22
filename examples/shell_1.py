@@ -1,4 +1,5 @@
 """This examples attempts to detect the OS via available shell commands."""
+import qprompt
 from auxly.shell import has
 wincmds = ["tracert","fc","ver"]
 maccmds = ["osacompile"]
@@ -9,3 +10,4 @@ elif all([has(cmd) for cmd in maccmds]):
     print("Looks like you might be running Mac.")
 elif all([has(cmd) for cmd in nixcmds]):
     print("Looks like you might be running Linux.")
+qprompt.pause()
