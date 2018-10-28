@@ -1,5 +1,19 @@
 = Auxly Changelog
 
+== auxly-0.5.4 (2018-10-28)
+=== Release highlights
+  - Added helper functions/methods.
+
+=== All additions and changes
+  - Added `filesys.File.appendline()`.
+  - Added `filesys.File.writeline()`.
+  - Added `filesys.File.erase()`.
+  - Added `filesys.walkfiles()`.
+  - Updated `filesys.Cwd()` to include `root`.
+
+=== Bug fixes
+Not applicable.
+
 == auxly-0.5.3 (2018-09-19)
 === Release highlights
   - Added helper functions/methods.

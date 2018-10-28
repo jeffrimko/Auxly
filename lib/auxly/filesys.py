@@ -27,16 +27,16 @@ ENCODING = "utf-8"
 class Cwd(object):
     """Class to handle changing current working directory. Can
     be used as a context manager."""
-    def __init__(self, newpath=""):
+    def __init__(self, path=".", root=None):
         self.path = os.getcwd()
         self.original = self.path
-        if newpath:
-            if not op.isabs(newpath):
-                newpath = op.abspath(newpath)
-            if op.isfile(newpath):
-                newpath = op.dirname(newpath)
-            if op.isdir(newpath):
-                self.path = newpath
+        if path:
+            if not op.isabs(path):
+                path = abspath(path, root=root)
+            if op.isfile(path):
+                path = op.dirname(path)
+            if op.isdir(path):
+                self.path = path
             os.chdir(self.path)
     def __enter__(self):
         return self
@@ -203,9 +203,9 @@ def homedir():
     """Returns the path to the current user's home directory."""
     return op.expanduser("~")
 
-def cwd(path=None):
+def cwd(path=None, root=None):
     """Returns the CWD and optionally sets it to the given path."""
-    return Cwd(path).path
+    return Cwd(path, root=root).path
 
 def makedirs(path, ignore_extsep=False):
     """Makes all directories required for given path; returns true if successful
