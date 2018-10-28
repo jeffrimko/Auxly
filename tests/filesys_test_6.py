@@ -19,8 +19,56 @@ class TestCase(BaseTest):
         test.assertTrue(f.write("hello"))
         test.assertTrue(f.append(" world"))
         test.assertTrue(f.exists())
-        test.assertEqual("hello world", fread(p))
+        test.assertEqual("hello world", f.read())
         test.assertEqual("5eb63bbbe01eeed093cb22bb8f5acdc3", f.checksum())
+
+    def test_file_2(test):
+        """Basic File usage."""
+        p = FNAME[0]
+        f = File(p)
+        test.assertFalse(f.exists())
+        test.assertTrue(f.write("hello"))
+        test.assertTrue(f.write("world"))
+        test.assertEqual("world", f.read())
+        test.assertTrue(f.erase())
+        test.assertEqual("", f.read())
+
+    def test_file_3(test):
+        """Basic File usage."""
+        p = FNAME[0]
+        f = File(p)
+        test.assertFalse(f.exists())
+        test.assertTrue(f.write(123))
+        test.assertEqual("123", f.read())
+
+    def test_file_4(test):
+        """Basic File usage."""
+        import os
+        p = FNAME[0]
+        f = File(p)
+        test.assertFalse(f.exists())
+        test.assertTrue(f.writeline("hello"))
+        test.assertEqual("hello" + os.linesep, f.read())
+
+    def test_file_5(test):
+        """Basic File usage."""
+        import os
+        p = FNAME[0]
+        f = File(p)
+        test.assertFalse(f.exists())
+        test.assertTrue(f.writeline("hello"))
+        test.assertTrue(f.append("world"))
+        test.assertEqual("hello" + os.linesep + "world", f.read())
+
+    def test_file_6(test):
+        """Basic File usage."""
+        import os
+        p = FNAME[0]
+        f = File(p)
+        test.assertFalse(f.exists())
+        test.assertTrue(f.writeline("hello"))
+        test.assertTrue(f.appendline("world"))
+        test.assertEqual("hello" + os.linesep + "world" + os.linesep, f.read())
 
 ##==============================================================#
 ## SECTION: Main Body                                           #

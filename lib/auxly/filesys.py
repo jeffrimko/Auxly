@@ -136,10 +136,15 @@ class File(_FileSysObject):
                 return fi.readlines()
         except:
             return []
-    def _write(self, content, mode, encoding=None):
+    def _write(self, content, mode, encoding=None, linesep=False):
+        """Handles file writes."""
         makedirs(self.path)
         try:
             encoding = encoding or ENCODING
+            if "b" not in mode:
+                content = str(content)
+                if linesep:
+                    content += os.linesep
             with codecs.open(self.path, mode, encoding=encoding) as fo:
                 fo.write(content)
                 return True
@@ -149,14 +154,23 @@ class File(_FileSysObject):
         """Appends the given content to the file. Existing content is
         preserved. Returns true if successful, false otherwise."""
         mode = "ab" if binary else "a"
-        encoding = encoding or ENCODING
-        return self._write(content, mode, encoding=encoding)
+        return self._write(content, mode, encoding=encoding, linesep=False)
+    def appendline(self, content, binary=False, encoding=None):
+        """Same as `append()` but adds a line break after the content."""
+        mode = "ab" if binary else "a"
+        return self._write(content, mode, encoding=encoding, linesep=True)
     def write(self, content, binary=False, encoding=None):
         """Writes the given content to the file. Existing content is
         deleted. Returns true if successful, false otherwise."""
         mode = "wb" if binary else "w"
-        encoding = encoding or ENCODING
-        return self._write(content, mode, encoding=encoding)
+        return self._write(content, mode, encoding=encoding, linesep=False)
+    def writeline(self, content, binary=False, encoding=None):
+        """Same as `write()` but adds a line break after the content."""
+        mode = "wb" if binary else "w"
+        return self._write(content, mode, encoding=encoding, linesep=True)
+    def erase(self):
+        """Erases the content in a file but does not delete it."""
+        return self.write("")
     def delete(self):
         """Deletes the file. Returns true if successful, false otherwise."""
         return delete(self.path)
