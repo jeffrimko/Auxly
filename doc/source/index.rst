@@ -30,6 +30,7 @@ File System
 .. autofunction:: auxly.filesys.abspath
 .. autofunction:: auxly.filesys.homedir
 .. autofunction:: auxly.filesys.cwd
+.. autofunction:: auxly.filesys.walkfiles
 .. autofunction:: auxly.filesys.makedirs
 .. autofunction:: auxly.filesys.delete
 .. autofunction:: auxly.filesys.countfiles
