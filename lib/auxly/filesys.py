@@ -142,7 +142,10 @@ class File(_FileSysObject):
         try:
             encoding = encoding or ENCODING
             if "b" not in mode:
-                content = str(content)
+                try:
+                    content = str(content)
+                except:
+                    pass
                 if linesep:
                     content += os.linesep
             with codecs.open(self.path, mode, encoding=encoding) as fo:
