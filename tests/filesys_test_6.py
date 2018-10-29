@@ -30,8 +30,10 @@ class TestCase(BaseTest):
         test.assertTrue(f.write("hello"))
         test.assertTrue(f.write("world"))
         test.assertEqual("world", f.read())
-        test.assertTrue(f.erase())
+        test.assertFalse(f.isempty())
+        test.assertTrue(f.empty())
         test.assertEqual("", f.read())
+        test.assertTrue(f.isempty())
 
     def test_file_3(test):
         """Basic File usage."""
