@@ -171,8 +171,8 @@ class File(_FileSysObject):
         """Same as `write()` but adds a line break after the content."""
         mode = "wb" if binary else "w"
         return self._write(content, mode, encoding=encoding, linesep=True)
-    def erase(self):
-        """Erases the content in a file but does not delete it."""
+    def empty(self):
+        """Erases/empties the content in a file but does not delete it."""
         return self.write("")
     def delete(self):
         """Deletes the file. Returns true if successful, false otherwise."""
