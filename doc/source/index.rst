@@ -31,6 +31,9 @@ The ``auxly.filesys`` module provides various convenience functions for working 
 
 .. automodule:: auxly.filesys
     :members:
+    :inherited-members:
+    :show-inheritance:
+    :exclude-members: capitalize, center, casefold, count, endswith, expandtabs, encode, find, format, index, isalnum, isalpha, isdecimal, isdigit, isidentifier, islower, isnumeric, isprintable, isspace, istitle, isupper, join, ljust, rjust, lower, upper, swapcase, lstrip, rstrip, strip, partition, maketrans, rpartition, translate, replace, rfind, rindex, split, rsplit, splitlines, startswith, title, zfill, format_map
 
 ``auxly.shell``
 ***************
@@ -38,13 +41,15 @@ The ``auxly.shell`` module provides various convenience functions for working wi
 
 .. automodule:: auxly.shell
     :members:
+    :inherited-members:
 
 ``auxly.stringy``
-***************
+*****************
 The ``auxly.stringy`` module provides various convenience functions for working with strings.
 
 .. automodule:: auxly.stringy
     :members:
+    :inherited-members:
 
 ``auxly.listy``
 ***************
@@ -52,3 +57,4 @@ The ``auxly.listy`` module provides various convenience functions for working wi
 
 .. automodule:: auxly.listy
     :members:
+    :inherited-members:
