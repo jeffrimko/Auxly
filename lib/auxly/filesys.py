@@ -26,7 +26,13 @@ ENCODING = "utf-8"
 
 class Cwd(object):
     """Class to handle changing current working directory. Can
-    be used as a context manager."""
+    be used as a context manager.
+
+    **Examples**:
+    ::
+        with auxly.filesys.Cwd(auxly.filesys.homedir()):  # Temporarily set CWD.
+            pass  # do stuff here...
+    """
     def __init__(self, path=".", root=None):
         self.path = os.getcwd()
         self.original = self.path
@@ -204,12 +210,22 @@ def homedir():
     return op.expanduser("~")
 
 def cwd(path=None, root=None):
-    """Returns the CWD and optionally sets it to the given path."""
+    """Returns the CWD and optionally sets it to the given path.
+    **Examples**:
+    ::
+        print(auxly.filesys.cwd())  # Get the CWD.
+        auxly.filesys.cwd("foo")  # Set the CWD to `foo`.
+    """
     return Cwd(path, root=root).path
 
 def makedirs(path, ignore_extsep=False):
     """Makes all directories required for given path; returns true if successful
-    and false otherwise."""
+    and false otherwise.
+
+    **Examples**:
+    ::
+        auxly.filesys.makedirs("bar/baz")
+    """
     if not ignore_extsep and op.basename(path).find(os.extsep) > -1:
         path = op.dirname(path)
     try:
@@ -280,7 +296,13 @@ def countdirs(path, recurse=False):
     return count
 
 def isempty(path):
-    """Returns True if the given file or directory path is empty."""
+    """Returns True if the given file or directory path is empty.
+
+    **Examples**:
+    ::
+        auxly.filesys.isempty("foo.txt")  # Works on files...
+        auxly.filesys.isempty("bar")  # ...or directories!
+    """
     if op.isdir(path):
         return [] == os.listdir(path)
     elif op.isfile(path):
@@ -378,8 +400,11 @@ def move(srcpath, dstpath, overwrite=True):
 
 def checksum(fpath, hasher=None, asbytes=False):
     """Returns the checksum of the file at the given path as a hex string
-    (default) or as a bytes literal. Uses MD5 by default. Based on code from
-    https://stackoverflow.com/a/3431835/789078."""
+    (default) or as a bytes literal. Uses MD5 by default.
+
+    **Attribution**:
+    Based on code from
+    `Stack Overflow <https://stackoverflow.com/a/3431835/789078>`_."""
     def blockiter(fpath, blocksize=0x1000):
         with open(fpath, "rb") as afile:
             block = afile.read(blocksize)

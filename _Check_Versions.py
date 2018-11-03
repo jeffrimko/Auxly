@@ -10,7 +10,7 @@ import verace
 
 VERCHK = verace.VerChecker("Auxly", __file__)
 VERCHK.include(r"lib\setup.py", match="version = ", splits=[('"',1)])
-VERCHK.include(r"lib\auxly\_modu.py", match="__version__ = ", splits=[('"',1)])
+VERCHK.include(r"lib\auxly\__init__.py", match="__version__ = ", splits=[('"',1)])
 VERCHK.include(r"CHANGELOG.adoc", match="auxly-", splits=[("-",1),(" ",0)], updatable=False)
 VERCHK.include(r"doc\source\conf.py", match="version = ", splits=[("'",1)])
 VERCHK.include(r"doc\source\conf.py", match="release = ", splits=[("'",1)])

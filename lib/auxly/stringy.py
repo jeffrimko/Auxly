@@ -11,7 +11,12 @@ from string import ascii_lowercase
 
 def subat(orig, index, replace):
     """Substitutes the replacement string/character at the given index in the
-    given string, returns the modified string."""
+    given string, returns the modified string.
+
+    **Examples**:
+    ::
+        auxly.stringy.subat("bit", 2, "n")
+    """
     return "".join([(orig[x] if x != index else replace) for x in range(len(orig))])
 
 def randomize(length=6, choices=None):

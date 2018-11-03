@@ -20,17 +20,32 @@ NULL = open(os.devnull, "w")
 
 def call(cmd, **kwargs):
     """Calls the given shell command. Output will be displayed. Returns the
-    status code."""
+    status code.
+
+    **Examples**:
+    ::
+        auxly.shell.call("ls")
+    """
     kwargs['shell'] = True
     return subprocess.call(cmd, **kwargs)
 
 def silent(cmd, **kwargs):
     """Calls the given shell command. Output will not be displayed. Returns the
-    status code."""
+    status code.
+
+    **Examples**:
+    ::
+        auxly.shell.silent("ls")
+    """
     return call(cmd, shell=True, stdout=NULL, stderr=NULL, **kwargs)
 
 def has(cmd):
-    """Returns true if the give shell command is available."""
+    """Returns true if the give shell command is available.
+
+    **Examples**:
+    ::
+        auxly.shell.has("ls")  # True
+    """
     helps = ["--help", "-h", "--version"]
     if "nt" == os.name:
         helps.insert(0, "/?")
@@ -72,14 +87,19 @@ def iterstd(cmd, std="out", **kwargs):
 ##--------------------------------------------------------------#
 
 #: Iterates through lines of stdout.
+#:
+#: **Examples**:
+#: ::
+#:      for line in auxly.shell.iterout("cat myfile.txt"):
+#:          print(line)
 iterout = functools.partial(iterstd, std="out")
 
 def listout(cmd, **kwargs):
-    """Same as iterout() but returns a list."""
+    """Same as ``iterout()`` but returns a list."""
     return [line for line in iterout(cmd, **kwargs)]
 
 def strout(cmd, **kwargs):
-    """Same as iterout() but returns a string."""
+    """Same as ``iterout()`` but returns a string."""
     return "\n".join(listout(cmd, **kwargs))
 
 ##--------------------------------------------------------------#
@@ -90,11 +110,11 @@ def strout(cmd, **kwargs):
 itererr = functools.partial(iterstd, std="err")
 
 def listerr(cmd, **kwargs):
-    """Same as itererr() but returns a list."""
+    """Same as ``itererr()`` but returns a list."""
     return [line for line in itererr(cmd, **kwargs)]
 
 def strerr(cmd, **kwargs):
-    """Same as itererr() but returns a string."""
+    """Same as ``itererr()`` but returns a string."""
     return "\n".join(listerr(cmd, **kwargs))
 
 ##==============================================================#

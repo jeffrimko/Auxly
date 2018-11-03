@@ -14,63 +14,59 @@ For more information:
   - **GitHub** - https://github.com/jeffrimko/Auxly - Main version control repository.
   - **PyPI** - https://pypi.python.org/pypi/auxly - Package index page.
 
-Top Level
----------
+Introduction
+------------
 
-.. autofunction:: auxly.open
-.. autofunction:: auxly.throw
-.. autofunction:: auxly.isadmin
-.. autofunction:: auxly.verbose
-.. autofunction:: auxly.trycatch
-.. autofunction:: auxly.callstop
+Auxly provides various convenience functions for common tasks. Functions
+that overlap with the standard library are designed to do what you would
+reasonably expect
+(`POLA <https://en.wikipedia.org/wiki/Principle_of_least_astonishment>`__)
+and, when necessary, fail without throwing exceptions.
+
+
+The following are basic examples of Auxly (all examples can be found
+`here <https://github.com/jeffrimko/Auxly/tree/master/examples>`__):
+
+-  `examples/delete\_1.py <https://github.com/jeffrimko/Auxly/blob/master/examples/delete_1.py>`__
+   - Deletes all PYC files in the project.
+
+Refer to the unit tests
+`here <https://github.com/jeffrimko/Auxly/tree/master/tests>`__ for
+additional examples.
+
+API Documentation
+-----------------
+
+Top Level
+*********
+
+.. automodule:: auxly
+    :members:
 
 File System
------------
+***********
+The ``auxly.filesys`` module provides various convenience functions for working with the file system.
 
-.. autofunction:: auxly.filesys.abspath
-.. autofunction:: auxly.filesys.homedir
-.. autofunction:: auxly.filesys.cwd
-.. autofunction:: auxly.filesys.walkfiles
-.. autofunction:: auxly.filesys.makedirs
-.. autofunction:: auxly.filesys.delete
-.. autofunction:: auxly.filesys.countfiles
-.. autofunction:: auxly.filesys.countdirs
-.. autofunction:: auxly.filesys.isempty
-.. autofunction:: auxly.filesys.copy
-.. autofunction:: auxly.filesys.move
-.. autofunction:: auxly.filesys.checksum
-
-.. autoclass:: auxly.filesys.Cwd
-    :members:
-
-.. autoclass:: auxly.filesys.Path
-    :members:
-
-.. autoclass:: auxly.filesys.File
+.. automodule:: auxly.filesys
     :members:
 
 Shell
------
+*****
+The ``auxly.shell`` module provides various convenience functions for working with the system shell.
 
-.. autofunction:: auxly.shell.call
-.. autofunction:: auxly.shell.silent
-.. autofunction:: auxly.shell.has
-.. autofunction:: auxly.shell.iterstd
-.. autofunction:: auxly.shell.listout
-.. autofunction:: auxly.shell.iterout
-.. autofunction:: auxly.shell.itererr
-.. autofunction:: auxly.shell.strout
-.. autofunction:: auxly.shell.listerr
-.. autofunction:: auxly.shell.strerr
+.. automodule:: auxly.shell
+    :members:
 
 Stringy
--------
+*******
+The ``auxly.stringy`` module provides various convenience functions for working with strings.
 
-.. autofunction:: auxly.stringy.subat
-.. autofunction:: auxly.stringy.randomize
+.. automodule:: auxly.stringy
+    :members:
 
 Listy
------
+*****
+The ``auxly.listy`` module provides various convenience functions for working with lists.
 
-.. autofunction:: auxly.listy.chunk
-.. autofunction:: auxly.listy.smooth
+.. automodule:: auxly.listy
+    :members:

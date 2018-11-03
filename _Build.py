@@ -30,6 +30,11 @@ def upload():
     with auxly.filesys.Cwd("lib", __file__):
         auxly.shell.call("_Upload_PyPI.py")
 
+@menu
+def docs():
+    with auxly.filesys.Cwd("doc", __file__):
+        auxly.shell.call("make html")
+
 ##==============================================================#
 ## SECTION: Main Body                                           #
 ##==============================================================#
