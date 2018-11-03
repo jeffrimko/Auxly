@@ -24,15 +24,15 @@ that is desirable:
 
 Auxly provides the following modules:
 
--  ``auxly``
+-  `auxly <https://auxly.readthedocs.io/en/latest/#id1>`__
 
--  ``auxly.filesys``
+-  `auxly.filesys <https://auxly.readthedocs.io/en/latest/#auxly-filesys>`__
 
--  ``auxly.shell``
+-  `auxly.shell <https://auxly.readthedocs.io/en/latest/#auxly-shell>`__
 
--  ``auxly.stringy``
+-  `auxly.stringy <https://auxly.readthedocs.io/en/latest/#auxly-stringy>`__
 
--  ``auxly.listy``
+-  `auxly.listy <https://auxly.readthedocs.io/en/latest/#auxly-listy>`__
 
 The following are basic examples of Auxly (all examples can be found
 `here <https://github.com/jeffrimko/Auxly/tree/master/examples>`__):

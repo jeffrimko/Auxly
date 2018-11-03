@@ -17,11 +17,11 @@ auxly.filesys.copy("foo.txt", "bar") or auxly.throw()  # Throws/raises exception
 
 Auxly provides the following modules:
 
-  - `auxly`
-  - `auxly.filesys`
-  - `auxly.shell`
-  - `auxly.stringy`
-  - `auxly.listy`
+  - https://auxly.readthedocs.io/en/latest/#id1[auxly]
+  - https://auxly.readthedocs.io/en/latest/#auxly-filesys[auxly.filesys]
+  - https://auxly.readthedocs.io/en/latest/#auxly-shell[auxly.shell]
+  - https://auxly.readthedocs.io/en/latest/#auxly-stringy[auxly.stringy]
+  - https://auxly.readthedocs.io/en/latest/#auxly-listy[auxly.listy]
 
 The following are basic examples of Auxly (all examples can be found https://github.com/jeffrimko/Auxly/tree/master/examples[here]):
 
