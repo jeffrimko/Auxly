@@ -45,7 +45,6 @@ class TestCase(BaseTest):
 
     def test_file_4(test):
         """Basic File usage."""
-        import os
         p = FNAME[0]
         f = File(p)
         test.assertFalse(f.exists())
@@ -54,7 +53,6 @@ class TestCase(BaseTest):
 
     def test_file_5(test):
         """Basic File usage."""
-        import os
         p = FNAME[0]
         f = File(p)
         test.assertFalse(f.exists())
@@ -64,13 +62,25 @@ class TestCase(BaseTest):
 
     def test_file_6(test):
         """Basic File usage."""
-        import os
         p = FNAME[0]
         f = File(p)
         test.assertFalse(f.exists())
         test.assertTrue(f.writeline("hello"))
         test.assertTrue(f.appendline("world"))
         test.assertEqual("hello" + os.linesep + "world" + os.linesep, f.read())
+
+    def test_file_7(test):
+        """Basic File usage."""
+        f = File(DIR[0], DIR[1], FNAME[0])
+        test.assertFalse(op.isdir(DIR[0]))
+        test.assertFalse(op.isdir(op.join(DIR[0], DIR[1])))
+        test.assertFalse(op.isfile(op.join(DIR[0], DIR[1], FNAME[0])))
+        test.assertFalse(f.exists())
+        test.assertTrue(f.writeline("hello"))
+        test.assertTrue(f.exists())
+        test.assertTrue(op.isdir(DIR[0]))
+        test.assertTrue(op.isdir(op.join(DIR[0], DIR[1])))
+        test.assertTrue(op.isfile(op.join(DIR[0], DIR[1], FNAME[0])))
 
 ##==============================================================#
 ## SECTION: Main Body                                           #

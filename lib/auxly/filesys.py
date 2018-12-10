@@ -54,8 +54,8 @@ class Cwd(object):
         return self.path
 
 class _FileSysObject(object):
-    def __init__(self, path):
-        self._fspath = path
+    def __init__(self, *path):
+        self._fspath = op.join(*path)
     def isfile(self):
         """Returns true if object is file, false otherwise."""
         return op.isfile(self._fspath)
@@ -86,9 +86,9 @@ class _FileSysObject(object):
 
 class Path(_FileSysObject, str):
     """Object representing a filesystem path."""
-    def __new__(cls, content):
-        return super(Path, cls).__new__(cls, op.abspath(content))
-    def __init__(self, path):
+    def __new__(cls, *content):
+        return super(Path, cls).__new__(cls, op.abspath(op.join(*content)))
+    def __init__(self, *path):
         super(Path, self).__init__(self)
         self.parse()
     def parse(self):
@@ -105,12 +105,12 @@ class Path(_FileSysObject, str):
             self.ext = op.splitext(base)[1]
     def join(self, relpath):
         """Joins the given relative path with this path."""
-        return Path(op.join(self, relpath))
+        return Path(self, relpath)
 
 class File(_FileSysObject):
     """Object representing a filesystem file. The ENCODING variable defines the
     default encoding."""
-    def __init__(self, path, del_at_exit=False):
+    def __init__(self, *path, del_at_exit=False):
         """Creates a file object for the given path.
 
         **Params:**
@@ -118,7 +118,7 @@ class File(_FileSysObject):
           - del_at_exit (bool) - If true, the file will be deleted when the
             script exits.
         """
-        self.path = Path(path)
+        self.path = Path(*path)
         if self.path.exists() and self.path.isdir():
             raise Exception("AuxlyExceptionFileCannotBeDir")
         super(File, self).__init__(self.path)

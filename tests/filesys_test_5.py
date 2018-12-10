@@ -26,6 +26,14 @@ class TestCase(BaseTest):
         test.assertEqual(base, p.file)
         test.assertEqual(ext, p.ext)
 
+    def test_path_2(test):
+        """Basic Path usage."""
+        p = Path(DIR[0], FNAME[0])
+        test.assertFalse(p.exists())
+        test.assertFalse(p.isfile())
+        test.assertFalse(p.isdir())
+        test.assertEqual(op.abspath(op.join(DIR[0], FNAME[0])), p)
+
 ##==============================================================#
 ## SECTION: Main Body                                           #
 ##==============================================================#
