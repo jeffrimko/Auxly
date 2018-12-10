@@ -110,19 +110,20 @@ class Path(_FileSysObject, str):
 class File(_FileSysObject):
     """Object representing a filesystem file. The ENCODING variable defines the
     default encoding."""
-    def __init__(self, *path, del_at_exit=False):
+    def __init__(self, *path, **kwargs):
         """Creates a file object for the given path.
 
         **Params:**
           - path (str) - Path to the file. Multiple values will be passed to
             `os.path.join()`.
-          - del_at_exit (bool) - If true, the file will be deleted when the
+          - del_at_exit (bool) [kwargs] - If true, the file will be deleted when the
             script exits.
         """
         self.path = Path(*path)
         if self.path.exists() and self.path.isdir():
             raise Exception("AuxlyExceptionFileCannotBeDir")
         super(File, self).__init__(self.path)
+        del_at_exit = kwargs.get('del_at_exit')
         if del_at_exit:
             atexit.register(self.delete)
     def __repr__(self):
