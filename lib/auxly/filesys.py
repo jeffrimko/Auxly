@@ -114,7 +114,8 @@ class File(_FileSysObject):
         """Creates a file object for the given path.
 
         **Params:**
-          - path (str) - Path to the file.
+          - path (str) - Path to the file. Multiple values will be passed to
+            `os.path.join()`.
           - del_at_exit (bool) - If true, the file will be deleted when the
             script exits.
         """
