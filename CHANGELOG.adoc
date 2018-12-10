@@ -1,207 +1,170 @@
 = Auxly Changelog
 
+== auxly-0.6.0 (2018-12-09)
+=== Highlights
+  - Updated CHANGELOG format.
+
+=== Changed
+  - Can now join paths via the `Path` and `File` constructors, e.g. `File("foo", "bar.txt")` is equivalent to `File(os.path.join("foo", "bar.txt"))`.
+
 == auxly-0.5.5 (2018-10-28)
-=== Release highlights
+=== Highlights
   - Minor method rename.
 
-=== All additions and changes
+=== Changed
   - Renamed `filesys.File.erase()` to `filesys.File.empty()`.
 
-=== Bug fixes
-Not applicable.
-
 == auxly-0.5.4 (2018-10-28)
-=== Release highlights
+=== Highlights
   - Added helper functions/methods.
 
-=== All additions and changes
+=== Added
   - Added `filesys.File.appendline()`.
   - Added `filesys.File.writeline()`.
   - Added `filesys.File.erase()`.
   - Added `filesys.walkfiles()`.
+
+=== Changed
   - Updated `filesys.Cwd()` to include `root`.
 
-=== Bug fixes
-Not applicable.
-
 == auxly-0.5.3 (2018-09-19)
-=== Release highlights
+=== Highlights
   - Added helper functions/methods.
 
-=== All additions and changes
+=== Added
   - Added `filesys.rootdir()`.
   - Added `filesys.Path.created()`.
   - Added `filesys.Path.modified()`.
   - Added `filesys.File.created()`.
   - Added `filesys.File.modified()`.
 
-=== Bug fixes
-Not applicable.
-
 == auxly-0.5.2 (2018-06-23)
-=== Release highlights
+=== Highlights
   - Added new module.
 
-=== All additions and changes
+=== Added
   - Added `listy` module along with `listy.chunk()` and `listy.smooth()`.
 
-=== Bug fixes
-Not applicable.
-
 == auxly-0.5.1 (2018-05-26)
-=== Release highlights
+=== Highlights
   - Renamed function.
 
-=== All additions and changes
+=== Changed
   - Renamed `stringy.subidx()` to `stringy.subat()`.
 
-=== Bug fixes
-Not applicable.
-
 == auxly-0.5.0 (2018-05-20)
-=== Release highlights
+=== Highlights
   - Added helper functions/methods.
 
-=== All additions and changes
+=== Added
   - Added `encoding` option to `filesys.File` methods.
   - Added `stringy` module.
   - Added `callstop()`.
   - Added `trycatch()`.
   - Added `filesys.File.size()`.
 
-=== Bug fixes
-Not applicable.
-
 == auxly-0.4.3 (2018-04-14)
-=== Release highlights
+=== Highlights
   - Minor method addition.
 
-=== All additions and changes
+=== Added
   - Added `filesys.File.readlines()`.
 
-=== Bug fixes
-Not applicable.
-
 == auxly-0.4.2 (2018-04-11)
-=== Release highlights
+=== Highlights
   - Minor function tweak.
 
-=== All additions and changes
+=== Changed
   - The default root for `filesys.abspath()` is now the CWD.
 
-=== Bug fixes
-Not applicable.
-
 == auxly-0.4.1 (2018-04-11)
-=== Release highlights
+=== Highlights
   - Minor function addition.
 
-=== All additions and changes
+=== Added
   - Added `verbose()` helper function.
 
-=== Bug fixes
-Not applicable.
-
 == auxly-0.4.0 (2018-03-11)
-=== Release highlights
+=== Highlights
   - Minor function addition.
 
-=== All additions and changes
+=== Added
   - Added `filesys.checksum()` function and associated `filesys.File` methods.
 
-=== Bug fixes
-Not applicable.
-
 == auxly-0.3.6 (2018-02-22)
-=== Release highlights
+=== Highlights
   - Minor convenience function addition and bug fix.
 
-=== All additions and changes
+=== Added
   - Added `isadmin()`.
 
-=== Bug fixes
+=== Fixed
   - Fixed issue with Python 3 warning for some `shell` functions.
 
 == auxly-0.3.5 (2017-06-19)
-=== Release highlights
+=== Highlights
   - Minor module reorganization.
 
-=== All additions and changes
+=== Changed
   - Moved `path` functions to `filesys`.
 
-=== Bug fixes
-Not applicable.
-
 == auxly-0.3.4 (2017-01-17)
-=== Release highlights
+=== Highlights
   - Fixed issues with `filesys` function.
 
-=== All additions and changes
-Not applicable.
-
-=== Bug fixes
+=== Fixed
   - Fixed issue with `filesys.move()`, file would be deleted if src/dst names were the same but using different case.
 
 == auxly-0.3.3 (2017-01-17)
-=== Release highlights
+=== Highlights
   - Added convenience class.
   - Fixed issues with `filesys` functions.
 
-=== All additions and changes
+=== Added
   - Added `Cwd` class.
 
-=== Bug fixes
+=== Fixed
   - Fixed incorrect behavior in `filesys.copy()` and `filesys.move()`.
 
 == auxly-0.3.2 (2017-01-09)
-=== Release highlights
+=== Highlights
   - Added convenience class.
 
-=== All additions and changes
+=== Added
   - Added `filesys.File` class.
 
-=== Bug fixes
-Not applicable.
-
 == auxly-0.3.1 (2017-01-07)
-=== Release highlights
+=== Highlights
   - Changed file system path convenience function/type to class.
 
-=== All additions and changes
+=== Changed
   - Changed `filesys.ParsedPath` to a class.
   - Removed `filesys.parsepath()`.
 
-=== Bug fixes
-Not applicable.
-
 == auxly-0.3.0 (2017-01-07)
-=== Release highlights
+=== Highlights
   - Bug fix and convenience function update.
 
-=== All additions and changes
+=== Added
   - Added `filesys.parsepath()`.
 
-=== Bug fixes
+=== Fixed
   - Fixed issue with `filesys.move()` which would result in file being deleted if src and dst are the same.
 
 == auxly-0.2.0 (2016-12-28)
-=== Release highlights
+=== Highlights
   - Improved support for Python 3.
   - Various updates to improve default function behavior.
 
-=== All additions and changes
-  - Updates to improve behavior of `move()`, `copy()`, `makedirs()` in `filesys`.
+=== Added
   - Added `stderr` functions to `shell`.
 
-=== Bug fixes
+=== Changed
+  - Updates to improve behavior of `move()`, `copy()`, `makedirs()` in `filesys`.
+
+=== Fixed
   - Updates to fix freeze bug of `has()` in `shell` when run on Linux.
 
 == auxly-0.1.0 (2016-07-18)
-=== Release highlights
+=== Highlights
   - First release.
-
-=== All additions and changes
-Not applicable.
-
-=== Bug fixes
-Not applicable.
