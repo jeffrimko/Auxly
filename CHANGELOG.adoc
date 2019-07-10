@@ -1,5 +1,9 @@
 = Auxly Changelog
 
+== auxly-0.6.1 (2019-07-09)
+=== Added
+  - Added `shell.start()`.
+
 == auxly-0.6.0 (2018-12-09)
 === Highlights
   - Updated CHANGELOG format.
