@@ -5,6 +5,8 @@
 from __future__ import print_function
 import auxly.filesys
 import auxly.shell
+import auxly.stringy
+import auxly.listy
 import ctypes
 import os
 import os.path as op
@@ -16,7 +18,7 @@ import sys
 ##==============================================================#
 
 #: Library version string.
-__version__ = "0.6.0"
+__version__ = "0.6.1"
 
 ##==============================================================#
 ## SECTION: Function Definitions                                #

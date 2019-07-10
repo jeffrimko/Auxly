@@ -39,6 +39,18 @@ def silent(cmd, **kwargs):
     """
     return call(cmd, shell=True, stdout=NULL, stderr=NULL, **kwargs)
 
+def start(cmd, **kwargs):
+    """Starts the given command in a separate terminal process. Returns a Popen
+    object. Windows only.
+
+    **Examples**:
+    ::
+        p = auxly.shell.start("python -m http.server")
+        ...
+        p.kill()
+    """
+    return subprocess.Popen(cmd, creationflags=subprocess.CREATE_NEW_CONSOLE, **kwargs)
+
 def has(cmd):
     """Returns true if the give shell command is available.
 
