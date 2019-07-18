@@ -4,8 +4,11 @@
 
 import functools
 import os
+import os.path as op
 import subprocess
 import sys
+import signal
+import tempfile
 
 ##==============================================================#
 ## SECTION: Global Definitions                                  #
@@ -13,6 +16,29 @@ import sys
 
 #: Null device.
 NULL = open(os.devnull, "w")
+
+##==============================================================#
+## SECTION: Class Definitions                                   #
+##==============================================================#
+
+class _StartedProcess:
+    """This object is returned by a ``start()`` call."""
+    def __init__(self, popen, logfile):
+        self._popen = popen
+        self._logfile = logfile
+    def __del__(self):
+        self.stop()
+    def stop(self):
+        """Stops the started process."""
+        self._logfile.close()
+        # NOTE: These two CTRL_BREAK_EVENT seem to be necessary on Windows. A
+        # single CTRL_BREAK_EVENT does not always work properly.
+        os.kill(self._popen.pid, signal.CTRL_BREAK_EVENT)
+        os.kill(self._popen.pid, signal.CTRL_BREAK_EVENT)
+        self._popen.kill()
+    def wait(self):
+        """Waits for the process to complete."""
+        self._popen.wait()
 
 ##==============================================================#
 ## SECTION: Function Definitions                                #
@@ -39,17 +65,32 @@ def silent(cmd, **kwargs):
     """
     return call(cmd, shell=True, stdout=NULL, stderr=NULL, **kwargs)
 
-def start(cmd, **kwargs):
-    """Starts the given command in a separate terminal process. Returns a Popen
-    object. Windows only.
+def start(cmd, logpath=None, **kwargs):
+    """Starts the given command as a background process. Redirects stdin/stderr
+    to an optional log file path. Returns a ``_StartedProcess`` object.
 
     **Examples**:
     ::
         p = auxly.shell.start("python -m http.server")
         ...
-        p.kill()
+        p.stop()
     """
-    return subprocess.Popen(cmd, creationflags=subprocess.CREATE_NEW_CONSOLE, **kwargs)
+    if logpath:
+        logfile = open(op.abspath(logpath), "w")
+    else:
+        # NOTE: Using a temp file seems to be necessary in some cases for
+        # Windows. For example, instances have been seen where Python Flask
+        # apps would not work properly having the stdout/stderr directed to
+        # NULL.
+        logfile = tempfile.NamedTemporaryFile("w", delete=True)
+    popen = subprocess.Popen(
+            cmd,
+            shell=True,
+            stdout=logfile,
+            stderr=logfile,
+            stdin=subprocess.PIPE,
+            creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
+    return _StartedProcess(popen, logfile)
 
 def has(cmd):
     """Returns true if the give shell command is available.

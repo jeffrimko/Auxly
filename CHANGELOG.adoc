@@ -1,5 +1,9 @@
 = Auxly Changelog
 
+== auxly-0.6.2 (2019-07-17)
+=== Changed
+  - Changed how `shell.start()` works, it now starts the command as a silent background process. Attempts to fix strange behavior seen on Windows.
+
 == auxly-0.6.1 (2019-07-09)
 === Added
   - Added `shell.start()`.
