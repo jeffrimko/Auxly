@@ -24,6 +24,7 @@ NULL = open(os.devnull, "w")
 class _StartedProcess:
     """This object is returned by a ``start()`` call."""
     def __init__(self, popen, logfile):
+        self.pid = popen.pid
         self._popen = popen
         self._logfile = logfile
     def __del__(self):
@@ -175,4 +176,5 @@ def strerr(cmd, **kwargs):
 ##==============================================================#
 
 if __name__ == '__main__':
-    pass
+    p = start("python")
+    print(p.pid)

@@ -1,5 +1,9 @@
 = Auxly Changelog
 
+== auxly-0.6.3 (2019-08-22)
+=== Added
+  - The `_StartedProcess` objects returned by `shell.start()` now include the PID.
+
 == auxly-0.6.2 (2019-07-17)
 === Changed
   - Changed how `shell.start()` works, it now starts the command as a silent background process. Attempts to fix strange behavior seen on Windows.
