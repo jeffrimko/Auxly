@@ -2,6 +2,7 @@
 ## SECTION: Imports                                             #
 ##==============================================================#
 
+import atexit
 import functools
 import os
 import os.path as op
@@ -27,6 +28,7 @@ class _StartedProcess:
         self.pid = popen.pid
         self._popen = popen
         self._logfile = logfile
+        atexit.register(self.stop)
     def __del__(self):
         self.stop()
     def stop(self):
@@ -176,5 +178,4 @@ def strerr(cmd, **kwargs):
 ##==============================================================#
 
 if __name__ == '__main__':
-    p = start("python")
-    print(p.pid)
+    pass

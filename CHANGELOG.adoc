@@ -1,5 +1,9 @@
 = Auxly Changelog
 
+== auxly-0.6.4 (2019-08-25)
+=== Changed
+  - The `_StartedProcess` objects returned by `shell.start()` will now call their `stop()` method when the application exits.
+
 == auxly-0.6.3 (2019-08-22)
 === Added
   - The `_StartedProcess` objects returned by `shell.start()` now include the PID.
