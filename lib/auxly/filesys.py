@@ -265,15 +265,19 @@ def delete(path, regex=None, recurse=False, test=False):
 def walkfiles(startdir, regex=None, recurse=True):
     """Yields the absolute paths of files found within the given start
     directory. Can optionally filter paths using a regex pattern."""
-    for r,_,fs in os.walk(startdir):
-        if not recurse and startdir != r:
-            return
-        for f in fs:
-            path = op.abspath(op.join(r,f))
-            if regex and not _is_match(regex, path):
-                    continue
-            if op.isfile(path):
-                yield path
+    startdir = op.abspath(startdir)
+    with os.scandir(startdir) as it:
+        for i in it:
+            if i.is_file():
+                if regex:
+                    n = op.join(startdir, i.name)
+                    if _is_match(regex, n):
+                        yield n
+                else:
+                    yield op.join(startdir, i.name)
+            elif recurse:
+                for j in walkfiles(op.join(startdir, i.name), regex, recurse):
+                    yield j
 
 def countfiles(path, recurse=False):
     """Returns the number of files under the given directory path."""
