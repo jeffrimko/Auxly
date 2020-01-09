@@ -1,5 +1,9 @@
 = Auxly Changelog
 
+== auxly-0.6.6 (2020-01-09)
+=== Fixed
+  - Fixed issue where `filesys.copy()` would create extra directory when copying files without an extension.
+
 == auxly-0.6.5 (2019-10-22)
 === Changed
   - Refactored `filesys.walkfiles()` to use `os.scandir()` from the standard library to improve performance.
