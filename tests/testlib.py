@@ -8,10 +8,11 @@ import sys
 import unittest
 
 # Allows development version of library to be used instead of installed.
-libdir = op.normpath(op.join(op.abspath(op.dirname(__file__)), r"../lib"))
+testdir = op.abspath(op.dirname(__file__))
+libdir = op.normpath(op.join(testdir, r"../lib"))
 sys.path.insert(0, libdir)
 
-from auxly.filesys import delete, makedirs
+from auxly.filesys import delete, makedirs, cwd
 
 ##==============================================================#
 ## SECTION: Global Definitions                                  #
@@ -28,6 +29,7 @@ TEXT = ["hello", "world"]
 class BaseTest(unittest.TestCase):
     def tearDown(test):
         super(BaseTest, test).tearDown()
+        cwd(testdir)
         for i in FNAME + DIR:
             delete(i)
 

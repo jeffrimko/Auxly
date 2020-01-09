@@ -12,6 +12,7 @@ from auxly.filesys import copy, cwd, delete, isempty
 ##==============================================================#
 
 class TestCase(BaseTest):
+
     def test_copy_1(test):
         """Copy file to dir/file, overwrite existing file."""
         path0 = FNAME[0]
@@ -99,6 +100,18 @@ class TestCase(BaseTest):
         test.assertTrue(op.isdir(path0))
         test.assertTrue(op.isdir(path1))
         test.assertTrue(isempty(path1))
+
+    def test_copy_9(test):
+        """Copy file without extension."""
+        path0 = r"..\LICENSE"
+        path1 = "LICENSE"
+        test.assertTrue(op.isfile(path0))
+        test.assertFalse(op.isfile(path1))
+        test.assertTrue(copy(path0, path1))
+        test.assertTrue(op.isfile(path0))
+        test.assertTrue(op.isfile(path1))
+        test.assertTrue(delete(path1))
+        test.assertFalse(op.isfile(path1))
 
 ##==============================================================#
 ## SECTION: Main Body                                           #

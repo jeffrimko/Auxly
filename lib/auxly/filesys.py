@@ -360,7 +360,16 @@ def copy(srcpath, dstpath, overwrite=True):
                 if not copy(op.join(r,f), op.join(curdir, f), overwrite=overwrite):
                     return False
     elif op.isfile(srcpath):
-        makedirs(dstpath)
+        dstdir = dstpath
+        if op.basename(srcpath).count(".") == 0 and op.basename(srcpath) == op.basename(dstpath):
+            # NOTE: This is a special condition to prevent creating an extra
+            # directory in a scenario where the srcpath is a file without an
+            # extension. For example, if `C:\LICENSE` is the srcpath and
+            # `C:\foo\LICENSE` is the dstpath, this will prevent creating a
+            # directory named `C:\foo\LICENSE` and then copying the `LICENSE`
+            # to that directory.
+            dstdir = op.dirname(dstpath)
+        makedirs(dstdir)
         shutil.copy2(srcpath, dstpath)
 
     return op.exists(dstpath)
