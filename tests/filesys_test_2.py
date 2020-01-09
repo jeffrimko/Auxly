@@ -103,7 +103,7 @@ class TestCase(BaseTest):
 
     def test_copy_9(test):
         """Copy file without extension."""
-        path0 = r"..\LICENSE"
+        path0 = "../LICENSE"
         path1 = "LICENSE"
         test.assertTrue(op.isfile(path0))
         test.assertFalse(op.isfile(path1))
