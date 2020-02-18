@@ -97,6 +97,21 @@ class TestCase(BaseTest):
         test.assertEqual(None, f.read())
         test.assertEqual([], f.readlines())
 
+    def test_file_9(test):
+        """Basic File usage."""
+        f = File("somefile.txt")
+        test.assertFalse(f.exists())
+        test.assertFalse(f.isfile())
+        test.assertFalse(f.isdir())
+        test.assertTrue(f.empty())
+        test.assertTrue(f.exists())
+        test.assertTrue(f.isfile())
+        test.assertFalse(f.isdir())
+        test.assertTrue(f.delete())
+        test.assertFalse(f.exists())
+        test.assertFalse(f.isfile())
+        test.assertFalse(f.isdir())
+
 ##==============================================================#
 ## SECTION: Main Body                                           #
 ##==============================================================#
