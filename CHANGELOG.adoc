@@ -1,5 +1,10 @@
 = Auxly Changelog
 
+== auxly-0.7.0 (2020-02-17)
+=== Changed
+  - If an exception is caught and not re-thrown, `trycatch()` will now return the result of `oncatch`.
+  - Updated methods of `File` and `Path` to return None rather than throwing exceptions if the file/directory doesn't exist.
+
 == auxly-0.6.6 (2020-01-09)
 === Fixed
   - Fixed issue where `filesys.copy()` would create extra directory when copying files without an extension.
