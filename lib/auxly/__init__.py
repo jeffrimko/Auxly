@@ -86,10 +86,12 @@ def trycatch(*args, **kwargs):
             try:
                 return func(*fargs, **fkrgs)
             except:
+                cresult = None
                 if oncatch != None:
-                    oncatch()
+                    cresult = oncatch()
                 if rethrow:
                     raise
+                return cresult
         return wrapper
     if len(args) > 0 and callable(args[0]):
         func = args[0]
