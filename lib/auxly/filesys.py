@@ -64,10 +64,13 @@ class _FileSysObject(object):
         return op.isdir(self._fspath)
     def dirpath(self):
         """Returns a Path object for the directory associated with this object."""
-        if self.isfile():
-            return Path(op.dirname(self._fspath))
-        else:
-            return Path(self)
+        try:
+            if self.isfile():
+                return Path(op.dirname(self._fspath))
+            else:
+                return Path(self)
+        except:
+            return None
     def exists(self):
         """Returns true if object exists, false otherwise."""
         return op.exists(self._fspath)
@@ -76,13 +79,22 @@ class _FileSysObject(object):
         return isempty(self._fspath)
     def created(self):
         """Returns the object created date/time."""
-        return datetime.fromtimestamp(op.getctime(self._fspath))
+        try:
+            return datetime.fromtimestamp(op.getctime(self._fspath))
+        except:
+            return None
     def modified(self):
         """Returns the object modified date/time."""
-        return datetime.fromtimestamp(op.getmtime(self._fspath))
+        try:
+            return datetime.fromtimestamp(op.getmtime(self._fspath))
+        except:
+            return None
     def size(self):
         """Returns the size of the object in bytes."""
-        return getsize(self._fspath, recurse=True)
+        try:
+            return getsize(self._fspath, recurse=True)
+        except:
+            return None
 
 class Path(_FileSysObject, str):
     """Object representing a filesystem path."""
@@ -426,10 +438,13 @@ def checksum(fpath, hasher=None, asbytes=False):
             while len(block) > 0:
                 yield block
                 block = afile.read(blocksize)
-    hasher = hasher or hashlib.md5()
-    for block in blockiter(fpath):
-        hasher.update(block)
-    return (hasher.digest() if asbytes else hasher.hexdigest())
+    try:
+        hasher = hasher or hashlib.md5()
+        for block in blockiter(fpath):
+            hasher.update(block)
+        return (hasher.digest() if asbytes else hasher.hexdigest())
+    except:
+        return None
 
 def rootdir():
     """Returns the system root directory."""
