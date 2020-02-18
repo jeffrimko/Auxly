@@ -34,6 +34,17 @@ class TestCase(BaseTest):
         test.assertFalse(p.isdir())
         test.assertEqual(op.abspath(op.join(DIR[0], FNAME[0])), p)
 
+    def test_path_3(test):
+        """Basic Path usage."""
+        p = Path("not_a_real_dir")
+        test.assertFalse(p.exists())
+        test.assertFalse(p.isfile())
+        test.assertFalse(p.isdir())
+        test.assertTrue(None == p.created())
+        test.assertTrue(None == p.modified())
+        test.assertTrue(None == p.size())
+        test.assertTrue(None == p.isempty())
+
 ##==============================================================#
 ## SECTION: Main Body                                           #
 ##==============================================================#

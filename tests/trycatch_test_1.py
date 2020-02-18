@@ -44,6 +44,28 @@ class TestCase(BaseTest):
             trycatch(badfunc, rethrow=True)(1)
         test.assertEqual(0, VAL)
 
+    def test_trycatch_5(test):
+        vals = [1,2]
+        with test.assertRaises(IndexError):
+            trycatch(lambda: vals[100], rethrow=True)()
+
+    def test_trycatch_6(test):
+        vals = [1,2]
+        result = trycatch(lambda: vals[100], oncatch=lambda: 123)()
+        test.assertEqual(123, result)
+
+    def test_trycatch_7(test):
+        vals = [1,2]
+        result = trycatch(lambda: vals[1], oncatch=lambda: 123)()
+        test.assertEqual(2, result)
+
+    def test_trycatch_8(test):
+        vals = [1,2]
+        result = None
+        with test.assertRaises(IndexError):
+            result = trycatch(lambda: vals[100], oncatch=lambda: 123, rethrow=True)()
+        test.assertEqual(None, result)
+
 ##==============================================================#
 ## SECTION: Function Definitions                                #
 ##==============================================================#

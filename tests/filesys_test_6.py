@@ -82,6 +82,21 @@ class TestCase(BaseTest):
         test.assertTrue(op.isdir(op.join(DIR[0], DIR[1])))
         test.assertTrue(op.isfile(op.join(DIR[0], DIR[1], FNAME[0])))
 
+    def test_file_8(test):
+        """Basic File usage."""
+        f = File("not_a_real_file.txt")
+        test.assertFalse(f.exists())
+        test.assertFalse(f.isdir())
+        test.assertFalse(f.isfile())
+        test.assertEqual(None, f.dirpath())
+        test.assertEqual(None, f.created())
+        test.assertEqual(None, f.modified())
+        test.assertEqual(None, f.size())
+        test.assertEqual(None, f.isempty())
+        test.assertEqual(None, f.checksum())
+        test.assertEqual(None, f.read())
+        test.assertEqual([], f.readlines())
+
 ##==============================================================#
 ## SECTION: Main Body                                           #
 ##==============================================================#
