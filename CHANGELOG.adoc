@@ -5,6 +5,9 @@
   - If an exception is caught and not re-thrown, `trycatch()` will now return the result of `oncatch`.
   - Updated methods of `File` and `Path` to return None rather than throwing exceptions if the file/directory doesn't exist.
 
+=== Fixed
+  - Fixed Python 2.7/<3.6 issue with `filesys.walkfiles()`.
+
 == auxly-0.6.6 (2020-01-09)
 === Fixed
   - Fixed issue where `filesys.copy()` would create extra directory when copying files without an extension.
