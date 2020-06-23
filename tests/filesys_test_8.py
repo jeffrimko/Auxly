@@ -20,9 +20,7 @@ class TestCase(BaseTest):
     def test_file_2(test):
         """Test walkfiles() behavior."""
         noregex = [f for f in walkfiles("..")]
-        print(noregex)
         withregex = [f for f in walkfiles("..", regex=".adoc$")]
-        print(withregex)
         test.assertTrue(len(noregex) > len(withregex))
 
     def test_file_3(test):
@@ -38,7 +36,6 @@ class TestCase(BaseTest):
         """Test walkfiles() behavior."""
         found = False
         for f in walkfiles(".", recurse=False):
-            print(f, __file__)
             found |= f.endswith(__file__)
         test.assertTrue(found)
 
