@@ -20,7 +20,7 @@ that is desirable:
 
 .. code:: python
 
-   auxly.filesys.copy("foo.txt", "bar") or auxly.throw()  # Throws/raises exception on failure.
+    auxly.filesys.copy("foo.txt", "bar") or auxly.throw()  # Throws/raises exception on failure.
 
 Auxly provides the following modules:
 
