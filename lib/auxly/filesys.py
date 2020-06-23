@@ -304,7 +304,7 @@ def walkfiles(startdir, regex=None, recurse=True, regex_entire=True):
             for f in fs:
                 path = op.abspath(op.join(r,f))
                 n = path if regex_entire else f
-                if not _is_match(regex, n):
+                if regex and not _is_match(regex, n):
                     continue
                 if op.isfile(path):
                     yield path
@@ -335,7 +335,7 @@ def walkdirs(startdir, regex=None, recurse=True, regex_entire=True):
             for d in ds:
                 path = op.abspath(op.join(r,d))
                 n = path if regex_entire else d
-                if not _is_match(regex, n):
+                if regex and not _is_match(regex, n):
                     continue
                 if op.isfile(path):
                     yield path
