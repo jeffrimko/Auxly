@@ -26,6 +26,18 @@ def randomize(length=6, choices=None):
     choices = choices or ascii_lowercase
     return "".join(choice(choices) for _ in range(length))
 
+def between(full, start, end):
+    """Returns the substring of the given string that occurs between the start
+    and end strings."""
+    try:
+        if not start:
+            start = full[0]
+        parse = full.split(start, 1)[1]
+        result = parse.split(end, 1)[0]
+        return result
+    except:
+        return full
+
 ##==============================================================#
 ## SECTION: Main Body                                           #
 ##==============================================================#

@@ -25,6 +25,7 @@ class TestCase(BaseTest):
         test.assertEqual(path, p.filename)
         test.assertEqual(base, p.file)
         test.assertEqual(ext, p.ext)
+        test.assertEqual(FNAME[0], p.name)
 
     def test_path_2(test):
         """Basic Path usage."""
@@ -33,6 +34,7 @@ class TestCase(BaseTest):
         test.assertFalse(p.isfile())
         test.assertFalse(p.isdir())
         test.assertEqual(op.abspath(op.join(DIR[0], FNAME[0])), p)
+        test.assertEqual(FNAME[0], p.name)
 
     def test_path_3(test):
         """Basic Path usage."""
@@ -44,6 +46,8 @@ class TestCase(BaseTest):
         test.assertTrue(None == p.modified())
         test.assertTrue(None == p.size())
         test.assertTrue(None == p.isempty())
+        test.assertTrue(None == p.isempty())
+        test.assertTrue("not_a_real_dir" == p.name)
 
 ##==============================================================#
 ## SECTION: Main Body                                           #

@@ -72,6 +72,9 @@ class _FileSysObject(object):
                 return Path(self)
         except:
             return None
+    @property
+    def name(self):
+        return op.basename(self._fspath)
     def exists(self):
         """Returns true if object exists, false otherwise."""
         return op.exists(self._fspath)
@@ -275,7 +278,7 @@ def delete(path, regex=None, recurse=False, test=False):
             return [] if op.exists(path) else [path]
     return deleted
 
-def walkfiles(startdir, regex=None, recurse=True):
+def walkfiles(startdir, regex=None, recurse=True, regex_entire=True):
     """Yields the absolute paths of files found within the given start
     directory. Can optionally filter paths using a regex pattern."""
     if sys.version_info >= (3, 6):
@@ -284,13 +287,14 @@ def walkfiles(startdir, regex=None, recurse=True):
             for i in it:
                 if i.is_file():
                     if regex:
-                        n = op.join(startdir, i.name)
+                        path = op.join(startdir, i.name)
+                        n = path if regex_entire else i.name
                         if _is_match(regex, n):
-                            yield n
+                            yield path
                     else:
                         yield op.join(startdir, i.name)
                 elif recurse:
-                    for j in walkfiles(op.join(startdir, i.name), regex, recurse):
+                    for j in walkfiles(op.join(startdir, i.name), regex, recurse, regex_entire):
                         yield j
     else:
         for r,_,fs in os.walk(startdir):
@@ -298,7 +302,38 @@ def walkfiles(startdir, regex=None, recurse=True):
                 return
             for f in fs:
                 path = op.abspath(op.join(r,f))
-                if regex and not _is_match(regex, path):
+                n = path if regex_entire else f
+                if not _is_match(regex, n):
+                    continue
+                if op.isfile(path):
+                    yield path
+
+def walkdirs(startdir, regex=None, recurse=True, regex_entire=True):
+    """Yields the absolute paths of directories found within the given start
+    directory. Can optionally filter paths using a regex pattern."""
+    if sys.version_info >= (3, 6):
+        startdir = op.abspath(startdir)
+        with os.scandir(startdir) as it:
+            for i in it:
+                if i.is_dir():
+                    if regex:
+                        path = op.join(startdir, i.name)
+                        n = path if regex_entire else op.basename(i.name)
+                        if _is_match(regex, n):
+                            yield path
+                    else:
+                        yield op.join(startdir, i.name)
+                    if recurse:
+                        for j in walkdirs(op.join(startdir, i.name), regex, recurse, regex_entire):
+                            yield j
+    else:
+        for r,ds,_ in os.walk(startdir):
+            if not recurse and startdir != r:
+                return
+            for d in ds:
+                path = op.abspath(op.join(r,d))
+                n = path if regex_entire else d
+                if not _is_match(regex, n):
                     continue
                 if op.isfile(path):
                     yield path
