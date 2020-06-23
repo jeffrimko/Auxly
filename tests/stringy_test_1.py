@@ -5,7 +5,7 @@
 import os
 from testlib import *
 
-from auxly.stringy import subat, randomize
+from auxly.stringy import subat, randomize, between
 
 ##==============================================================#
 ## SECTION: Class Definitions                                   #
@@ -24,6 +24,20 @@ class TestCase(BaseTest):
         test.assertEqual(6, len(randomize(choices="aeiou")))
         test.assertEqual(6, len(randomize(choices=["a", "e", "i", "o", "u"])))
         test.assertEqual(10, len(randomize(10)))
+
+    def test_between_1(test):
+        test.assertEqual("hello", between("xhellox", "x", "x"))
+        test.assertEqual("hello", between("xhelloxx", "x", "x"))
+        test.assertEqual("hello", between(" hello!", " ", "!"))
+        test.assertEqual("hello", between("abc hello!xyz", " ", "!"))
+        test.assertEqual("hello", between("abc hello!xyz", "abc ", "!xyz"))
+        test.assertEqual("hello", between("aaaabc hello!xyzzz", "abc ", "!xyz"))
+        test.assertEqual("hello", between("hello", "not_there", "not_there"))
+        test.assertEqual("hello", between("hello there", "", " there"))
+        test.assertEqual("hello", between("hello there", "", " "))
+        test.assertEqual("hello", between("hello", "", "not_there"))
+        test.assertEqual("hello", between("hello", "", "aeiou"))
+        test.assertEqual("hello", between("hello", "", ""))
 
 ##==============================================================#
 ## SECTION: Main Body                                           #

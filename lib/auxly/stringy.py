@@ -31,8 +31,9 @@ def between(full, start, end):
     and end strings."""
     try:
         if not start:
-            start = full[0]
-        parse = full.split(start, 1)[1]
+            parse = full
+        else:
+            parse = full.split(start, 1)[1]
         result = parse.split(end, 1)[0]
         return result
     except:
