@@ -1,5 +1,3 @@
-.. __introduction:
-
 Introduction
 ------------
 
@@ -39,10 +37,10 @@ Auxly provides the following modules:
 The following are basic examples of Auxly (all examples can be found
 `here <https://github.com/jeffrimko/Auxly/tree/master/examples>`__):
 
--  `examples/delete_pyc.py <https://github.com/jeffrimko/Auxly/blob/master/examples/delete_pyc.py>`__
+-  `examples/delete\_pyc.py <https://github.com/jeffrimko/Auxly/blob/master/examples/delete_pyc.py>`__
    - Deletes all PYC files in the project.
 
--  `examples/guess_os.py <https://github.com/jeffrimko/Auxly/blob/master/examples/guess_os.py>`__
+-  `examples/guess\_os.py <https://github.com/jeffrimko/Auxly/blob/master/examples/guess_os.py>`__
    - Attempts to guess the host OS based on available shell commands.
 
 Refer to the unit tests
