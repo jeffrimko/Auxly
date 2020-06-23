@@ -280,7 +280,8 @@ def delete(path, regex=None, recurse=False, test=False):
 
 def walkfiles(startdir, regex=None, recurse=True, regex_entire=True):
     """Yields the absolute paths of files found within the given start
-    directory. Can optionally filter paths using a regex pattern."""
+    directory. Can optionally filter paths using a regex pattern, either on the
+    entire path if regex_entire is true otherwise on the file name only."""
     if sys.version_info >= (3, 6):
         startdir = op.abspath(startdir)
         with os.scandir(startdir) as it:
@@ -310,7 +311,8 @@ def walkfiles(startdir, regex=None, recurse=True, regex_entire=True):
 
 def walkdirs(startdir, regex=None, recurse=True, regex_entire=True):
     """Yields the absolute paths of directories found within the given start
-    directory. Can optionally filter paths using a regex pattern."""
+    directory. Can optionally filter paths using a regex pattern, either on the
+    entire path if regex_entire is true otherwise on the directory name only."""
     if sys.version_info >= (3, 6):
         startdir = op.abspath(startdir)
         with os.scandir(startdir) as it:

@@ -1,5 +1,14 @@
 = Auxly Changelog
 
+== auxly-0.7.1 (2020-06-22)
+=== Added
+  - Added `stringy.between()`.
+  - Added `filesys.walkdirs()`.
+
+=== Changed
+  - Added `regex_entire` parameter to `filesys.walkfiles()`.
+  - Added `name` property to `_FileSysObject`.
+
 == auxly-0.7.0 (2020-02-17)
 === Changed
   - If an exception is caught and not re-thrown, `trycatch()` will now return the result of `oncatch`.
