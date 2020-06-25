@@ -1,5 +1,9 @@
 = Auxly Changelog
 
+== auxly-0.7.2 (2020-06-24)
+=== Changed
+  - Changed `stringy.between()` behavior if the end string is empty, no longer returns the full string.
+
 == auxly-0.7.1 (2020-06-22)
 === Added
   - Added `stringy.between()`.
