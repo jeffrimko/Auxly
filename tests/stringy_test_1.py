@@ -38,6 +38,10 @@ class TestCase(BaseTest):
         test.assertEqual("hello", between("hello", "", "not_there"))
         test.assertEqual("hello", between("hello", "", "aeiou"))
         test.assertEqual("hello", between("hello", "", ""))
+        test.assertEqual("hello", between("xhello", "x", ""))
+        test.assertEqual("hello", between("helloxworld", "", "x"))
+        test.assertEqual("hello", between("lhello", "l", ""))
+        test.assertEqual("hello", between("hello!!!world", "", "!"))
 
 ##==============================================================#
 ## SECTION: Main Body                                           #

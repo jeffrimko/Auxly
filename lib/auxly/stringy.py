@@ -34,7 +34,10 @@ def between(full, start, end):
             parse = full
         else:
             parse = full.split(start, 1)[1]
-        result = parse.split(end, 1)[0]
+        if end:
+            result = parse.split(end, 1)[0]
+        else:
+            result = parse
         return result
     except:
         return full
