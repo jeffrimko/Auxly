@@ -39,9 +39,13 @@ class _StartedProcess:
         os.kill(self._popen.pid, signal.CTRL_BREAK_EVENT)
         os.kill(self._popen.pid, signal.CTRL_BREAK_EVENT)
         self._popen.kill()
+    def poll(self):
+        """Returns None if the process is still running, otherwise return the
+        status code."""
+        return self._popen.poll()
     def wait(self):
-        """Waits for the process to complete."""
-        self._popen.wait()
+        """Waits for the process to complete then returns the status code."""
+        return self._popen.wait()
 
 ##==============================================================#
 ## SECTION: Function Definitions                                #
