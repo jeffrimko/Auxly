@@ -90,13 +90,17 @@ def start(cmd, logpath=None, **kwargs):
         # apps would not work properly having the stdout/stderr directed to
         # NULL.
         logfile = tempfile.NamedTemporaryFile("w", delete=True)
+
+    flags = 0
+    if "nt" == os.name:
+        flags = subprocess.CREATE_NEW_PROCESS_GROUP
     popen = subprocess.Popen(
             cmd,
             shell=True,
             stdout=logfile,
             stderr=logfile,
             stdin=subprocess.PIPE,
-            creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
+            creationflags=flags)
     return _StartedProcess(popen, logfile)
 
 def has(cmd):

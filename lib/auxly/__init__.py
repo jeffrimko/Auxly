@@ -10,8 +10,8 @@ import auxly.listy
 import ctypes
 import os
 import os.path as op
+import platform
 import subprocess
-import sys
 
 ##==============================================================#
 ## SECTION: Global Definitions                                  #
@@ -23,6 +23,18 @@ __version__ = "0.7.2"
 ##==============================================================#
 ## SECTION: Function Definitions                                #
 ##==============================================================#
+
+def iswindows():
+    """Returns true if host OS is Windows."""
+    return "windows" in platform.platform().lower()
+
+def islinux():
+    """Returns true if host OS is Linux."""
+    return "linux" in platform.platform().lower()
+
+def ismac():
+    """Returns true if host OS is Mac."""
+    return "darwin" in platform.platform().lower()
 
 def open(target):
     """Opens the target file or URL in the default application.
@@ -36,10 +48,10 @@ def open(target):
         auxly.open("myfile.txt")
         auxly.open("https://www.github.com/")
     """
-    if sys.platform == "win32":
+    if iswindows():
         os.startfile(target)
     else:
-        opener = "open" if sys.platform == "darwin" else "xdg-open"
+        opener = "open" if ismac() else "xdg-open"
         subprocess.call([opener, target])
 
 def throw(name="AuxlyException"):
@@ -50,7 +62,7 @@ def throw(name="AuxlyException"):
 def isadmin():
     """Returns true if the script is being run in admin mode, false
     otherwise."""
-    if sys.platform == "win32":
+    if iswindows():
         return ctypes.windll.shell32.IsUserAnAdmin() != 0
     return os.getuid() == 0
 
