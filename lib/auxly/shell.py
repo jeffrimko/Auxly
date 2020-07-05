@@ -34,10 +34,11 @@ class _StartedProcess:
     def stop(self):
         """Stops the started process."""
         self._logfile.close()
-        # NOTE: These two CTRL_BREAK_EVENT seem to be necessary on Windows. A
-        # single CTRL_BREAK_EVENT does not always work properly.
-        os.kill(self._popen.pid, signal.CTRL_BREAK_EVENT)
-        os.kill(self._popen.pid, signal.CTRL_BREAK_EVENT)
+        if "nt" == os.name:
+            # NOTE: These two CTRL_BREAK_EVENT seem to be necessary on Windows. A
+            # single CTRL_BREAK_EVENT does not always work properly.
+            os.kill(self._popen.pid, signal.CTRL_BREAK_EVENT)
+            os.kill(self._popen.pid, signal.CTRL_BREAK_EVENT)
         self._popen.kill()
     def poll(self):
         """Returns None if the process is still running, otherwise return the
