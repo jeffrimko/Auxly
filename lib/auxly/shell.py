@@ -34,6 +34,8 @@ class _StartedProcess:
     def stop(self):
         """Stops the started process."""
         self._logfile.close()
+        if self.poll() != None:
+            return
         if "nt" == os.name:
             # NOTE: These two CTRL_BREAK_EVENT seem to be necessary on Windows. A
             # single CTRL_BREAK_EVENT does not always work properly.
