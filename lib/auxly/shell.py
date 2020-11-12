@@ -11,6 +11,11 @@ import sys
 import signal
 import tempfile
 
+try:
+    from auxly._auxly import iswindows
+except ModuleNotFoundError:
+    from _auxly import iswindows
+
 ##==============================================================#
 ## SECTION: Global Definitions                                  #
 ##==============================================================#
@@ -22,32 +27,58 @@ NULL = open(os.devnull, "w")
 ## SECTION: Class Definitions                                   #
 ##==============================================================#
 
-class _StartedProcess:
+class Process:
     """This object is returned by a ``start()`` call."""
-    def __init__(self, popen, logfile):
-        self.pid = popen.pid
-        self._popen = popen
-        self._logfile = logfile
+    def __init__(self, cmd, logpath=""):
+        self._cmd = cmd
+        if logpath:
+            self._logfile = open(op.abspath(logpath), "w")
+        else:
+            # NOTE: Using a temp file seems to be necessary in some cases for
+            # Windows. For example, instances have been seen where Python Flask
+            # apps would not work properly having the stdout/stderr directed to
+            # NULL.
+            self._logfile = tempfile.NamedTemporaryFile("w", delete=True)
+        flags = subprocess.CREATE_NEW_PROCESS_GROUP if iswindows() else 0
+        self._popen = subprocess.Popen(
+                cmd,
+                shell=True,
+                stdout=self._logfile,
+                stderr=self._logfile,
+                stdin=subprocess.PIPE,
+                creationflags=flags)
+        self.pid = self._popen.pid
         atexit.register(self.stop)
     def __del__(self):
         self.stop()
+    def __repr__(self):
+        return "Process: " + self._cmd
     def stop(self):
         """Stops the started process."""
         self._logfile.close()
-        if self.poll() != None:
+        if self.exitcode() != None:
             return
-        if "nt" == os.name:
-            # NOTE: These two CTRL_BREAK_EVENT seem to be necessary on Windows. A
-            # single CTRL_BREAK_EVENT does not always work properly.
-            os.kill(self._popen.pid, signal.CTRL_BREAK_EVENT)
-            os.kill(self._popen.pid, signal.CTRL_BREAK_EVENT)
-        self._popen.kill()
-    def poll(self):
+        try:
+            if iswindows():
+                # NOTE: These two CTRL_BREAK_EVENT seem to be necessary on Windows. A
+                # single CTRL_BREAK_EVENT does not always work properly.
+                os.kill(self._popen.pid, signal.CTRL_BREAK_EVENT)
+                os.kill(self._popen.pid, signal.CTRL_BREAK_EVENT)
+            self._popen.terminate()
+            self._popen.kill()
+            if iswindows() and self.isrunning():
+                print("KILL")
+                silent("taskkill /f /t /pid " + str(self._popen.pid))
+        except:
+            pass
+    def isrunning(self):
+        return self.exitcode() == None
+    def exitcode(self):
         """Returns None if the process is still running, otherwise return the
-        status code."""
+        exit code."""
         return self._popen.poll()
     def wait(self):
-        """Waits for the process to complete then returns the status code."""
+        """Waits for the process to complete then returns the exit code."""
         return self._popen.wait()
 
 ##==============================================================#
@@ -56,7 +87,7 @@ class _StartedProcess:
 
 def call(cmd, **kwargs):
     """Calls the given shell command. Output will be displayed. Returns the
-    status code.
+    exit code.
 
     **Examples**:
     ::
@@ -67,7 +98,7 @@ def call(cmd, **kwargs):
 
 def silent(cmd, **kwargs):
     """Calls the given shell command. Output will not be displayed. Returns the
-    status code.
+    exit code.
 
     **Examples**:
     ::
@@ -77,7 +108,7 @@ def silent(cmd, **kwargs):
 
 def start(cmd, logpath=None, **kwargs):
     """Starts the given command as a background process. Redirects stdin/stderr
-    to an optional log file path. Returns a ``_StartedProcess`` object.
+    to an optional log file path. Returns a ``Process`` object.
 
     **Examples**:
     ::
@@ -85,26 +116,7 @@ def start(cmd, logpath=None, **kwargs):
         ...
         p.stop()
     """
-    if logpath:
-        logfile = open(op.abspath(logpath), "w")
-    else:
-        # NOTE: Using a temp file seems to be necessary in some cases for
-        # Windows. For example, instances have been seen where Python Flask
-        # apps would not work properly having the stdout/stderr directed to
-        # NULL.
-        logfile = tempfile.NamedTemporaryFile("w", delete=True)
-
-    flags = 0
-    if "nt" == os.name:
-        flags = subprocess.CREATE_NEW_PROCESS_GROUP
-    popen = subprocess.Popen(
-            cmd,
-            shell=True,
-            stdout=logfile,
-            stderr=logfile,
-            stdin=subprocess.PIPE,
-            creationflags=flags)
-    return _StartedProcess(popen, logfile)
+    return Process(cmd, logfile)
 
 def has(cmd):
     """Returns true if the give shell command is available.
