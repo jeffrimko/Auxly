@@ -56,6 +56,8 @@ class Cwd(object):
 
 class _FileSysObject(object):
     def __init__(self, *path):
+        if not path:
+            raise ValueError("no path provided")
         self._fspath = op.join(*path)
     def isfile(self):
         """Returns true if object is file, false otherwise."""
@@ -103,6 +105,8 @@ class _FileSysObject(object):
 class Path(_FileSysObject, str):
     """Object representing a filesystem path."""
     def __new__(cls, *content):
+        if not content:
+            raise ValueError("no path provided")
         return super(Path, cls).__new__(cls, op.abspath(op.join(*content)))
     def __init__(self, *path):
         super(Path, self).__init__(self)
@@ -135,9 +139,11 @@ class File(_FileSysObject):
           - del_at_exit (bool) [kwargs] - If true, the file will be deleted when the
             script exits.
         """
+        if not path:
+            raise ValueError("no path provided")
         self.path = Path(*path)
         if self.path.exists() and self.path.isdir():
-            raise Exception("AuxlyExceptionFileCannotBeDir")
+            raise TypeError("file cannot be dir")
         super(File, self).__init__(self.path)
         del_at_exit = kwargs.get('del_at_exit')
         if del_at_exit:
