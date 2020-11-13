@@ -28,7 +28,7 @@ class TestCase(BaseTest):
         if has("ls"):
             p = start("ls")
             while True:
-                result = p.poll()
+                result = p.exitcode()
                 if result != None:
                     break
             test.assertEqual(0, result)
