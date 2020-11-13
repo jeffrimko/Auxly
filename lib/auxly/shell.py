@@ -29,7 +29,7 @@ NULL = open(os.devnull, "w")
 
 class Process:
     """This object is returned by a ``start()`` call."""
-    def __init__(self, cmd, logpath=""):
+    def __init__(self, cmd, logpath=None):
         self._cmd = cmd
         if logpath:
             self._logfile = open(op.abspath(logpath), "w")
@@ -116,7 +116,7 @@ def start(cmd, logpath=None, **kwargs):
         ...
         p.stop()
     """
-    return Process(cmd, logfile)
+    return Process(cmd, logpath)
 
 def has(cmd):
     """Returns true if the give shell command is available.
