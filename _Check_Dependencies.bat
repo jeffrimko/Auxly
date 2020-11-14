@@ -36,6 +36,12 @@ call:ChkDep^
     "github.com/jeffrimko/Verace"^
     "latest"^
     python -c "import verace"
+call:ChkDep^
+    "Sphinx"^
+    "Python utility for building docs."^
+    "https://pypi.org/project/Sphinx/"^
+    "latest"^
+    sphinx-build --help
 
 pause
 exit /b 0

@@ -11,10 +11,7 @@ import sys
 import signal
 import tempfile
 
-try:
-    from auxly._auxly import iswindows
-except ModuleNotFoundError:
-    from _auxly import iswindows
+from auxly import iswindows
 
 ##==============================================================#
 ## SECTION: Global Definitions                                  #

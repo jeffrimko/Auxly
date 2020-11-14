@@ -22,7 +22,7 @@ API Documentation
 ``auxly``
 *********
 
-.. automodule:: auxly._auxly
+.. automodule:: auxly
     :members:
 
 ``auxly.filesys``
