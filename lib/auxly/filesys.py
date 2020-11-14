@@ -113,16 +113,16 @@ class Path(_FileSysObject, str):
         return super(Path, cls).__new__(cls, op.abspath(op.join(path, *extrapath)))
     def __init__(self, *path):
         super(Path, self).__init__(self)
-        self.parse()
-    def parse(self):
         #: The directory path.
         self.dir = None
-        #: The file name with extension.
+        #: The file name with extension, e.g. "myfile.txt".
         self.filename = None
-        #: The file name without extension.
+        #: The file name without extension, e.g. "myfile".
         self.file = None
-        #: The file extension.
+        #: The file extension, e.g. ".txt".
         self.ext = None
+        self.parse()
+    def parse(self):
         if op.isdir(self):
             self.dir = self
         elif op.isfile(self):
