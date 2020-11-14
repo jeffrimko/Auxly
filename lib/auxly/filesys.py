@@ -70,7 +70,8 @@ class _FileSysObject(object):
         """Returns true if object is directory, otherwise false."""
         return op.isdir(self._fspath)
     def dirpath(self):
-        """Returns a Path object for the directory associated with this object."""
+        """Returns a ``Path`` object for the directory associated with this
+        object."""
         try:
             if self.isfile():
                 return Path(op.dirname(self._fspath))
@@ -107,7 +108,7 @@ class _FileSysObject(object):
             return None
 
 class Path(_FileSysObject, str):
-    """Object representing a filesystem path."""
+    """Object representing a file system path."""
     def __new__(cls, path, *extrapath):
         return super(Path, cls).__new__(cls, op.abspath(op.join(path, *extrapath)))
     def __init__(self, *path):
@@ -135,7 +136,7 @@ class Path(_FileSysObject, str):
         return Path(self, relpath)
 
 class File(_FileSysObject):
-    """Object representing a filesystem file. The ENCODING variable defines the
+    """Object representing a file system file. The ENCODING variable defines the
     default encoding."""
     def __init__(self, path, *extrapath, **kwargs):
         """Creates a file object for the given path.
@@ -148,7 +149,7 @@ class File(_FileSysObject):
         """
         if not path:
             raise ValueError("no path provided")
-        #: The file path as a Path object.
+        #: The file path as a ``Path`` object.
         self.path = Path(path, *extrapath)
         if self.path.exists() and self.path.isdir():
             raise TypeError("file cannot be dir")
