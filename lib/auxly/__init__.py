@@ -9,20 +9,17 @@ import os.path as op
 import platform
 import subprocess
 
-try:
-    import auxly.filesys
-    import auxly.shell
-    import auxly.stringy
-    import auxly.listy
-except ImportError:
-    pass
+import auxly.filesys
+import auxly.shell
+import auxly.stringy
+import auxly.listy
 
 ##==============================================================#
 ## SECTION: Global Definitions                                  #
 ##==============================================================#
 
 #: Library version string.
-__version__ = "0.8.0"
+__version__ = "0.8.1"
 
 ##==============================================================#
 ## SECTION: Class Definitions                                   #

@@ -1,5 +1,12 @@
 = Auxly Changelog
 
+== auxly-0.8.1 (2020-11-14)
+=== Changed
+  - Changed `shell.Process` to create directories if necessary for given `logpath`.
+
+=== Fixed
+  - Fixed module import regression in `0.8.0`.
+
 == auxly-0.8.0 (2020-11-14)
 === Added
   - Added `AuxlyError` as a default exception.

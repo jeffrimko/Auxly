@@ -11,7 +11,7 @@ import sys
 import signal
 import tempfile
 
-from auxly import iswindows
+import auxly
 
 ##==============================================================#
 ## SECTION: Global Definitions                                  #
@@ -29,14 +29,16 @@ class Process(object):
     def __init__(self, cmd, logpath=None):
         self._cmd = cmd
         if logpath:
-            self._logfile = open(op.abspath(logpath), "w")
+            logpath = op.abspath(logpath)
+            auxly.filesys.makedirs(logpath)
+            self._logfile = open(logpath, "w")
         else:
             # NOTE: Using a temp file seems to be necessary in some cases for
             # Windows. For example, instances have been seen where Python Flask
             # apps would not work properly having the stdout/stderr directed to
             # NULL.
             self._logfile = tempfile.NamedTemporaryFile("w", delete=True)
-        flags = subprocess.CREATE_NEW_PROCESS_GROUP if iswindows() else 0
+        flags = subprocess.CREATE_NEW_PROCESS_GROUP if auxly.iswindows() else 0
         self._popen = subprocess.Popen(
                 cmd,
                 shell=True,
@@ -59,7 +61,7 @@ class Process(object):
         if self.exitcode() != None:
             return
         try:
-            if iswindows():
+            if auxly.iswindows():
                 if force:
                     silent("taskkill /f /t /pid " + str(self._popen.pid))
                 # NOTE: These two CTRL_BREAK_EVENT seem to be necessary on Windows. A
@@ -68,7 +70,7 @@ class Process(object):
                 os.kill(self._popen.pid, signal.CTRL_BREAK_EVENT)
             self._popen.terminate()
             self._popen.kill()
-            if iswindows() and self.isrunning():
+            if auxly.iswindows() and self.isrunning():
                 silent("taskkill /f /t /pid " + str(self._popen.pid))
         except:
             pass
