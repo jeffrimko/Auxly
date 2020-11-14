@@ -32,10 +32,16 @@ class Cwd(object):
     **Examples**:
     ::
         with auxly.filesys.Cwd(auxly.filesys.homedir()):  # Temporarily set CWD.
-            pass  # do stuff here...
+            pass  # Do stuff here...
+
+        with auxly.filesys.Cwd("..") as cwd:  # Temporarily set CWD.
+            cwd.path      # The current working directory.
+            cwd.original  # The original working directory.
     """
     def __init__(self, path=".", root=None):
+        #: The new/current working directory path.
         self.path = os.getcwd()
+        #: The original working directory path.
         self.original = self.path
         if path:
             if not op.isabs(path):

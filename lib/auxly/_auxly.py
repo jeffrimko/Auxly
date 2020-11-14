@@ -58,7 +58,6 @@ def throw(*args, **kwargs):
 
     **Examples**:
     ::
-
         throw()
         throw("error message")
         throw(ValueError)
@@ -97,7 +96,6 @@ def trycatch(*args, **kwargs):
 
     **Examples**:
     ::
-
         trycatch(myfunc)(myarg1, myarg2, kwarg=mykwarg)
         trycatch(myfunc, oncatch=mycatchfunc)(myarg1, myarg2, kwarg=mykwarg)
         trycatch(myfunc, rethrow=True)(myarg1, myarg2, kwarg=mykwarg)
@@ -131,7 +129,6 @@ def callstop(*args, **kwargs):
 
     **Examples**:
     ::
-
         call = callstop(myfunc, limit=3)
         call(myarg1, myarg2)
     """
