@@ -114,8 +114,13 @@ class Path(_FileSysObject, str):
         super(Path, self).__init__(self)
         self.parse()
     def parse(self):
+        #: The directory path.
         self.dir = None
+        #: The file name with extension.
+        self.filename = None
+        #: The file name without extension.
         self.file = None
+        #: The file extension.
         self.ext = None
         if op.isdir(self):
             self.dir = self
@@ -143,6 +148,7 @@ class File(_FileSysObject):
         """
         if not path:
             raise ValueError("no path provided")
+        #: The file path as a Path object.
         self.path = Path(path, *extrapath)
         if self.path.exists() and self.path.isdir():
             raise TypeError("file cannot be dir")
@@ -470,7 +476,7 @@ def move(srcpath, dstpath, overwrite=True):
         if not overwrite:
             return False
         else:
-            # On Windows, filename case is ignored so the following check will
+            # On Windows, file name case is ignored so the following check will
             # prevent unintentionally deleting the srcpath before moving.
             if "nt" == os.name and srcpath.lower() == dstpath.lower():
                 pass
