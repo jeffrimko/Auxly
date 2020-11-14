@@ -49,6 +49,11 @@ class TestCase(BaseTest):
         test.assertTrue(None == p.isempty())
         test.assertTrue("not_a_real_dir" == p.name)
 
+    def test_path_4(test):
+        """Basic Path usage."""
+        with test.assertRaises(TypeError):
+            p = Path()
+
 ##==============================================================#
 ## SECTION: Main Body                                           #
 ##==============================================================#

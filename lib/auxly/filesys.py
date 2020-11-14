@@ -55,10 +55,8 @@ class Cwd(object):
         return self.path
 
 class _FileSysObject(object):
-    def __init__(self, *path):
-        if not path:
-            raise ValueError("no path provided")
-        self._fspath = op.join(*path)
+    def __init__(self, path, *extrapath):
+        self._fspath = op.join(path, *extrapath)
     def isfile(self):
         """Returns true if object is file, otherwise false."""
         return op.isfile(self._fspath)
@@ -104,10 +102,8 @@ class _FileSysObject(object):
 
 class Path(_FileSysObject, str):
     """Object representing a filesystem path."""
-    def __new__(cls, *content):
-        if not content:
-            raise ValueError("no path provided")
-        return super(Path, cls).__new__(cls, op.abspath(op.join(*content)))
+    def __new__(cls, path, *extrapath):
+        return super(Path, cls).__new__(cls, op.abspath(op.join(path, *extrapath)))
     def __init__(self, *path):
         super(Path, self).__init__(self)
         self.parse()
@@ -130,7 +126,7 @@ class Path(_FileSysObject, str):
 class File(_FileSysObject):
     """Object representing a filesystem file. The ENCODING variable defines the
     default encoding."""
-    def __init__(self, *path, **kwargs):
+    def __init__(self, path, *extrapath, **kwargs):
         """Creates a file object for the given path.
 
         **Params:**
@@ -141,7 +137,7 @@ class File(_FileSysObject):
         """
         if not path:
             raise ValueError("no path provided")
-        self.path = Path(*path)
+        self.path = Path(path, *extrapath)
         if self.path.exists() and self.path.isdir():
             raise TypeError("file cannot be dir")
         super(File, self).__init__(self.path)

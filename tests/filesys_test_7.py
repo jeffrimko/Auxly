@@ -39,6 +39,16 @@ class TestCase(BaseTest):
         test.assertEqual(FNAME[0], f.name)
         test.assertTrue(op.isabs(f.path))
 
+    def test_file_3(test):
+        """Basic File usage."""
+        with test.assertRaises(TypeError):
+            f = File()
+
+    def test_file_4(test):
+        """Basic File usage."""
+        with test.assertRaises(TypeError):
+            f = File(".")
+
 ##==============================================================#
 ## SECTION: Main Body                                           #
 ##==============================================================#
