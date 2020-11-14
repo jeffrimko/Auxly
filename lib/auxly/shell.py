@@ -27,7 +27,7 @@ NULL = open(os.devnull, "w")
 ## SECTION: Class Definitions                                   #
 ##==============================================================#
 
-class Process:
+class Process(object):
     """Runs the given command in a separate shell process."""
     def __init__(self, cmd, logpath=None):
         self._cmd = cmd
@@ -47,6 +47,7 @@ class Process:
                 stderr=self._logfile,
                 stdin=subprocess.PIPE,
                 creationflags=flags)
+        #: The process PID.
         self.pid = self._popen.pid
         atexit.register(self.stop)
     def __del__(self):
