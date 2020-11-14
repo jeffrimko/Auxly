@@ -28,7 +28,7 @@ NULL = open(os.devnull, "w")
 ##==============================================================#
 
 class Process:
-    """This object is returned by a ``start()`` call."""
+    """Runs the given command in a separate shell process."""
     def __init__(self, cmd, logpath=None):
         self._cmd = cmd
         if logpath:
@@ -53,13 +53,17 @@ class Process:
         self.stop()
     def __repr__(self):
         return "Process: " + self._cmd
-    def stop(self):
-        """Stops the started process."""
+    def stop(self, force=False):
+        """Stops the started process. The force flag can be useful to stop some
+        running subprocess, e.g. notepad on Windows or something similar that
+        might run outside the shell."""
         self._logfile.close()
         if self.exitcode() != None:
             return
         try:
             if iswindows():
+                if force:
+                    silent("taskkill /f /t /pid " + str(self._popen.pid))
                 # NOTE: These two CTRL_BREAK_EVENT seem to be necessary on Windows. A
                 # single CTRL_BREAK_EVENT does not always work properly.
                 os.kill(self._popen.pid, signal.CTRL_BREAK_EVENT)
@@ -67,11 +71,11 @@ class Process:
             self._popen.terminate()
             self._popen.kill()
             if iswindows() and self.isrunning():
-                print("KILL")
                 silent("taskkill /f /t /pid " + str(self._popen.pid))
         except:
             pass
     def isrunning(self):
+        """Returns true if the process is still running, false otherwise."""
         return self.exitcode() == None
     def exitcode(self):
         """Returns None if the process is still running, otherwise return the
@@ -107,8 +111,8 @@ def silent(cmd, **kwargs):
     return call(cmd, shell=True, stdout=NULL, stderr=NULL, **kwargs)
 
 def start(cmd, logpath=None, **kwargs):
-    """Starts the given command as a background process. Redirects stdin/stderr
-    to an optional log file path. Returns a ``Process`` object.
+    """Starts the given command as a separate shell process. Redirects
+    stdin/stderr to an optional log file path. Returns a ``Process`` object.
 
     **Examples**:
     ::
