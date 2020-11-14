@@ -17,6 +17,13 @@ import subprocess
 __version__ = "0.7.2"
 
 ##==============================================================#
+## SECTION: Class Definitions                                   #
+##==============================================================#
+
+class AuxlyError(Exception):
+    pass
+
+##==============================================================#
 ## SECTION: Function Definitions                                #
 ##==============================================================#
 
@@ -50,10 +57,24 @@ def open(target):
         opener = "open" if ismac() else "xdg-open"
         subprocess.call([opener, target])
 
-def throw(name="AuxlyException"):
+def throw(*args, **kwargs):
     """Convenience function for throwing/raising exceptions. Usefully with
-    compound "or" statements and similar situations."""
-    raise Exception(name)
+    compound "or" statements and similar situations. Throws an AuxlyError by
+    default unless another exception is provided as the first argument.
+
+    **Examples**:
+    ::
+
+        throw()
+        throw("error message")
+        throw(ValueError)
+        throw(ValueError, "error message")
+    """
+    exception = AuxlyError
+    if len(args) > 0 and isinstance(args[0], type(Exception)):
+        exception = args[0]
+        args = args[1:]
+    raise exception(*args, **kwargs)
 
 def isadmin():
     """Returns true if the script is being run in admin mode, false
