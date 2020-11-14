@@ -75,10 +75,10 @@ class Process:
         except:
             pass
     def isrunning(self):
-        """Returns true if the process is still running, false otherwise."""
+        """Returns true if the process is still running, otherwise false."""
         return self.exitcode() == None
     def exitcode(self):
-        """Returns None if the process is still running, otherwise return the
+        """Returns None if the process is still running, otherwise the
         exit code."""
         return self._popen.poll()
     def wait(self):

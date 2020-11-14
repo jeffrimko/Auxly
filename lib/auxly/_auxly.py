@@ -10,17 +10,11 @@ import platform
 import subprocess
 
 ##==============================================================#
-## SECTION: Global Definitions                                  #
-##==============================================================#
-
-#: Library version string.
-__version__ = "0.7.2"
-
-##==============================================================#
 ## SECTION: Class Definitions                                   #
 ##==============================================================#
 
 class AuxlyError(Exception):
+    """Generic Auxly error."""
     pass
 
 ##==============================================================#
@@ -77,14 +71,14 @@ def throw(*args, **kwargs):
     raise exception(*args, **kwargs)
 
 def isadmin():
-    """Returns true if the script is being run in admin mode, false
-    otherwise."""
+    """Returns true if the script is being run in admin mode, otherwise
+    false."""
     if iswindows():
         return ctypes.windll.shell32.IsUserAnAdmin() != 0
     return os.getuid() == 0
 
 def verbose(enabled):
-    """Returns normal print function if enable, otherwise a dummy print
+    """Returns normal print function if enabled, otherwise a dummy print
     function is returned which will suppress output."""
     def _vprint(msg, **kwargs):
         print(msg, **kwargs)

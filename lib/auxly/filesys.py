@@ -60,10 +60,10 @@ class _FileSysObject(object):
             raise ValueError("no path provided")
         self._fspath = op.join(*path)
     def isfile(self):
-        """Returns true if object is file, false otherwise."""
+        """Returns true if object is file, otherwise false."""
         return op.isfile(self._fspath)
     def isdir(self):
-        """Returns true if object is directory, false otherwise."""
+        """Returns true if object is directory, otherwise false."""
         return op.isdir(self._fspath)
     def dirpath(self):
         """Returns a Path object for the directory associated with this object."""
@@ -78,10 +78,10 @@ class _FileSysObject(object):
     def name(self):
         return op.basename(self._fspath)
     def exists(self):
-        """Returns true if object exists, false otherwise."""
+        """Returns true if object exists, otherwise false."""
         return op.exists(self._fspath)
     def isempty(self):
-        """Returns true if object is empty, false otherwise."""
+        """Returns true if object is empty, otherwise false."""
         return isempty(self._fspath)
     def created(self):
         """Returns the object created date/time."""
@@ -185,7 +185,7 @@ class File(_FileSysObject):
             return False
     def append(self, content, binary=False, encoding=None):
         """Appends the given content to the file. Existing content is
-        preserved. Returns true if successful, false otherwise."""
+        preserved. Returns true if successful, otherwise false."""
         mode = "ab" if binary else "a"
         return self._write(content, mode, encoding=encoding, linesep=False)
     def appendline(self, content, binary=False, encoding=None):
@@ -194,7 +194,7 @@ class File(_FileSysObject):
         return self._write(content, mode, encoding=encoding, linesep=True)
     def write(self, content, binary=False, encoding=None):
         """Writes the given content to the file. Existing content is
-        deleted. Returns true if successful, false otherwise."""
+        deleted. Returns true if successful, otherwise false."""
         mode = "wb" if binary else "w"
         return self._write(content, mode, encoding=encoding, linesep=False)
     def writeline(self, content, binary=False, encoding=None):
@@ -205,7 +205,7 @@ class File(_FileSysObject):
         """Erases/empties the content in a file but does not delete it."""
         return self.write("")
     def delete(self):
-        """Deletes the file. Returns true if successful, false otherwise."""
+        """Deletes the file. Returns true if successful, otherwise false."""
         return delete(self.path)
     def checksum(self, **kwargs):
         """Returns the checksum of the file."""
@@ -244,7 +244,7 @@ def cwd(path=None, root=None):
 
 def makedirs(path, ignore_extsep=False):
     """Makes all directories required for given path; returns true if successful
-    and false otherwise.
+    otherwise false.
 
     **Examples**:
     ::
@@ -369,7 +369,7 @@ def countdirs(path, recurse=False):
     return count
 
 def isempty(path):
-    """Returns True if the given file or directory path is empty.
+    """Returns true if the given file or directory path is empty.
 
     **Examples**:
     ::
@@ -395,8 +395,8 @@ def getsize(path, recurse=False):
     return size
 
 def copy(srcpath, dstpath, overwrite=True):
-    """Copies the file or directory at `srcpath` to `dstpath`. Returns True if
-    successful, False otherwise."""
+    """Copies the file or directory at `srcpath` to `dstpath`. Returns true if
+    successful, otherwise false."""
     # Handle bail conditions.
     if not op.exists(srcpath):
         return False
@@ -442,8 +442,8 @@ def copy(srcpath, dstpath, overwrite=True):
     return op.exists(dstpath)
 
 def move(srcpath, dstpath, overwrite=True):
-    """Moves the file or directory at `srcpath` to `dstpath`. Returns True if
-    successful, False otherwise."""
+    """Moves the file or directory at `srcpath` to `dstpath`. Returns true if
+    successful, otherwise false."""
     # TODO: (JRR@201612230924) Consider adding smarter checks to prevent files ending up with directory names; e.g. if dstpath directory does not exist.
     if not op.exists(srcpath):
         return False
