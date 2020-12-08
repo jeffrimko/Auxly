@@ -171,7 +171,7 @@ class File(_FileSysObject):
         """Reads from the file and returns result as a list of lines."""
         try:
             encoding = encoding or ENCODING
-            with codecs.open(self.path, encoding=None) as fi:
+            with codecs.open(self.path, encoding=encoding) as fi:
                 return fi.readlines()
         except:
             return []
@@ -306,12 +306,12 @@ def walkfiles(startdir, regex=None, recurse=True, regex_entire=True):
                         path = op.join(startdir, i.name)
                         n = path if regex_entire else i.name
                         if _is_match(regex, n):
-                            yield path
+                            yield Path(path)
                     else:
                         yield op.join(startdir, i.name)
                 elif recurse:
                     for j in walkfiles(op.join(startdir, i.name), regex, recurse, regex_entire):
-                        yield j
+                        yield Path(j)
     else:
         for r,_,fs in os.walk(startdir):
             if not recurse and startdir != r:
@@ -322,7 +322,7 @@ def walkfiles(startdir, regex=None, recurse=True, regex_entire=True):
                 if regex and not _is_match(regex, n):
                     continue
                 if op.isfile(path):
-                    yield path
+                    yield Path(path)
 
 def walkdirs(startdir, regex=None, recurse=True, regex_entire=True):
     """Yields the absolute paths of directories found within the given start
@@ -337,12 +337,12 @@ def walkdirs(startdir, regex=None, recurse=True, regex_entire=True):
                         path = op.join(startdir, i.name)
                         n = path if regex_entire else op.basename(i.name)
                         if _is_match(regex, n):
-                            yield path
+                            yield Path(path)
                     else:
-                        yield op.join(startdir, i.name)
+                        yield Path(startdir, i.name)
                     if recurse:
                         for j in walkdirs(op.join(startdir, i.name), regex, recurse, regex_entire):
-                            yield j
+                            yield Path(j)
     else:
         for r,ds,_ in os.walk(startdir):
             if not recurse and startdir != r:
@@ -353,7 +353,7 @@ def walkdirs(startdir, regex=None, recurse=True, regex_entire=True):
                 if regex and not _is_match(regex, n):
                     continue
                 if op.isfile(path):
-                    yield path
+                    yield Path(path)
 
 def countfiles(path, recurse=False):
     """Returns the number of files under the given directory path."""
