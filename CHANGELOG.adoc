@@ -1,5 +1,9 @@
 = Auxly Changelog
 
+== TODO
+=== Fixed
+  - Fixed `filesys.move()` returning False if the relative and absolute path for the same file is given.
+
 == auxly-0.8.1 (2020-11-14)
 === Changed
   - Changed `shell.Process` to create directories if necessary for given `logpath`.

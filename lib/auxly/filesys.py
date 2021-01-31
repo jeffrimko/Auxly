@@ -454,6 +454,8 @@ def move(srcpath, dstpath, overwrite=True):
     """Moves the file or directory at `srcpath` to `dstpath`. Returns true if
     successful, otherwise false."""
     # TODO: (JRR@201612230924) Consider adding smarter checks to prevent files ending up with directory names; e.g. if dstpath directory does not exist.
+    srcpath = op.abspath(srcpath)
+    dstpath = op.abspath(dstpath)
     if not op.exists(srcpath):
         return False
     if srcpath == dstpath:
