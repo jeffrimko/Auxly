@@ -1,7 +1,7 @@
 = Auxly
 
 image:http://img.shields.io/:license-mit-blue.svg["License", link="https://github.com/jeffrimko/Auxly/blob/master/LICENSE"]
-image:https://travis-ci.org/jeffrimko/Auxly.svg?branch=master["Build Status"]
+image:https://github.com/jeffrimko/Auxly/workflows/tests/badge.svg["Build Status", link="https://github.com/jeffrimko/Auxly/workflows/tests/badge.svg"]
 
 == Introduction
 This project provides a Python 2.7/3.x library for common tasks especially when writing shell-like scripts. Some of the functionality overlaps with the standard library but the API is slightly modified.
