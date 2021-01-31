@@ -130,8 +130,9 @@ class TestCase(BaseTest):
         test.assertTrue(op.isfile(path.upper()))
 
     def test_move_9(test):
-        """Regression check for bug: Fixed `filesys.move()` returning False
-        if the relative and absolute path for the same file is given."""
+        """Regression check for bug: Fixed `filesys.move()` returning False and
+        deleting file if the relative and absolute path for the same file is
+        given."""
         path = FNAME[0]
         fwrite(path, TEXT[0])
         test.assertTrue(op.isfile(path))
