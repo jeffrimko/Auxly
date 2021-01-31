@@ -294,7 +294,7 @@ def delete(path, regex=None, recurse=False, test=False):
     return deleted
 
 def walkfiles(startdir, regex=None, recurse=True, regex_entire=True):
-    """Yields the absolute paths of files found within the given start
+    """Yields Path object for files found within the given start
     directory. Can optionally filter paths using a regex pattern, either on the
     entire path if regex_entire is true otherwise on the file name only."""
     if sys.version_info >= (3, 6):
@@ -325,7 +325,7 @@ def walkfiles(startdir, regex=None, recurse=True, regex_entire=True):
                     yield Path(path)
 
 def walkdirs(startdir, regex=None, recurse=True, regex_entire=True):
-    """Yields the absolute paths of directories found within the given start
+    """Yields Path object for directories found within the given start
     directory. Can optionally filter paths using a regex pattern, either on the
     entire path if regex_entire is true otherwise on the directory name only."""
     if sys.version_info >= (3, 6):

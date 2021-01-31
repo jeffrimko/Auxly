@@ -1,6 +1,6 @@
 = Auxly Changelog
 
-== TODO
+== auxly-0.8.2 (2021-01-31)
 === Changed
   - Changed default encoding for `File.readlines()`.
   - Changed `filesys.walkdirs()` and `filesys.walkfiles()` now return `filesys.Path` objects instead of strings.
