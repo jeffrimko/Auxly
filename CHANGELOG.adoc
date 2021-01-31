@@ -1,6 +1,10 @@
 = Auxly Changelog
 
 == TODO
+=== Changed
+  - Changed default encoding for `File.readlines()`.
+  - Changed `filesys.walkdirs()` and `filesys.walkfiles()` now return `filesys.Path` objects instead of strings.
+
 === Fixed
   - Fixed `filesys.move()` returning False if the relative and absolute path for the same file is given.
 
