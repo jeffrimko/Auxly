@@ -28,7 +28,7 @@ class TestCase(BaseTest):
         test.assertEqual(UTF8_STR, f.read())
         test.assertEqual(None, f.read(encoding="ascii"))
         test.assertEqual(FNAME[0], f.name)
-        test.assertTrue(op.isabs(f.path))
+        test.assertTrue(op.isabs(f))
 
     def test_file_2(test):
         """Basic File usage."""
@@ -37,7 +37,7 @@ class TestCase(BaseTest):
         test.assertFalse(f.exists())
         test.assertFalse(f.write(UTF8_STR, encoding="ascii"))
         test.assertEqual(FNAME[0], f.name)
-        test.assertTrue(op.isabs(f.path))
+        test.assertTrue(op.isabs(f))
 
     def test_file_3(test):
         """Basic File usage."""

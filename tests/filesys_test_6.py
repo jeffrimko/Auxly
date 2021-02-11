@@ -88,7 +88,6 @@ class TestCase(BaseTest):
         test.assertFalse(f.exists())
         test.assertFalse(f.isdir())
         test.assertFalse(f.isfile())
-        test.assertEqual(None, f.dirpath())
         test.assertEqual(None, f.created())
         test.assertEqual(None, f.modified())
         test.assertEqual(None, f.size())

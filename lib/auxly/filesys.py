@@ -60,28 +60,33 @@ class Cwd(object):
     def __repr__(self):
         return self.path
 
-class _FileSysObject(object):
-    def __init__(self, path, *extrapath):
-        self._fspath = op.join(path, *extrapath)
-    def isfile(self):
-        """Returns true if object is file, otherwise false."""
-        return op.isfile(self._fspath)
+class Path(str):
+    def __new__(cls, path, *extrapath):
+        return super(Path, cls).__new__(cls, op.abspath(op.join(path, *extrapath)))
+    def __init__(self, *path):
+        self._fspath = op.abspath(op.join(*path))
+    def __add__(self, value):
+        return Path(self._fspath + value)
+    def __repr__(self):
+        return self._fspath
     def isdir(self):
         """Returns true if object is directory, otherwise false."""
         return op.isdir(self._fspath)
-    def dirpath(self):
-        """Returns a ``Path`` object for the directory associated with this
-        object."""
-        try:
-            if self.isfile():
-                return Path(op.dirname(self._fspath))
-            else:
-                return Path(self)
-        except:
-            return None
+    def isfile(self):
+        """Returns true if object is file, otherwise false."""
+        return op.isfile(self._fspath)
     @property
     def name(self):
+        """Returns the base name of the path."""
         return op.basename(self._fspath)
+    @property
+    def parent(self):
+        """Returns a ``Path`` for the parent directory of this object."""
+        return Path(op.dirname(self._fspath))
+    def join(self, relpath):
+        """Returns a ``Path`` of the given relative path joined with this
+        object."""
+        return Path(self, relpath)
     def exists(self):
         """Returns true if object exists, otherwise false."""
         return op.exists(self._fspath)
@@ -107,35 +112,7 @@ class _FileSysObject(object):
         except:
             return None
 
-class Path(_FileSysObject, str):
-    """Object representing a file system path."""
-    def __new__(cls, path, *extrapath):
-        return super(Path, cls).__new__(cls, op.abspath(op.join(path, *extrapath)))
-    def __init__(self, *path):
-        super(Path, self).__init__(self)
-        #: The directory path.
-        self.dir = None
-        #: The file name with extension, e.g. "myfile.txt".
-        self.filename = None
-        #: The file name without extension, e.g. "myfile".
-        self.file = None
-        #: The file extension, e.g. ".txt".
-        self.ext = None
-        self.parse()
-    def parse(self):
-        if op.isdir(self):
-            self.dir = self
-        elif op.isfile(self):
-            base = op.basename(self)
-            self.dir = op.dirname(self)
-            self.filename = base
-            self.file = op.splitext(base)[0]
-            self.ext = op.splitext(base)[1]
-    def join(self, relpath):
-        """Joins the given relative path with this path."""
-        return Path(self, relpath)
-
-class File(_FileSysObject):
+class File(Path):
     """Object representing a file system file. The ENCODING variable defines the
     default encoding."""
     def __init__(self, path, *extrapath, **kwargs):
@@ -149,21 +126,24 @@ class File(_FileSysObject):
         """
         if not path:
             raise ValueError("no path provided")
-        #: The file path as a ``Path`` object.
-        self.path = Path(path, *extrapath)
-        if self.path.exists() and self.path.isdir():
+        if isinstance(path, Path):
+            path = path._fspath
+        super(File, self).__init__(path, *extrapath, **kwargs)
+        if self.exists() and self.isdir():
             raise TypeError("file cannot be dir")
-        super(File, self).__init__(self.path)
         del_at_exit = kwargs.get('del_at_exit')
         if del_at_exit:
             atexit.register(self.delete)
-    def __repr__(self):
-        return self.path
+        toks = op.basename(path)
+        self.stem = op.splitext(toks)[0]
+        self.ext = op.splitext(toks)[1]
+    def __add__(self, value):
+        return File(self._fspath + value)
     def read(self, encoding=None):
         """Reads from the file and returns result as a string."""
         encoding = encoding or ENCODING
         try:
-            with codecs.open(self.path, encoding=encoding) as fi:
+            with codecs.open(self, encoding=encoding) as fi:
                 return fi.read()
         except:
             return None
@@ -171,13 +151,13 @@ class File(_FileSysObject):
         """Reads from the file and returns result as a list of lines."""
         try:
             encoding = encoding or ENCODING
-            with codecs.open(self.path, encoding=encoding) as fi:
+            with codecs.open(self, encoding=encoding) as fi:
                 return fi.readlines()
         except:
             return []
     def _write(self, content, mode, encoding=None, linesep=False):
         """Handles file writes."""
-        makedirs(self.path)
+        makedirs(self)
         try:
             encoding = encoding or ENCODING
             if "b" not in mode:
@@ -187,7 +167,7 @@ class File(_FileSysObject):
                     pass
                 if linesep:
                     content += os.linesep
-            with codecs.open(self.path, mode, encoding=encoding) as fo:
+            with codecs.open(self, mode, encoding=encoding) as fo:
                 fo.write(content)
                 return True
         except:
@@ -215,10 +195,10 @@ class File(_FileSysObject):
         return self.write("")
     def delete(self):
         """Deletes the file. Returns true if successful, otherwise false."""
-        return delete(self.path)
+        return delete(self)
     def checksum(self, **kwargs):
         """Returns the checksum of the file."""
-        return checksum(self.path, **kwargs)
+        return checksum(self, **kwargs)
 
 ##==============================================================#
 ## SECTION: Function Definitions                                #
