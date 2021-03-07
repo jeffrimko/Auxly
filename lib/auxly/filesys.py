@@ -61,7 +61,8 @@ class Cwd(object):
         return self.path
 
 class Path(str):
-    def __new__(cls, path, *extrapath):
+    """Object representing a file system path."""
+    def __new__(cls, path, *extrapath, **kwargs):
         return super(Path, cls).__new__(cls, op.abspath(op.join(path, *extrapath)))
     def __init__(self, *path):
         self._fspath = op.abspath(op.join(*path))
@@ -69,20 +70,14 @@ class Path(str):
         return Path(self._fspath + value)
     def __repr__(self):
         return self._fspath
-    def isdir(self):
-        """Returns true if object is directory, otherwise false."""
-        return op.isdir(self._fspath)
-    def isfile(self):
-        """Returns true if object is file, otherwise false."""
-        return op.isfile(self._fspath)
     @property
     def name(self):
         """Returns the base name of the path."""
         return op.basename(self._fspath)
     @property
     def parent(self):
-        """Returns a ``Path`` for the parent directory of this object."""
-        return Path(op.dirname(self._fspath))
+        """Returns a ``Dir`` for the parent directory of this object."""
+        return Dir(op.dirname(self._fspath))
     def join(self, relpath):
         """Returns a ``Path`` of the given relative path joined with this
         object."""
@@ -90,6 +85,12 @@ class Path(str):
     def exists(self):
         """Returns true if object exists, otherwise false."""
         return op.exists(self._fspath)
+    def isdir(self):
+        """Returns true if path is for an existing directory, otherwise false."""
+        return op.isdir(self._fspath)
+    def isfile(self):
+        """Returns true if path is for an existing file, otherwise false."""
+        return op.isfile(self._fspath)
     def isempty(self):
         """Returns true if object is empty, otherwise false."""
         return isempty(self._fspath)
@@ -111,6 +112,33 @@ class Path(str):
             return getsize(self._fspath, recurse=True)
         except:
             return None
+    def delete(self):
+        """Deletes the file. Returns true if successful, otherwise false."""
+        return delete(self)
+
+class Dir(Path):
+    """Object representing a file system directory."""
+    def __init__(self, path, *extrapath, **kwargs):
+        if not path:
+            raise ValueError("no path provided")
+        if isinstance(path, Path):
+            path = path._fspath
+        super(Dir, self).__init__(path, *extrapath)
+        if self.exists() and self.isfile():
+            raise TypeError("dir cannot be file")
+        del_at_exit = kwargs.get('del_at_exit')
+        if del_at_exit:
+            atexit.register(self.delete)
+    def countfiles(self, **kwargs):
+        return countfiles(self, **kwargs)
+    def countdirs(self, **kwargs):
+        return countdirs(self, **kwargs)
+    def walkfiles(self, **kwargs):
+        for f in walkfiles(self, **kwargs):
+            yield f
+    def walkdirs(self, **kwargs):
+        for f in walkdirs(self, **kwargs):
+            yield f
 
 class File(Path):
     """Object representing a file system file. The ENCODING variable defines the
@@ -128,17 +156,24 @@ class File(Path):
             raise ValueError("no path provided")
         if isinstance(path, Path):
             path = path._fspath
-        super(File, self).__init__(path, *extrapath, **kwargs)
+        super(File, self).__init__(path, *extrapath)
         if self.exists() and self.isdir():
             raise TypeError("file cannot be dir")
         del_at_exit = kwargs.get('del_at_exit')
         if del_at_exit:
             atexit.register(self.delete)
-        toks = op.basename(path)
-        self.stem = op.splitext(toks)[0]
-        self.ext = op.splitext(toks)[1]
     def __add__(self, value):
         return File(self._fspath + value)
+    @property
+    def stem(self):
+        """Returns the file stem, i.e. the file name without the extension."""
+        toks = op.basename(self._fspath)
+        return op.splitext(toks)[0]
+    @property
+    def ext(self):
+        """Returns the file extension including the period (e.g. `.txt`)."""
+        toks = op.basename(self._fspath)
+        return op.splitext(toks)[1]
     def read(self, encoding=None):
         """Reads from the file and returns result as a string."""
         encoding = encoding or ENCODING
@@ -193,9 +228,6 @@ class File(Path):
     def empty(self):
         """Erases/empties the content in a file but does not delete it."""
         return self.write("")
-    def delete(self):
-        """Deletes the file. Returns true if successful, otherwise false."""
-        return delete(self)
     def checksum(self, **kwargs):
         """Returns the checksum of the file."""
         return checksum(self, **kwargs)
@@ -274,7 +306,7 @@ def delete(path, regex=None, recurse=False, test=False):
     return deleted
 
 def walkfiles(startdir, regex=None, recurse=True, regex_entire=True):
-    """Yields Path object for files found within the given start
+    """Yields a ``File`` for files found within the given start
     directory. Can optionally filter paths using a regex pattern, either on the
     entire path if regex_entire is true otherwise on the file name only."""
     if sys.version_info >= (3, 6):
@@ -291,7 +323,7 @@ def walkfiles(startdir, regex=None, recurse=True, regex_entire=True):
                         yield op.join(startdir, i.name)
                 elif recurse:
                     for j in walkfiles(op.join(startdir, i.name), regex, recurse, regex_entire):
-                        yield Path(j)
+                        yield File(j)
     else:
         for r,_,fs in os.walk(startdir):
             if not recurse and startdir != r:
@@ -302,7 +334,7 @@ def walkfiles(startdir, regex=None, recurse=True, regex_entire=True):
                 if regex and not _is_match(regex, n):
                     continue
                 if op.isfile(path):
-                    yield Path(path)
+                    yield File(path)
 
 def walkdirs(startdir, regex=None, recurse=True, regex_entire=True):
     """Yields Path object for directories found within the given start
@@ -501,4 +533,6 @@ def rootdir():
 ##==============================================================#
 
 if __name__ == '__main__':
-    pass
+    d = Dir("testdel", del_at_exit=True)
+    print(d)
+    print(d.exists())
