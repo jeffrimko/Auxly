@@ -319,6 +319,8 @@ def makedirs(path, ignore_extsep=False):
     ::
         auxly.filesys.makedirs("bar/baz")
     """
+    if op.isdir(path):
+       return True
     if not ignore_extsep and op.basename(path).find(os.extsep) > -1:
         path = op.dirname(path)
     try:
@@ -605,4 +607,5 @@ def rootdir():
 ##==============================================================#
 
 if __name__ == '__main__':
-    pass
+    print(makedirs("foo"))
+    print("OK")

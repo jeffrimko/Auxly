@@ -1,5 +1,13 @@
 = Auxly Changelog
 
+== auxly-0.9.0 (2023-04-17)
+=== Changed
+  - Added `listy.isiterable()`, `listy.iterate()`, and `listy.index()`.
+  - Added `stringy.remove()`, `stringy.haspattern()`, and `stringy.subtract()`.
+  - Added `filesys.Path` which is now the base of `File` and `Dir.`
+  - Added `filesys.countall()` and `filesys.walkall()`.
+  - Updates to `AuxlyError`, made it falsy for comparisons.
+
 == auxly-0.8.2 (2021-01-31)
 === Changed
   - Changed default encoding for `File.readlines()`.
