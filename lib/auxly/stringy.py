@@ -4,6 +4,10 @@
 
 from random import choice
 from string import ascii_lowercase
+import re
+
+import top as auxly
+from listy import iterate
 
 ##==============================================================#
 ## SECTION: Function Definitions                                #
@@ -26,21 +30,43 @@ def randomize(length=6, choices=None):
     choices = choices or ascii_lowercase
     return "".join(choice(choices) for _ in range(length))
 
-def between(full, start, end):
+def between(orig, start, end):
     """Returns the substring of the given string that occurs between the start
     and end strings."""
     try:
-        if not start:
-            parse = full
-        else:
-            parse = full.split(start, 1)[1]
-        if end:
-            result = parse.split(end, 1)[0]
-        else:
-            result = parse
-        return result
+        parse = orig
+        if start and start in parse:
+            parse = parse.split(start, 1)[1]
+        if end and end in parse:
+            parse = parse.split(end, 1)[0]
+        return parse
     except:
-        return full
+        return auxly.AuxlyError()
+
+def remove(orig, subs):
+    """Removes the given substrings from the given string, returns the modified
+    string."""
+    output = orig
+    try:
+        for s in iterate(subs):
+            output = output.replace(s, "")
+        return output
+    except:
+        return auxly.AuxlyError()
+
+def haspattern(pattern, search):
+    """Returns true if the given text contains the given regex pattern."""
+    try:
+        return re.compile(pattern).search(search) != None
+    except:
+        return auxly.AuxlyError()
+
+def subtract(orig, tosub):
+    """Returns the original string with the given substring removed if it is
+    found at the end, otherwise returns just the original string."""
+    if orig.endswith(tosub):
+        return orig[:-1 * len(tosub)]
+    return orig
 
 ##==============================================================#
 ## SECTION: Main Body                                           #

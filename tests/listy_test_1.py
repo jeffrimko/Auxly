@@ -5,7 +5,7 @@
 import os
 from testlib import *
 
-from auxly.listy import chunk, smooth
+from auxly.listy import chunk, smooth, isiterable, iterate
 
 ##==============================================================#
 ## SECTION: Class Definitions                                   #
@@ -23,6 +23,16 @@ class TestCase(BaseTest):
         test.assertEqual([1,2,3,4,5,6], list(smooth([[1,2],[3,4],[5,6]])))
         test.assertEqual([1,2,3,4,5,6], list(smooth([[1,[2]],[[3,4]],[[5],6]])))
         test.assertEqual([1,2,3,4,5,6], list(smooth([[1,[2,[3,[4,[5,[6]]]]]]])))
+
+    def test_isiterable_1(test):
+        test.assertTrue(isiterable("abc"))
+        test.assertTrue(isiterable([1,2,3]))
+        test.assertTrue(isiterable((1,2,3)))
+        test.assertFalse(isiterable(123))
+
+    def test_iterate_1(test):
+        test.assertEqual(["abc"], list(iterate("abc")))
+        test.assertEqual([1,2,3], list(iterate([1,2,3])))
 
 ##==============================================================#
 ## SECTION: Main Body                                           #

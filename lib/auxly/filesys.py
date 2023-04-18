@@ -4,15 +4,17 @@
 ## SECTION: Imports                                             #
 ##==============================================================#
 
+from datetime import datetime
 import atexit
 import codecs
 import hashlib
 import os
 import os.path as op
-import re
 import shutil
 import sys
-from datetime import datetime
+
+import top as auxly
+from stringy import haspattern, subtract
 
 ##==============================================================#
 ## SECTION: Global Definitions                                  #
@@ -60,138 +62,200 @@ class Cwd(object):
     def __repr__(self):
         return self.path
 
-class _FileSysObject(object):
-    def __init__(self, path, *extrapath):
-        self._fspath = op.join(path, *extrapath)
-    def isfile(self):
-        """Returns true if object is file, otherwise false."""
-        return op.isfile(self._fspath)
-    def isdir(self):
-        """Returns true if object is directory, otherwise false."""
-        return op.isdir(self._fspath)
-    def dirpath(self):
-        """Returns a ``Path`` object for the directory associated with this
-        object."""
-        try:
-            if self.isfile():
-                return Path(op.dirname(self._fspath))
-            else:
-                return Path(self)
-        except:
-            return None
+class Path(str):
+    """Object representing a file system path."""
+    def __new__(cls, path, *extrapath, **kwargs):
+        return super(Path, cls).__new__(cls, op.abspath(op.join(path, *extrapath)))
+    def __init__(self, *path):
+        self._fspath = op.abspath(op.join(*path))
+    def __add__(self, value):
+        return Path(self._fspath + value)
+    def __sub__(self, value):
+        return Path(subtract(self._fspath, value))
+    def __repr__(self):
+        return self._fspath
+    @property
+    def path(self):
+        """Returns the path as a string."""
+        return self._fspath
     @property
     def name(self):
+        """Returns the base name of the path."""
         return op.basename(self._fspath)
+    @property
+    def parent(self):
+        """Returns a ``Dir`` for the parent directory of this object."""
+        return Dir(op.dirname(self._fspath))
+    def join(self, relpath):
+        """Returns a ``Path`` of the given relative path joined with this
+        object."""
+        return Path(self, relpath)
     def exists(self):
         """Returns true if object exists, otherwise false."""
         return op.exists(self._fspath)
+    def isdir(self):
+        """Returns true if path is for an existing directory, otherwise false."""
+        return op.isdir(self._fspath)
+    def isfile(self):
+        """Returns true if path is for an existing file, otherwise false."""
+        return op.isfile(self._fspath)
     def isempty(self):
         """Returns true if object is empty, otherwise false."""
         return isempty(self._fspath)
     def created(self):
         """Returns the object created date/time."""
+        if not self.exists():
+            return None
         try:
             return datetime.fromtimestamp(op.getctime(self._fspath))
-        except:
-            return None
+        except Exception as ex:
+            return auxly.AuxlyError(ex)
     def modified(self):
         """Returns the object modified date/time."""
+        if not self.exists():
+            return None
         try:
             return datetime.fromtimestamp(op.getmtime(self._fspath))
-        except:
-            return None
+        except Exception as ex:
+            return auxly.AuxlyError(ex)
     def size(self):
         """Returns the size of the object in bytes."""
-        try:
-            return getsize(self._fspath, recurse=True)
-        except:
+        if not self.exists():
             return None
+        try:
+            return getsize(self._fspath, recurse=False)
+        except Exception as ex:
+            return auxly.AuxlyError(ex)
+    def delete(self):
+        """Deletes the file. Returns true if successful, otherwise false."""
+        return delete(self)
+    def copy(self, dstpath):
+        return copy(self._fspath, dstpath)
+    def move(self, dstpath):
+        return move(self._fspath, dstpath)
 
-class Path(_FileSysObject, str):
-    """Object representing a file system path."""
-    def __new__(cls, path, *extrapath):
-        return super(Path, cls).__new__(cls, op.abspath(op.join(path, *extrapath)))
-    def __init__(self, *path):
-        super(Path, self).__init__(self)
-        #: The directory path.
-        self.dir = None
-        #: The file name with extension, e.g. "myfile.txt".
-        self.filename = None
-        #: The file name without extension, e.g. "myfile".
-        self.file = None
-        #: The file extension, e.g. ".txt".
-        self.ext = None
-        self.parse()
-    def parse(self):
-        if op.isdir(self):
-            self.dir = self
-        elif op.isfile(self):
-            base = op.basename(self)
-            self.dir = op.dirname(self)
-            self.filename = base
-            self.file = op.splitext(base)[0]
-            self.ext = op.splitext(base)[1]
-    def join(self, relpath):
-        """Joins the given relative path with this path."""
-        return Path(self, relpath)
+class Dir(Path):
+    """Object representing a file system directory."""
+    def __init__(self, path, *extrapath, **kwargs):
+        """Dir object for the given path.
 
-class File(_FileSysObject):
+        **Params:**
+          - path (str) - Path to the directory. Multiple values will be passed to
+            `os.path.join()`.
+          - make (bool) [kwargs] - If true, the directory will be created if it
+            does not exist.
+          - del_at_exit (bool) [kwargs] - If true, the directory will be
+            deleted when the script exits.
+        """
+        if not path:
+            raise ValueError("no path provided")
+        if isinstance(path, Path):
+            path = path._fspath
+        super(Dir, self).__init__(path, *extrapath)
+        if self.exists() and self.isfile():
+            raise TypeError("dir cannot be file")
+        if kwargs.get('make'):
+            self.make()
+        if kwargs.get('del_at_exit'):
+            atexit.register(self.delete)
+    def countall(self, **kwargs):
+        return countall(self, **kwargs)
+    def countfiles(self, **kwargs):
+        return countfiles(self, **kwargs)
+    def countdirs(self, **kwargs):
+        return countdirs(self, **kwargs)
+    def walkall(self, **kwargs):
+        for i in walkall(self, **kwargs):
+            yield i
+    def walkfiles(self, **kwargs):
+        for i in walkfiles(self, **kwargs):
+            yield i
+    def walkdirs(self, **kwargs):
+        for i in walkdirs(self, **kwargs):
+            yield i
+    def make(self):
+        """Creates the directory if it does not already exist. No effect if the
+        directory already exists."""
+        return makedirs(self, ignore_extsep=True)
+
+class File(Path):
     """Object representing a file system file. The ENCODING variable defines the
     default encoding."""
     def __init__(self, path, *extrapath, **kwargs):
-        """Creates a file object for the given path.
+        """File object for the given path.
 
         **Params:**
           - path (str) - Path to the file. Multiple values will be passed to
             `os.path.join()`.
+          - make (bool) [kwargs] - If true, the file will be created if it does
+            not exist.
           - del_at_exit (bool) [kwargs] - If true, the file will be deleted when the
             script exits.
         """
         if not path:
             raise ValueError("no path provided")
-        #: The file path as a ``Path`` object.
-        self.path = Path(path, *extrapath)
-        if self.path.exists() and self.path.isdir():
+        if isinstance(path, Path):
+            path = path._fspath
+        super(File, self).__init__(path, *extrapath)
+        if self.exists() and self.isdir():
             raise TypeError("file cannot be dir")
-        super(File, self).__init__(self.path)
-        del_at_exit = kwargs.get('del_at_exit')
-        if del_at_exit:
+        if kwargs.get('make'):
+            self.make()
+        if kwargs.get('del_at_exit'):
             atexit.register(self.delete)
-    def __repr__(self):
-        return self.path
+    @property
+    def stem(self):
+        """Returns the file stem, i.e. the file name without the extension."""
+        toks = op.basename(self._fspath)
+        return op.splitext(toks)[0]
+    @property
+    def ext(self):
+        """Returns the file extension including the period (e.g. `.txt`)."""
+        toks = op.basename(self._fspath)
+        return op.splitext(toks)[1]
     def read(self, encoding=None):
         """Reads from the file and returns result as a string."""
         encoding = encoding or ENCODING
-        try:
-            with codecs.open(self.path, encoding=encoding) as fi:
-                return fi.read()
-        except:
+        if not self.exists():
             return None
+        try:
+            with codecs.open(self, encoding=encoding) as fi:
+                return fi.read()
+        except Exception as ex:
+            return auxly.AuxlyError(ex)
+    def splitlines(self, encoding=None):
+        """Reads from the file and returns result as a list of lines with endings removed."""
+        try:
+            return (self.read(encoding=encoding) or "").splitlines()
+        except Exception as ex:
+            return auxly.AuxlyError(ex)
     def readlines(self, encoding=None):
-        """Reads from the file and returns result as a list of lines."""
+        """Reads from the file and returns result as a list of lines with endings included."""
+        if not self.exists():
+            return []
         try:
             encoding = encoding or ENCODING
-            with codecs.open(self.path, encoding=encoding) as fi:
+            with codecs.open(self, encoding=encoding) as fi:
                 return fi.readlines()
-        except:
-            return []
+        except Exception as ex:
+            return auxly.AuxlyError(ex)
     def _write(self, content, mode, encoding=None, linesep=False):
         """Handles file writes."""
-        makedirs(self.path)
+        makedirs(self)
         try:
             encoding = encoding or ENCODING
             if "b" not in mode:
                 try:
                     content = str(content)
-                except:
+                except Exception:
                     pass
                 if linesep:
                     content += os.linesep
-            with codecs.open(self.path, mode, encoding=encoding) as fo:
+            with codecs.open(self, mode, encoding=encoding) as fo:
                 fo.write(content)
                 return True
-        except:
-            return False
+        except Exception as ex:
+            return auxly.AuxlyError(ex)
     def append(self, content, binary=False, encoding=None):
         """Appends the given content to the file. Existing content is
         preserved. Returns true if successful, otherwise false."""
@@ -213,23 +277,19 @@ class File(_FileSysObject):
     def empty(self):
         """Erases/empties the content in a file but does not delete it."""
         return self.write("")
-    def delete(self):
-        """Deletes the file. Returns true if successful, otherwise false."""
-        return delete(self.path)
     def checksum(self, **kwargs):
         """Returns the checksum of the file."""
-        return checksum(self.path, **kwargs)
+        return checksum(self, **kwargs)
+    def make(self):
+        """Creates an empty file If the file does not already exist. No effect
+        if the file already exist."""
+        if self.isfile():
+            return True
+        return self.empty()
 
 ##==============================================================#
 ## SECTION: Function Definitions                                #
 ##==============================================================#
-
-def _is_match(regex, text):
-    """Returns true if the given text matches the given regex pattern."""
-    try:
-        return re.compile(regex).search(text) != None
-    except:
-        return False
 
 def abspath(relpath, root=None):
     """Returns an absolute path based on the given root and relative path."""
@@ -253,7 +313,7 @@ def cwd(path=None, root=None):
 
 def makedirs(path, ignore_extsep=False):
     """Makes all directories required for given path; returns true if successful
-    otherwise false.
+    otherwise false. Returns true if directories already exist.
 
     **Examples**:
     ::
@@ -263,8 +323,8 @@ def makedirs(path, ignore_extsep=False):
         path = op.dirname(path)
     try:
         os.makedirs(path)
-    except:
-        return False
+    except Exception as ex:
+        return auxly.AuxlyError(ex)
     return True
 
 def delete(path, regex=None, recurse=False, test=False):
@@ -283,7 +343,7 @@ def delete(path, regex=None, recurse=False, test=False):
         if regex:
             for r,ds,fs in os.walk(path):
                 for i in fs:
-                    if _is_match(regex, i):
+                    if haspattern(regex, i):
                         deleted += delete(op.join(r,i), test=test)
                 if not recurse:
                     break
@@ -293,10 +353,24 @@ def delete(path, regex=None, recurse=False, test=False):
             return [] if op.exists(path) else [path]
     return deleted
 
-def walkfiles(startdir, regex=None, recurse=True, regex_entire=True):
-    """Yields Path object for files found within the given start
+def walkall(startdir, regex=None, regex_entire=True, recurse=False):
+    """Yields a ``File`` or ``Dir`` for all found files and directories within
+    the given start directory. Can optionally filter paths using a regex
+    pattern, either on the entire path if regex_entire is true otherwise on the
+    file name only."""
+    if not op.isdir(startdir):
+        return
+    for i in walkdirs(startdir, regex, regex_entire, recurse):
+        yield i
+    for i in walkfiles(startdir, regex, regex_entire, recurse):
+        yield i
+
+def walkfiles(startdir, regex=None, regex_entire=True, recurse=False):
+    """Yields a ``File`` for files found within the given start
     directory. Can optionally filter paths using a regex pattern, either on the
     entire path if regex_entire is true otherwise on the file name only."""
+    if not op.isdir(startdir):
+        return
     if sys.version_info >= (3, 6):
         startdir = op.abspath(startdir)
         with os.scandir(startdir) as it:
@@ -305,13 +379,13 @@ def walkfiles(startdir, regex=None, recurse=True, regex_entire=True):
                     if regex:
                         path = op.join(startdir, i.name)
                         n = path if regex_entire else i.name
-                        if _is_match(regex, n):
-                            yield Path(path)
+                        if haspattern(regex, n):
+                            yield File(path)
                     else:
-                        yield op.join(startdir, i.name)
+                        yield File(op.join(startdir, i.name))
                 elif recurse:
                     for j in walkfiles(op.join(startdir, i.name), regex, recurse, regex_entire):
-                        yield Path(j)
+                        yield File(j)
     else:
         for r,_,fs in os.walk(startdir):
             if not recurse and startdir != r:
@@ -319,15 +393,17 @@ def walkfiles(startdir, regex=None, recurse=True, regex_entire=True):
             for f in fs:
                 path = op.abspath(op.join(r,f))
                 n = path if regex_entire else f
-                if regex and not _is_match(regex, n):
+                if regex and not haspattern(regex, n):
                     continue
                 if op.isfile(path):
-                    yield Path(path)
+                    yield File(path)
 
-def walkdirs(startdir, regex=None, recurse=True, regex_entire=True):
+def walkdirs(startdir, regex=None, regex_entire=True, recurse=False):
     """Yields Path object for directories found within the given start
     directory. Can optionally filter paths using a regex pattern, either on the
     entire path if regex_entire is true otherwise on the directory name only."""
+    if not op.isdir(startdir):
+        return
     if sys.version_info >= (3, 6):
         startdir = op.abspath(startdir)
         with os.scandir(startdir) as it:
@@ -336,13 +412,13 @@ def walkdirs(startdir, regex=None, recurse=True, regex_entire=True):
                     if regex:
                         path = op.join(startdir, i.name)
                         n = path if regex_entire else op.basename(i.name)
-                        if _is_match(regex, n):
-                            yield Path(path)
+                        if haspattern(regex, n):
+                            yield Dir(path)
                     else:
-                        yield Path(startdir, i.name)
+                        yield Dir(startdir, i.name)
                     if recurse:
                         for j in walkdirs(op.join(startdir, i.name), regex, recurse, regex_entire):
-                            yield Path(j)
+                            yield Dir(j)
     else:
         for r,ds,_ in os.walk(startdir):
             if not recurse and startdir != r:
@@ -350,10 +426,15 @@ def walkdirs(startdir, regex=None, recurse=True, regex_entire=True):
             for d in ds:
                 path = op.abspath(op.join(r,d))
                 n = path if regex_entire else d
-                if regex and not _is_match(regex, n):
+                if regex and not haspattern(regex, n):
                     continue
                 if op.isfile(path):
-                    yield Path(path)
+                    yield Dir(path)
+
+def countall(path, recurse=False):
+    """Returns the number of directories and files under the given directory
+    path."""
+    return countfiles(path, recurse) + countdirs(path, recurse)
 
 def countfiles(path, recurse=False):
     """Returns the number of files under the given directory path."""
@@ -453,7 +534,8 @@ def copy(srcpath, dstpath, overwrite=True):
 def move(srcpath, dstpath, overwrite=True):
     """Moves the file or directory at `srcpath` to `dstpath`. Returns true if
     successful, otherwise false."""
-    # TODO: (JRR@201612230924) Consider adding smarter checks to prevent files ending up with directory names; e.g. if dstpath directory does not exist.
+    # TODO: Consider adding smarter checks to prevent files ending up with
+    # directory names; e.g. if dstpath directory does not exist.
     srcpath = op.abspath(srcpath)
     dstpath = op.abspath(dstpath)
     if not op.exists(srcpath):
@@ -487,8 +569,8 @@ def move(srcpath, dstpath, overwrite=True):
                 return False
     try:
         shutil.move(srcpath, dstpath)
-    except:
-        return False
+    except Exception as ex:
+        return auxly.AuxlyError(ex)
     return verfunc(verpath)
 
 def checksum(fpath, hasher=None, asbytes=False):
@@ -504,13 +586,15 @@ def checksum(fpath, hasher=None, asbytes=False):
             while len(block) > 0:
                 yield block
                 block = afile.read(blocksize)
+    if not op.exists(fpath):
+        return None
     try:
         hasher = hasher or hashlib.md5()
         for block in blockiter(fpath):
             hasher.update(block)
         return (hasher.digest() if asbytes else hasher.hexdigest())
-    except:
-        return None
+    except Exception as ex:
+        return auxly.AuxlyError(ex)
 
 def rootdir():
     """Returns the system root directory."""

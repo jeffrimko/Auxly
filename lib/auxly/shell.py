@@ -11,7 +11,7 @@ import sys
 import signal
 import tempfile
 
-import auxly
+import top as auxly
 
 ##==============================================================#
 ## SECTION: Global Definitions                                  #

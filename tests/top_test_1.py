@@ -21,7 +21,7 @@ class TestCase(BaseTest):
         test.assertFalse(move("fake1.txt", "fake2.txt"))
         with test.assertRaises(AuxlyError) as cm:
             move("fake1.txt", "fake2.txt") or throw("error message")
-        test.assertEqual("error message", str(cm.exception))
+        test.assertEqual("AuxlyError: error message", str(cm.exception))
 
     def test_throw_3(test):
         test.assertFalse(move("fake1.txt", "fake2.txt"))

@@ -14,7 +14,7 @@ class TestCase(BaseTest):
     def test_file_1(test):
         """Test walkfiles() behavior."""
         norecurse = [f for f in walkfiles("..", regex=".py$", recurse=False)]
-        withrecurse = [f for f in walkfiles("..", regex=".py$")]
+        withrecurse = [f for f in walkfiles("..", regex=".py$", recurse=True)]
         test.assertTrue(len(withrecurse) > len(norecurse))
 
     def test_file_2(test):

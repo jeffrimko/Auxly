@@ -5,6 +5,7 @@
 
 from testlib import *
 
+from auxly import AuxlyError
 from auxly.filesys import File
 
 ##==============================================================#
@@ -26,9 +27,9 @@ class TestCase(BaseTest):
         test.assertTrue(f.write(UTF8_STR))
         test.assertTrue(f.exists())
         test.assertEqual(UTF8_STR, f.read())
-        test.assertEqual(None, f.read(encoding="ascii"))
+        test.assertEqual(type(AuxlyError()), type(f.read(encoding="ascii")))
         test.assertEqual(FNAME[0], f.name)
-        test.assertTrue(op.isabs(f.path))
+        test.assertTrue(op.isabs(f))
 
     def test_file_2(test):
         """Basic File usage."""
@@ -37,7 +38,7 @@ class TestCase(BaseTest):
         test.assertFalse(f.exists())
         test.assertFalse(f.write(UTF8_STR, encoding="ascii"))
         test.assertEqual(FNAME[0], f.name)
-        test.assertTrue(op.isabs(f.path))
+        test.assertTrue(op.isabs(f))
 
     def test_file_3(test):
         """Basic File usage."""

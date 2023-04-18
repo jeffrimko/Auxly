@@ -5,7 +5,7 @@
 import os
 from testlib import *
 
-from auxly.stringy import subat, randomize, between
+from auxly.stringy import subat, randomize, between, remove, subtract
 
 ##==============================================================#
 ## SECTION: Class Definitions                                   #
@@ -42,6 +42,21 @@ class TestCase(BaseTest):
         test.assertEqual("hello", between("helloxworld", "", "x"))
         test.assertEqual("hello", between("lhello", "l", ""))
         test.assertEqual("hello", between("hello!!!world", "", "!"))
+
+    def test_remove_1(test):
+        test.assertEqual("hello world", remove("hello world!", "!"))
+        test.assertEqual("hello world", remove("hello world!", ["!"]))
+        test.assertEqual("abc", remove("abcdef", "def"))
+        test.assertEqual("aaa", remove(" a a a ", " "))
+        test.assertEqual("ab", remove("aaab", "aa"))
+        test.assertEqual("abcdef", remove("abcdef", "acf"))
+        test.assertEqual("bcf", remove("abdcef", list("ade")))
+
+    def test_subtract_1(test):
+        test.assertEqual("hello", subtract("hello.txt", ".txt"))
+        test.assertEqual("hello.txt", subtract("hello.txt", "xyz"))
+        test.assertEqual("", subtract("abc", "abc"))
+        test.assertEqual("abc", subtract("abc", "a"))
 
 ##==============================================================#
 ## SECTION: Main Body                                           #
